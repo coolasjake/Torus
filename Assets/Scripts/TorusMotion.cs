@@ -29,7 +29,7 @@ public class TorusMotion : MonoBehaviour
         get { return _height; }
         set
         {
-            _height = Mathf.Max(1, value);
+            _height = Mathf.Max(1f, value);
             UpdatePos();
         }
     }
@@ -57,14 +57,15 @@ public class TorusMotion : MonoBehaviour
     }
     public static Vector2 GetPos(float angle)
     {
-        return GetPos(angle, 0);
+        return GetPos(angle, 1);
     }
 
     public static Vector2 GetPos(float angle, float height)
     {
-        return new Vector2(
-            torusOrigin.x + (Mathf.Cos(Mathf.Deg2Rad * angle) * torusScale.x * (height + 1)),
-            torusOrigin.y + (Mathf.Sin(Mathf.Deg2Rad * angle) * torusScale.y * (height + 1))
+        Vector2 worldPos = new Vector2(
+            torusOrigin.x + (Mathf.Cos(Mathf.Deg2Rad * angle) * torusScale.x * (height)),
+            torusOrigin.y + (Mathf.Sin(Mathf.Deg2Rad * angle) * torusScale.y * (height))
         );
+        return worldPos;
     }
 }

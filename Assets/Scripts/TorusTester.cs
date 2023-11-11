@@ -37,8 +37,9 @@ public class TorusTester : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+    void OnDrawGizmos()
     {
+        TorusMotion.torusScale = torusScale;
         Gizmos.color = gizmoColour;
         Vector2 lastPos = TorusMotion.GetPos(0);
         for (int i = 0; i <= gizmoSections; ++i)
