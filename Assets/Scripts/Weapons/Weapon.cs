@@ -6,9 +6,8 @@ public abstract class Weapon : TorusMotion
 {
     public int weaponIndex = 0;
 
-    public float baseMoveSpeed = 1f;
-    [Range(0f, 1f)]
-    public float baseAimingMult = 0.5f;
+    public ModifiableFloat moveSpeed;
+    public ModifiableFloat aimingMult;
 
     [HideInInspector]
     public float _adjustedMoveSpeed;
