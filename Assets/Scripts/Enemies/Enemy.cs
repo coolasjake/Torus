@@ -128,7 +128,6 @@ public class Enemy : TorusMotion
 }
 
 public enum EnemyType {
-    none,
     tank,
     swarm,
     fast,
