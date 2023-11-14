@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13a1d09c0dd7bac4599f75eb6dd6c7f3, type: 3}
+  m_Name: DefaultEnemySettings
+  m_EditorClassIdentifier: 
+  health: 50
+  armourLevel: 0
+  speed: 5
+  XPReward: 10
+  resistances:
+    damageTypes:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  maxSafeTemp: 100
+  restingTemp: 35
+  freezeTemp: -30
+  damageFromHot: 1
+  damageFromCold: 0
+  maxSlow: 0.8
+  maxColdSlow: 0.2
+  frozenSlow: 0.2
+  baseTempChange: 1
+  conductivity: 50
+  explosionPrefab: {fileID: 8423020550156484834, guid: 7b5c60a2d443b75419f215e94796e1ee, type: 3}

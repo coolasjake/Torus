@@ -33,10 +33,14 @@ public class ModifiableFloat
         max = Max;
     }
 
+    //[SerializeField]
+    //private string name = "";
     [SerializeField]
     private float defaultValue = 0f;
-    private float min = 0f;
-    private float max = 0f;
+    [SerializeField]
+    private float min = float.NegativeInfinity;
+    [SerializeField]
+    private float max = float.PositiveInfinity;
     private float addition = 0;
     private float multiplier = 1;
 

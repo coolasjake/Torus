@@ -6,7 +6,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [HideInInspector]
-    public MachineGun weapon;
+    public MachineGun machinegun;
 
     // Start is called before the first frame update
     void Start()
@@ -22,8 +22,12 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Enemy enemy = collision.otherCollider.GetComponent<Enemy>();
+        print(collision.collider.name);
+        Enemy enemy = collision.collider.GetComponent<Enemy>();
         if (enemy)
-            weapon.BulletHit(this, enemy);
+        {
+            print(enemy.name);
+            machinegun.BulletHit(this, enemy);
+        }
     }
 }

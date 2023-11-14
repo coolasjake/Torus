@@ -4,28 +4,27 @@ using UnityEngine;
 
 public class MachineGun : Weapon
 {
-    [SerializeField]
-    private float basePhysicalDamage = 10f;
-    private float _adjustedPhysicalDamage = 0f;
 
-    [SerializeField]
-    private float baseRandomSpreadAngle = 2f;
-    private float _adjustedRandomSpreadAngle;
+    [Header("Machinegun Stats")]
+    public ModifiableFloat damage = new ModifiableFloat(10f, 0f, 1000f);
 
-    [SerializeField]
-    private float baseBulletSpeed = 2f;
-    private float _adjustedBulletSpeed;
+    public ModifiableFloat randomSpreadAngle = new ModifiableFloat(10f, 0f, 90f);
+
+    public ModifiableFloat bulletSpeed = new ModifiableFloat(10f, 0.01f, 1000f);
 
     private float fireRateDebit = 0;
 
+    private Bullet bulletPrefab;
+
     protected override void Fire()
     {
-        if (Time.time > _lastShot + baseFireRate)
+        if (Time.time > _lastShot + fireRate.Value)
         {
-            GameObject newBullet = Instantiate(attackPrefab, firingPoint.position, firingPoint.rotation);
+            Bullet newBullet = Instantiate(bulletPrefab, firingPoint.position, firingPoint.rotation);
             Vector2 dir = firingPoint.up;
-            dir = dir.Rotate(Random.Range(-baseRandomSpreadAngle, baseRandomSpreadAngle));
-            newBullet.GetComponent<Rigidbody2D>().velocity = dir * baseBulletSpeed;
+            dir = dir.Rotate(Random.Range(-randomSpreadAngle.Value, randomSpreadAngle.Value));
+            newBullet.GetComponent<Rigidbody2D>().velocity = dir * bulletSpeed.Value;
+            newBullet.machinegun = this;
             _lastShot = Time.time;
         }
         /*
@@ -41,12 +40,14 @@ public class MachineGun : Weapon
 
     public void BulletHit(Bullet bullet, Enemy enemy)
     {
-        enemy.Hit(_adjustedBasicDamage, DamageType.basic);
-        enemy.Hit(_adjustedPhysicalDamage, DamageType.physical);
+        print("hit " + enemy.name);
+        DefaultHit(enemy);
+        bullet.gameObject.SetActive(false);
+        Destroy(bullet.gameObject);
     }
 
     protected override void Setup()
     {
-        _adjustedMoveSpeed = baseMoveSpeed;
+        bulletPrefab = attackPrefab.GetComponent<Bullet>();
     }
 }

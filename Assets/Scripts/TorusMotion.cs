@@ -12,7 +12,7 @@ public class TorusMotion : MonoBehaviour
 
     void Awake()
     {
-        UpdatePos();
+        ApplyTransformPos();
     }
 
     public float Angle
@@ -20,10 +20,11 @@ public class TorusMotion : MonoBehaviour
         get { return _angle; }
         set
         {
-            _angle = value;
+            _angle = value % 360f;
             UpdatePos();
         }
     }
+
     public float Height
     {
         get { return _height; }
@@ -32,6 +33,11 @@ public class TorusMotion : MonoBehaviour
             _height = Mathf.Max(1f, value);
             UpdatePos();
         }
+    }
+
+    public void MoveCloser(float dist)
+    {
+        Height -= dist;
     }
 
     public void MoveAround(float dist)
@@ -50,10 +56,19 @@ public class TorusMotion : MonoBehaviour
         }
     }
 
+    protected void ApplyTransformPos()
+    {
+        //Set angle and height based on transform pos
+        float angle = Vector2.SignedAngle(Vector2.right, ((Vector2)transform.position / torusScale) - torusOrigin);
+        float height = Vector2.Distance(torusOrigin, transform.position / torusScale);
+        AngleAndHeight = new Vector2(angle, height);
+    }
+
     private void UpdatePos()
     {
         transform.position = GetPos(_angle, _height);
-        transform.rotation = Quaternion.Euler(0, 0, _angle);
+        transform.rotation = Quaternion.Euler(0, 0, _angle - 90f);
+        transform.hasChanged = false;
     }
     public static Vector2 GetPos(float angle)
     {

@@ -38,7 +38,7 @@ public class StatChange : Ability
 
     public override void Apply(Weapon weapon)
     {
-        weapon.ChangeStat(statName, operation, newValue);
+        weapon.AddModifier(statName, name, operation, newValue);
     }
 
 }

@@ -11,7 +11,7 @@ public class TorusTester : MonoBehaviour
     public Vector2 speed = Vector2.one;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         TorusMotion.torusScale = torusScale;
     }
@@ -19,6 +19,9 @@ public class TorusTester : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (target == null)
+            return;
+
         if (Input.GetKey(KeyCode.D))
         {
             target.MoveAround(-Time.deltaTime * speed.x);

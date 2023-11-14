@@ -1,19 +1,7 @@
 fileFormatVersion: 2
-guid: 5ce83dc7aebb94d46abaa70d293fadec
+guid: 1c421c08e71578045b8d8288492b3600
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -3181572675215302491
-    second: terra-reveene-cannon-export_0
-  - first:
-      213: -2161895127711415017
-    second: terra-reveene-cannon-export_1
-  - first:
-      213: 9092010370623837236
-    second: terra-reveene-cannon-export_2
-  - first:
-      213: -1518572754462066460
-    second: terra-reveene-cannon-export_3
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -53,12 +41,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 40
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -127,85 +115,148 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: terra-reveene-cannon-export_0
+      name: Explosion.ss_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 27
-        height: 13
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5a0e3b23288c8d3d0800000000000000
-      internalID: -3181572675215302491
+      spriteID: d71c7938b0c81bb10800000000000000
+      internalID: 1995530090982130045
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: terra-reveene-cannon-export_1
+      name: Explosion.ss_1
       rect:
         serializedVersion: 2
-        x: 27
+        x: 192
         y: 0
-        width: 27
-        height: 13
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7150d17e5d76ff1e0800000000000000
-      internalID: -2161895127711415017
+      spriteID: 78dd97ee427b25de0800000000000000
+      internalID: -1345811969382687353
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: terra-reveene-cannon-export_2
+      name: Explosion.ss_2
       rect:
         serializedVersion: 2
-        x: 54
+        x: 384
         y: 0
-        width: 27
-        height: 13
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4349333b24f4d2e70800000000000000
-      internalID: 9092010370623837236
+      spriteID: c183f6e89c1d11fd0800000000000000
+      internalID: -2372884865039255524
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: terra-reveene-cannon-export_3
+      name: Explosion.ss_3
       rect:
         serializedVersion: 2
-        x: 81
+        x: 576
         y: 0
-        width: 27
-        height: 13
-      alignment: 4
-      pivot: {x: 0, y: 0.5}
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4e8b3b42022fceae0800000000000000
-      internalID: -1518572754462066460
+      spriteID: 9642a85a0b2ecb1f0800000000000000
+      internalID: -1027697366627900311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Explosion.ss_4
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8bad936e2d44e8c20800000000000000
+      internalID: 3210579256958114488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Explosion.ss_5
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d44600075740cb2b0800000000000000
+      internalID: -5567570136900017075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Explosion.ss_6
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9dc3119a702676940800000000000000
+      internalID: 5289304072410709209
       vertices: []
       indices: 
       edges: []
