@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public MissionData missionData;
+
+    private List<EnemyFleet> fleets = new List<EnemyFleet>();
+
+    public void StartWave()
     {
-        
+
+    }
+    private void PlanWave()
+    {
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private class EnemyFleet
+    { 
+        public List<EnemyData> enemies = new List<EnemyData>();
+        public List<EnemyType> types = new List<EnemyType>();
+        public float angle = 0f;
     }
 }
