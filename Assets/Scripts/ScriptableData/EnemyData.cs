@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EnemyData", menuName = "ScriptableObjects/EnemyData", order = 1)]
@@ -7,17 +9,22 @@ public class EnemyData : ScriptableObject
 {
     [Header("Basic Settings")]
     [Min(1f)]
-    public float health = 10f;
+    [SerializeField]
+    private float health = 10f;
+    /// <summary> Armour reduces hit value (i.e. before any other effects are calculated) of all damage types except basic by 5% per level.
+    /// Can be reduced by effects, most commonly from acid. </summary>
     [Range(0, 10)]
-    public int armourLevel = 0;
+    [SerializeField]
+    private int armourLevel = 0;
     [Min(1)]
-    public float speed = 1f;
+    [SerializeField]
+    private float speed = 1f;
     [Min(0)]
-    public float XPReward = 0;
 
     [Header("Damage Settings")]
     /// <summary> Reduces damage based on values (0 = full damage, 1 = no damage). DOT effects have damage reduced, not application reduced.  </summary>
-    public AllDamage resistances = new AllDamage();
+    [EnumNamedArray(typeof(DamageType))]
+    public float[] resistances = new float[Enum.GetNames(typeof(DamageType)).Length];
 
     //Do multipliers for different enemy types
 
@@ -42,6 +49,68 @@ public class EnemyData : ScriptableObject
     [Range(0f, 100f)]
     public float conductivity = 50f;
 
+    [SerializeField]
+    private List<EnemyClassData> classes = new List<EnemyClassData> {
+        new EnemyClassData(EnemyClass.swarm), new EnemyClassData(EnemyClass.fast),
+        new EnemyClassData(EnemyClass.dodge), new EnemyClassData(EnemyClass.tank)};
+
+    public int Points(EnemyClass enemyClass) => classes[(int)enemyClass].pointsCost;
+    public float Health(EnemyClass enemyClass) => health * classes[(int)enemyClass].healthMultiplier;
+    public int Armour(EnemyClass enemyClass) => armourLevel + classes[(int)enemyClass].extraArmour;
+    public float Speed(EnemyClass enemyClass) => speed * classes[(int)enemyClass].speedMultiplier;
+    public Sprite ClassSprite(EnemyClass enemyClass) => classes[(int)enemyClass].sprite;
+    public AnimatorController ClassAnimations(EnemyClass enemyClass) => classes[(int)enemyClass].animationController;
+
     [Header("Effect Prefabs")]
     public GameObject explosionPrefab;
+
+    [System.Serializable]
+    public class EnemyClassData
+    {
+        public EnemyClassData(EnemyClass enemyClass)
+        {
+            name = enemyClass.ToString();
+            className = name;
+
+            if (enemyClass == EnemyClass.tank)
+            {
+                pointsCost = 10;
+                healthMultiplier = 5f;
+                extraArmour = 3;
+                speedMultiplier = 0.5f;
+            }
+            else if (enemyClass == EnemyClass.fast)
+            {
+                pointsCost = 5;
+                healthMultiplier = 2f;
+                extraArmour = 0;
+                speedMultiplier = 1.5f;
+                abilitySpeed = 2f;
+            }
+            else if (enemyClass == EnemyClass.dodge)
+            {
+                pointsCost = 5;
+                healthMultiplier = 3f;
+                extraArmour = 1;
+                speedMultiplier = 1f;
+                abilitySpeed = 10f;
+            }
+        }
+
+        [HideInInspector]
+        public string name = "";
+        public string className = "";
+        [Min(1)]
+        public int pointsCost = 1;
+        [Min(0.001f)]
+        public float healthMultiplier = 1f;
+        [Min(0)]
+        public int extraArmour = 0;
+        [Min(0.1f)]
+        public float speedMultiplier = 1f;
+        public float abilitySpeed = 0f;
+
+        public Sprite sprite;
+        public AnimatorController animationController;
+    }
 }

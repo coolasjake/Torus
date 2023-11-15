@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13a1d09c0dd7bac4599f75eb6dd6c7f3, type: 3}
+  m_Name: PurploidSettings
+  m_EditorClassIdentifier: 
+  health: 20
+  armourLevel: 0
+  speed: 5
+  resistances:
+    damageTypes:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+  maxSafeTemp: 100
+  restingTemp: 35
+  freezeTemp: -30
+  damageFromHot: 1
+  damageFromCold: 0
+  maxSlow: 0.8
+  maxColdSlow: 0.2
+  frozenSlow: 0.2
+  baseTempChange: 1
+  conductivity: 50
+  classes:
+  - name: swarm
+    className: swarm
+    pointsCost: 1
+    healthMultiplier: 1
+    extraArmour: 0
+    speedMultiplier: 1
+    abilitySpeed: 0
+    sprite: {fileID: 21300000, guid: 902df43e96cc7f14d929f25094c188a1, type: 3}
+    animationController: {fileID: 0}
+  - name: fast
+    className: fast
+    pointsCost: 5
+    healthMultiplier: 2
+    extraArmour: 0
+    speedMultiplier: 3
+    abilitySpeed: 2
+    sprite: {fileID: 21300000, guid: 1c421c08e71578045b8d8288492b3600, type: 3}
+    animationController: {fileID: 0}
+  - name: dodge
+    className: dodge
+    pointsCost: 5
+    healthMultiplier: 3
+    extraArmour: 1
+    speedMultiplier: 1
+    abilitySpeed: 10
+    sprite: {fileID: 21300000, guid: a53a833bd89f70b429a7e40b5730cd3c, type: 3}
+    animationController: {fileID: 0}
+  - name: tank
+    className: tank
+    pointsCost: 10
+    healthMultiplier: 5
+    extraArmour: 3
+    speedMultiplier: 0.5
+    abilitySpeed: 0
+    sprite: {fileID: 21300000, guid: e89e7a1811784714eb25386c1842bd12, type: 3}
+    animationController: {fileID: 0}
+  explosionPrefab: {fileID: 8423020550156484834, guid: 7b5c60a2d443b75419f215e94796e1ee, type: 3}

@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class Enemy : TorusMotion
 {
+    public EnemyClass myClass;
+    [HideInInspector]
     public EnemyData data;
+
+    public SpriteRenderer spriteRenderer;
+    public Animator animator;
 
     [HideInInspector]
     public float health;
     [HideInInspector]
     public float temperature = 0f;
-
-    /// <summary> Percentage of lightning damage that is taken or conducted to nearby enemies (100 = all damage is conducted). </summary>
-    [Range(0f, 100f)]
-    public float conductivity = 50f;
 
     /// <summary> Time that the latest stun effect on this enemy will end. </summary>
     [HideInInspector]
@@ -33,28 +34,22 @@ public class Enemy : TorusMotion
     /// and does nothing when health is below 10%. Nanites short when hit by lightining, doubling the effects. </summary>
     [HideInInspector]
     public float nanites = 0;
+    /// <summary> Stack of antimatter on this enemy. Antimatter creates an explosion with damage AND radius based on the stack size when hit by matter attacks:
+    /// physical, acid, poison, nanites. </summary>
+    [HideInInspector]
+    public float antimatter = 0;
 
     [HideInInspector]
     public Weapon lastHitBy;
 
-    public float XPReward => data.XPReward;
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        temperature = data.restingTemp;
-        health = data.health;
-    }
-
+#if UNITY_EDITOR
     // Update is called once per frame
     void Update()
     {
-#if UNITY_EDITOR
         if (transform.hasChanged)
             ApplyTransformPos();
-#endif
     }
+#endif
 
     private void FixedUpdate()
     {
@@ -77,7 +72,7 @@ public class Enemy : TorusMotion
 
         //Clamp modifier to not be less than the maximum slow value
         modifier = Mathf.Clamp(modifier, 1f - data.maxSlow, 2f);
-        return data.speed * modifier * Time.fixedDeltaTime * 0.01f;
+        return BaseSpeed * modifier * Time.fixedDeltaTime * 0.01f;
     }
 
     private void DOTEffects()
@@ -106,9 +101,9 @@ public class Enemy : TorusMotion
     private void UpdateTemperature()
     {
         if (data.damageFromHot && temperature > data.maxSafeTemp)
-            health -= (temperature - data.maxSafeTemp) * (1f - data.resistances.Heat);
+            health -= (temperature - data.maxSafeTemp);// * (1f - data.resistances.Heat);
         if (data.damageFromCold && temperature < data.freezeTemp)
-            health -= -(temperature - data.freezeTemp) * (1f - data.resistances.Heat);
+            health -= -(temperature - data.freezeTemp);// * (1f - data.resistances.Heat);
 
 
         if (temperature > data.restingTemp)
@@ -125,11 +120,28 @@ public class Enemy : TorusMotion
         float acidDamage = acid;
 
     }
+
+    public int PointsCost => data.Points(myClass);
+    public float BaseHealth => data.Health(myClass);
+    public int BaseArmour => data.Armour(myClass);
+    public float BaseSpeed => data.Speed(myClass);
+    public float XPReward => data.Points(myClass);
+
+    public void SetData(EnemyData enemyData)
+    {
+        data = enemyData;
+
+        health = BaseHealth;
+        temperature = data.restingTemp;
+
+        spriteRenderer.sprite = data.ClassSprite(myClass);
+        animator.runtimeAnimatorController = data.ClassAnimations(myClass);
+    }
 }
 
-public enum EnemyType {
-    tank,
+public enum EnemyClass {
     swarm,
     fast,
-    dodge
+    dodge,
+    tank,
 }

@@ -13,7 +13,7 @@ public class MissionData : ScriptableObject
     public List<EnemyData> mainEnemyTypes = new List<EnemyData>();
     public List<EnemyData> rareEnemyTypes = new List<EnemyData>();
 
-    public List<Weapon> weaponPrefabs = new List<Weapon>();
+    public List<WeaponType> chosenWeapons = new List<WeaponType>();
     public GameObject torusPrefab;
 
     public Sprite systemBackground;

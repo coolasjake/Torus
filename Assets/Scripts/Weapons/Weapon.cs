@@ -107,11 +107,11 @@ public abstract class Weapon : TorusMotion
         float physicalDamage = damageStats.physical.Value;
         if (enemy.frozen)
             physicalDamage *= 2f;
-        physicalDamage *= (1f - enemy.data.resistances.Physical);
+        //physicalDamage *= (1f - enemy.data.resistances.Physical);
         enemy.health -= physicalDamage;
 
         //Heat Damage
-        enemy.temperature += damageStats.heat.Value * (1f - enemy.data.resistances.Heat);
+        enemy.temperature += damageStats.heat.Value;// * (1f - enemy.data.resistances.Heat);
 
         if (enemy.health <= 0)
             KillEnemy(enemy);
