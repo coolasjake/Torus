@@ -12,13 +12,15 @@ public class EnemySpawner : MonoBehaviour
     {
 
     }
+
     private void PlanWave()
     {
 
     }
 
     private class EnemyFleet
-    { 
+    {
+        public float startTime = 0f;
         public List<EnemyData> enemies = new List<EnemyData>();
         public List<EnemyType> types = new List<EnemyType>();
         public float angle = 0f;

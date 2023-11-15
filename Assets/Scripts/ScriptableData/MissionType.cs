@@ -11,20 +11,20 @@ public class MissionType : ScriptableObject
 }
 
 [System.Serializable]
-public class WaveData()
+public class WaveData
 {
     public bool difficultyMultipliesNumber;
     public bool difficultyMultipliesStats;
     [Min(1)]
     public int numMainTypes = 1;
     [Min(1)]
-    public int baseNumMainEnemies = 10;
+    public int basePointsMainEnemies = 10;
     [Min(1f)]
-    public float diffNumMultMain = 1f;
-    [Min(1f)]
-    public float diffStatsMultMain = 1f;
+    public float diffMultMain = 1f;
+
     [EnumNamedArray(typeof(EnemyType))]
-    public bool[] allowedTypes = new bool[Enum.GetNames(typeof(EnemyType)).Length];
+    public bool[] allowedMainTypes = new bool[Enum.GetNames(typeof(EnemyType)).Length];
+    public int baseMainFleetSize = 5;
 
     [Min(0)]
     public int numRareTypes = 0;
@@ -34,5 +34,8 @@ public class WaveData()
     public float diffNumMultRare = 1f;
     [Min(1f)]
     public float diffStatsMultRare = 1f;
+
+    [EnumNamedArray(typeof(EnemyType))]
+    public bool[] allowedRareTypes = new bool[Enum.GetNames(typeof(EnemyType)).Length];
 
 }
