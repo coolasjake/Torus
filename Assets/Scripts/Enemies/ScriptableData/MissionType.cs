@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 [CreateAssetMenu(fileName = "DefaultMission", menuName = "ScriptableObjects/MissionType", order = 1)]
 public class MissionType : ScriptableObject
@@ -21,8 +23,8 @@ public class WaveData()
     public float diffNumMultMain = 1f;
     [Min(1f)]
     public float diffStatsMultMain = 1f;
-    public bool[] allowedTypes = new bool[Enum. ];
-
+    [EnumNamedArray(typeof(EnemyType))]
+    public bool[] allowedTypes = new bool[Enum.GetNames(typeof(EnemyType)).Length];
 
     [Min(0)]
     public int numRareTypes = 0;
