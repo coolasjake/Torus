@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
-public class Bullet : MonoBehaviour
+public class RailRod : MonoBehaviour
 {
     [HideInInspector]
-    public MachineGun machinegun;
+    public Railgun railgun;
 
     // Start is called before the first frame update
     void Start()
@@ -20,13 +19,13 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        Enemy enemy = collision.collider.GetComponent<Enemy>();
+        Enemy enemy = collision.GetComponent<Enemy>();
         if (enemy)
         {
             print(enemy.name);
-            machinegun.BulletHit(this, enemy);
+            railgun.RodHit(this, enemy);
         }
     }
 }

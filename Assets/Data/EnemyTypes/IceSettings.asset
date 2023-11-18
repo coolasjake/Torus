@@ -12,18 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13a1d09c0dd7bac4599f75eb6dd6c7f3, type: 3}
   m_Name: IceSettings
   m_EditorClassIdentifier: 
-  health: 20
+  health: 50
   armourLevel: 0
-  speed: 5
+  speed: 7
   resistances:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
+    damageTypes:
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
   maxSafeTemp: 100
   restingTemp: 35
   freezeTemp: -30
@@ -42,6 +43,7 @@ MonoBehaviour:
     extraArmour: 0
     speedMultiplier: 1
     abilitySpeed: 0
+    effectsSize: 1
     sprite: {fileID: 21300000, guid: f64d80bda77742b478ec88ec64eba276, type: 3}
     animationController: {fileID: 0}
   - name: fast
@@ -51,6 +53,7 @@ MonoBehaviour:
     extraArmour: 0
     speedMultiplier: 3
     abilitySpeed: 2
+    effectsSize: 2
     sprite: {fileID: 21300000, guid: e500427ff86225f45824c9d39ae1ac57, type: 3}
     animationController: {fileID: 0}
   - name: dodge
@@ -60,15 +63,17 @@ MonoBehaviour:
     extraArmour: 1
     speedMultiplier: 1
     abilitySpeed: 10
+    effectsSize: 2
     sprite: {fileID: 21300000, guid: 6d5450a5f1f7f51469dfc1245de6821d, type: 3}
     animationController: {fileID: 0}
   - name: tank
     className: tank
     pointsCost: 10
-    healthMultiplier: 5
-    extraArmour: 3
-    speedMultiplier: 0.5
+    healthMultiplier: 10
+    extraArmour: 5
+    speedMultiplier: 0.8
     abilitySpeed: 0
+    effectsSize: 5
     sprite: {fileID: 21300000, guid: 95f36083d3dba734c8fff5145018c680, type: 3}
     animationController: {fileID: 0}
   explosionPrefab: {fileID: 8423020550156484834, guid: 7b5c60a2d443b75419f215e94796e1ee, type: 3}

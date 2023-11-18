@@ -1,28 +1,40 @@
 fileFormatVersion: 2
-guid: a12b3d3bfd32551479a66b26515c932d
+guid: d33975cfc3fd38a4ba73efe18b5630cd
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1995530090982130045
-    second: Explosion.ss_0
+      213: 6204561657245004913
+    second: Armour.ss_0
   - first:
-      213: -1345811969382687353
-    second: Explosion.ss_1
+      213: -3518075911240734721
+    second: Armour.ss_1
   - first:
-      213: -2372884865039255524
-    second: Explosion.ss_2
+      213: 6937523590807553356
+    second: Armour.ss_2
   - first:
-      213: -1027697366627900311
-    second: Explosion.ss_3
+      213: -8446003698704536245
+    second: Armour.ss_3
   - first:
-      213: 3210579256958114488
-    second: Explosion.ss_4
+      213: 3288076902728288076
+    second: Armour.ss_4
   - first:
-      213: -5567570136900017075
-    second: Explosion.ss_5
+      213: -8762234015217352737
+    second: Armour.ss_5
   - first:
-      213: 5289304072410709209
-    second: Explosion.ss_6
+      213: 1245513755167034237
+    second: Armour.ss_6
+  - first:
+      213: 8806246660846694191
+    second: Armour.ss_7
+  - first:
+      213: -170873314978524786
+    second: Armour.ss_8
+  - first:
+      213: -2842347581010163773
+    second: Armour.ss_9
+  - first:
+      213: 1818520014205810042
+    second: Armour.ss_10
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -67,7 +79,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 500
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -136,13 +148,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Explosion.ss_0
+      name: Armour.ss_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 192
-        height: 192
+        width: 110
+        height: 36
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -150,20 +162,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d71c7938b0c81bb10800000000000000
-      internalID: 1995530090982130045
+      spriteID: 174f81f34f70b1650800000000000000
+      internalID: 6204561657245004913
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Explosion.ss_1
+      name: Armour.ss_1
       rect:
         serializedVersion: 2
-        x: 192
+        x: 110
         y: 0
-        width: 192
-        height: 192
+        width: 110
+        height: 36
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -171,20 +183,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 78dd97ee427b25de0800000000000000
-      internalID: -1345811969382687353
+      spriteID: ff723a929984d2fc0800000000000000
+      internalID: -3518075911240734721
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Explosion.ss_2
+      name: Armour.ss_2
       rect:
         serializedVersion: 2
-        x: 384
+        x: 220
         y: 0
-        width: 192
-        height: 192
+        width: 110
+        height: 36
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -192,20 +204,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c183f6e89c1d11fd0800000000000000
-      internalID: -2372884865039255524
+      spriteID: c450af203f8074060800000000000000
+      internalID: 6937523590807553356
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Explosion.ss_3
+      name: Armour.ss_3
       rect:
         serializedVersion: 2
-        x: 576
+        x: 330
         y: 0
-        width: 192
-        height: 192
+        width: 110
+        height: 36
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -213,20 +225,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9642a85a0b2ecb1f0800000000000000
-      internalID: -1027697366627900311
+      spriteID: b4da4178264c9ca80800000000000000
+      internalID: -8446003698704536245
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Explosion.ss_4
+      name: Armour.ss_4
       rect:
         serializedVersion: 2
-        x: 768
+        x: 440
         y: 0
-        width: 192
-        height: 192
+        width: 110
+        height: 36
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -234,20 +246,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8bad936e2d44e8c20800000000000000
-      internalID: 3210579256958114488
+      spriteID: c474945a58891ad20800000000000000
+      internalID: 3288076902728288076
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Explosion.ss_5
+      name: Armour.ss_5
       rect:
         serializedVersion: 2
-        x: 960
+        x: 550
         y: 0
-        width: 192
-        height: 192
+        width: 110
+        height: 36
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -255,20 +267,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d44600075740cb2b0800000000000000
-      internalID: -5567570136900017075
+      spriteID: fdfff14669a466680800000000000000
+      internalID: -8762234015217352737
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Explosion.ss_6
+      name: Armour.ss_6
       rect:
         serializedVersion: 2
-        x: 1152
+        x: 660
         y: 0
-        width: 192
-        height: 192
+        width: 110
+        height: 36
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -276,8 +288,92 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9dc3119a702676940800000000000000
-      internalID: 5289304072410709209
+      spriteID: d7b089b4924f84110800000000000000
+      internalID: 1245513755167034237
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Armour.ss_7
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 0
+        width: 110
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2fac383ea2163a70800000000000000
+      internalID: 8806246660846694191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Armour.ss_8
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 0
+        width: 110
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e819c1710afe0adf0800000000000000
+      internalID: -170873314978524786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Armour.ss_9
+      rect:
+        serializedVersion: 2
+        x: 990
+        y: 0
+        width: 110
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c7c2b93fe3fd88d0800000000000000
+      internalID: -2842347581010163773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Armour.ss_10
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 0
+        width: 110
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a75fca7615eac3910800000000000000
+      internalID: 1818520014205810042
       vertices: []
       indices: 
       edges: []

@@ -136,6 +136,26 @@ public static class Utility
         }
     }
 
+    public static float Lerp(this float value, float target, float t)
+    {
+        if (value < target)
+        {
+            value += Mathf.Abs(t);
+            if (value >= target)
+                return target;
+            else
+                return value;
+        }
+        else
+        {
+            value -= Mathf.Abs(t);
+            if (value <= target)
+                return target;
+            else
+                return value;
+        }
+    }
+
     public static Vector3 Invert(this Vector3 value)
     {
         return new Vector3(-value.x, -value.y, -value.z);
@@ -489,8 +509,8 @@ public class ModifiableFloat
             multiplier += mod.value;
     }
 }
-
-public struct NamedFloat
+[System.Serializable]
+public class NamedFloat
 {
     public NamedFloat(string Name, float Value)
     {

@@ -11,8 +11,21 @@ public class Enemy : TorusMotion
     public SpriteRenderer spriteRenderer;
     public Animator animator;
 
-    [HideInInspector]
-    public float health;
+    private HealthBar healthBar;
+
+    private float _health;
+    public float health
+    {
+        get { return _health; }
+        set
+        {
+            if (value != _health)
+            {
+                _health = value;
+                healthBar.Hit(_health / MaxHealth);
+            }
+        }
+    }
     [HideInInspector]
     public float temperature = 0f;
 
@@ -22,14 +35,20 @@ public class Enemy : TorusMotion
     public bool Stunned => (stunEndTime > Time.time);
 
     [HideInInspector]
+    public int armourDebuffs = 0;
+
+    [HideInInspector]
     public bool frozen = false;
 
     /// <summary> Stack of poison on this enemy. Poison deals infrequent DOT and doesn't diminish, but can be completely resisted. </summary>
     [HideInInspector]
     public float poison = 0;
-    /// <summary> Stack of acid on this enemy. Acid deals regular + constant DOT, diminishes over time, and explodes when enemy is on fire. </summary>
+    /// <summary> Stack of acid on this enemy. Acid deals constant DOT until stack runs out, and explodes when enemy is on fire. </summary>
     [HideInInspector]
     public float acid = 0;
+    /// <summary> Tick damage of the most powerful acid effect applied. </summary>
+    [HideInInspector]
+    public float acidDPS = 0;
     /// <summary> Stack of nanites on this enemy. Nanites deal DOT that is multiplied by the percentage of health remaining,
     /// and does nothing when health is below 10%. Nanites short when hit by lightining, doubling the effects. </summary>
     [HideInInspector]
@@ -42,6 +61,11 @@ public class Enemy : TorusMotion
     [HideInInspector]
     public Weapon lastHitBy;
 
+    void Awake()
+    {
+        healthBar = StaticRefs.SpawnHealthBar(Armour);
+    }
+
 #if UNITY_EDITOR
     // Update is called once per frame
     void Update()
@@ -53,8 +77,10 @@ public class Enemy : TorusMotion
 
     private void FixedUpdate()
     {
-        MoveCloser(CalculateSpeed());
         DOTEffects();
+        MoveCloser(CalculateSpeed());
+        CheckReachedStation();
+        healthBar.Move(transform.position);
     }
 
     private float CalculateSpeed()
@@ -75,12 +101,20 @@ public class Enemy : TorusMotion
         return BaseSpeed * modifier * Time.fixedDeltaTime * 0.01f;
     }
 
+    public void CheckReachedStation()
+    {
+        if (Height <= 0)
+        {
+            //Damage Station
+        }
+    }
+
     private void DOTEffects()
     {
         UpdateTemperature();
         AcidDOT();
 
-        if (health <= 0)
+        if (_health <= 0)
         {
             if (lastHitBy != null)
                 lastHitBy.KillEnemy(this);
@@ -92,18 +126,35 @@ public class Enemy : TorusMotion
         }
     }
 
-    public void SpawnExplosion()
+    public void Destroy()
+    {
+        Destroy(healthBar.gameObject);
+        SpawnExplosion(EffectsScale);
+        gameObject.SetActive(false);
+        Destroy(gameObject);
+    }
+
+    public void SpawnExplosion(float scale)
     {
         if (data.explosionPrefab != null)
-            Instantiate(data.explosionPrefab, transform.position, transform.rotation, transform.parent);
+        {
+            GameObject explosion = Instantiate(data.explosionPrefab, transform.position, transform.rotation, transform.parent);
+            explosion.transform.localScale = new Vector3(scale, scale, scale);
+        }
     }
 
     private void UpdateTemperature()
     {
         if (data.damageFromHot && temperature > data.maxSafeTemp)
-            health -= (temperature - data.maxSafeTemp);// * (1f - data.resistances.Heat);
+        {
+            _health -= (temperature - data.maxSafeTemp) * ResistanceMult(DamageType.heat);
+            healthBar.DOT(_health / MaxHealth);
+        }
         if (data.damageFromCold && temperature < data.freezeTemp)
-            health -= -(temperature - data.freezeTemp);// * (1f - data.resistances.Heat);
+        { 
+            _health -= -(temperature - data.freezeTemp) * ResistanceMult(DamageType.heat);
+            healthBar.DOT(_health / MaxHealth);
+        }
 
 
         if (temperature > data.restingTemp)
@@ -122,16 +173,18 @@ public class Enemy : TorusMotion
     }
 
     public int PointsCost => data.Points(myClass);
-    public float BaseHealth => data.Health(myClass);
-    public int BaseArmour => data.Armour(myClass);
+    public float MaxHealth => data.Health(myClass);
+    public int Armour => data.Armour(myClass) - armourDebuffs;
     public float BaseSpeed => data.Speed(myClass);
     public float XPReward => data.Points(myClass);
+    public float EffectsScale => data.EffectsScale(myClass);
+    public float ResistanceMult(DamageType type) => (1f - data.resistances.GetDamage(type));
 
     public void SetData(EnemyData enemyData)
     {
         data = enemyData;
 
-        health = BaseHealth;
+        _health = MaxHealth;
         temperature = data.restingTemp;
 
         spriteRenderer.sprite = data.ClassSprite(myClass);

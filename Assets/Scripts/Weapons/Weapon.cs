@@ -14,7 +14,10 @@ public abstract class Weapon : TorusMotion
 
     public ModifiableFloat fireRate = new ModifiableFloat(1f, 0.0001f, 60f);
 
-    public AllDamageStats damageStats = new AllDamageStats();
+    public DamageStats damageStats = new DamageStats();
+
+    public ModifiableFloat lightningRange = new ModifiableFloat(5f, 0f, 20f);
+    public ModifiableFloat acidDamage = new ModifiableFloat(5f, 0f, 20f);
 
     protected float _lastShot = 0f;
 
@@ -58,8 +61,8 @@ public abstract class Weapon : TorusMotion
         if (Input.GetButton("Fire" + weaponIndex))
         {
             _firing = true;
-            _actualMoveSpeed = moveSpeed.Value * aimingMult.Value;
-            Fire();
+            if (Fire())
+                _actualMoveSpeed = moveSpeed.Value * aimingMult.Value;
         }
         else
             _firing = false;
@@ -80,7 +83,7 @@ public abstract class Weapon : TorusMotion
 
     protected abstract void Setup();
 
-    protected abstract void Fire();
+    protected abstract bool Fire();
 
     public virtual void AddModifier(string statName, string modifierName, StatChangeOperation operation, float value)
     {
@@ -104,19 +107,34 @@ public abstract class Weapon : TorusMotion
         enemy.health -= damageStats.basic.Value;
 
         //Physical Damage
-        float physicalDamage = damageStats.physical.Value;
+        float physicalDamage = DamageAfterArmour(enemy.Armour, DamageType.physical);
         if (enemy.frozen)
             physicalDamage *= 2f;
-        //physicalDamage *= (1f - enemy.data.resistances.Physical);
+        physicalDamage *= enemy.ResistanceMult(DamageType.physical);
         enemy.health -= physicalDamage;
 
         //Heat Damage
-        enemy.temperature += damageStats.heat.Value;// * (1f - enemy.data.resistances.Heat);
+        float heatDamage = DamageAfterArmour(enemy.Armour, DamageType.heat);
+        enemy.temperature += heatDamage;
+
+        //Lightning
+        float lightningDamage = DamageAfterArmour(enemy.Armour, DamageType.lightning);
 
         if (enemy.health <= 0)
             KillEnemy(enemy);
         else
             enemy.lastHitBy = this;
+    }
+
+    protected float DamageAfterArmour(int armourLevel, DamageType type)
+    {
+        if (type == DamageType.basic)
+            return damageStats.GetDamage(type);
+
+        float damage = damageStats.GetDamage(type);
+        //Reduce damage by 5% per armour level
+        damage -= damage * Mathf.Clamp(armourLevel, 0, 10) * 0.05f;
+        return damage;
     }
 
     public void KillEnemy(Enemy enemy)
@@ -127,10 +145,7 @@ public abstract class Weapon : TorusMotion
         level += 1;
         upgradePoints += 1;
 
-        enemy.SpawnExplosion();
-
-        Destroy(enemy.gameObject);
-        enemy.gameObject.SetActive(false);
+        enemy.Destroy();
     }
 }
 
@@ -186,7 +201,7 @@ public class AllDamage
 }
 
 [System.Serializable]
-public class AllDamageStats
+public class DamageStats
 {
     public ModifiableFloat basic = new ModifiableFloat(0, 0, float.PositiveInfinity);
     public ModifiableFloat physical = new ModifiableFloat(0, 0, float.PositiveInfinity);
@@ -196,4 +211,24 @@ public class AllDamageStats
     public ModifiableFloat lightning = new ModifiableFloat(0, 0, float.PositiveInfinity);
     public ModifiableFloat nanites = new ModifiableFloat(0, 0, float.PositiveInfinity);
     public ModifiableFloat antimatter = new ModifiableFloat(0, 0, float.PositiveInfinity);
+
+    public float GetDamage(DamageType type)
+    {
+        if (type == DamageType.physical)
+            return physical.Value;
+        else if (type == DamageType.heat)
+            return heat.Value;
+        else if (type == DamageType.poison)
+            return poison.Value;
+        else if (type == DamageType.acid)
+            return acid.Value;
+        else if (type == DamageType.lightning)
+            return lightning.Value;
+        else if (type == DamageType.nanites)
+            return nanites.Value;
+        else if (type == DamageType.antimatter)
+            return antimatter.Value;
+        else
+            return basic.Value;
+    }
 }

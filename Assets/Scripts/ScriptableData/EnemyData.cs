@@ -19,12 +19,10 @@ public class EnemyData : ScriptableObject
     [Min(1)]
     [SerializeField]
     private float speed = 1f;
-    [Min(0)]
 
     [Header("Damage Settings")]
-    /// <summary> Reduces damage based on values (0 = full damage, 1 = no damage). DOT effects have damage reduced, not application reduced.  </summary>
-    [EnumNamedArray(typeof(DamageType))]
-    public float[] resistances = new float[Enum.GetNames(typeof(DamageType)).Length];
+    /// <summary> Reduces damage based on values (0 = full damage, 1 = no damage). DOT effects have damage reduced, not application reduced.  </summary>    
+    public AllDamage resistances = new AllDamage();
 
     //Do multipliers for different enemy types
 
@@ -60,6 +58,7 @@ public class EnemyData : ScriptableObject
     public float Speed(EnemyClass enemyClass) => speed * classes[(int)enemyClass].speedMultiplier;
     public Sprite ClassSprite(EnemyClass enemyClass) => classes[(int)enemyClass].sprite;
     public AnimatorController ClassAnimations(EnemyClass enemyClass) => classes[(int)enemyClass].animationController;
+    public float EffectsScale(EnemyClass enemyClass) => classes[(int)enemyClass].effectsSize;
 
     [Header("Effect Prefabs")]
     public GameObject explosionPrefab;
@@ -78,6 +77,7 @@ public class EnemyData : ScriptableObject
                 healthMultiplier = 5f;
                 extraArmour = 3;
                 speedMultiplier = 0.5f;
+                effectsSize = 5f;
             }
             else if (enemyClass == EnemyClass.fast)
             {
@@ -86,6 +86,7 @@ public class EnemyData : ScriptableObject
                 extraArmour = 0;
                 speedMultiplier = 1.5f;
                 abilitySpeed = 2f;
+                effectsSize = 2f;
             }
             else if (enemyClass == EnemyClass.dodge)
             {
@@ -94,6 +95,7 @@ public class EnemyData : ScriptableObject
                 extraArmour = 1;
                 speedMultiplier = 1f;
                 abilitySpeed = 10f;
+                effectsSize = 2f;
             }
         }
 
@@ -109,6 +111,7 @@ public class EnemyData : ScriptableObject
         [Min(0.1f)]
         public float speedMultiplier = 1f;
         public float abilitySpeed = 0f;
+        public float effectsSize = 1f;
 
         public Sprite sprite;
         public AnimatorController animationController;
