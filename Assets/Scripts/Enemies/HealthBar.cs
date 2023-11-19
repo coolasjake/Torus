@@ -30,9 +30,9 @@ public class HealthBar : MonoBehaviour
     private float[] _hitDamages = new float[cacheLen];
     private float _lastDam = 0f;
 
-    private float _hitEffectVal = 1f;
+    private float _hitEffectVal = 0f;
     private float _hitLagVal = 0f;
-    private float _dotEffectVal = 1f;
+    private float _dotEffectVal = 0f;
     private float _dotLagVal = 0f;
 
     private void Awake()

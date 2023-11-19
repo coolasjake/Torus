@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class MachineGun : Weapon
 {
-
     [Header("Machinegun Stats")]
     public ModifiableFloat randomSpreadAngle = new ModifiableFloat(10f, 0f, 90f);
 
@@ -35,8 +36,44 @@ public class MachineGun : Weapon
         Destroy(bullet.gameObject);
     }
 
+    public override void AddModifier(string statName, string modifierName, StatChangeOperation operation, float value)
+    {
+        switch (statName.ToLower())
+        {
+            case "spread":
+                randomSpreadAngle.AddModifier(modifierName, value, operation);
+                return;
+            case "bulletSpeed":
+                bulletSpeed.AddModifier(modifierName, value, operation);
+                return;
+        }
+
+        base.AddModifier(statName, modifierName, operation, value);
+    }
+
+    public override void UnlockPower(string powerName, int level)
+    {
+        MachineGunPowers power;
+        if (Enum.TryParse<MachineGunPowers>(powerName, out power))
+        {
+            powers[(int)power] = level;
+        }
+    }
+
     protected override void Setup()
     {
         bulletPrefab = attackPrefab.GetComponent<Bullet>();
+        powers = new int[Enum.GetNames(typeof(MachineGunPowers)).Length];
+    }
+
+    private enum MachineGunPowers {
+        DoubleShot,
+        ExtraShot,
+        SecondGun,
+        ArmourPierce,
+        EnemiesExplode,
+        ArmourStrip,
+        Fireballs,
+        InstantFreeze,
     }
 }

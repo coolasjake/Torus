@@ -24,7 +24,7 @@ public class Railgun : Weapon
 
     public void RodHit(RailRod rod, Enemy enemy)
     {
-        enemy.SpawnExplosion(0.2f);
+        enemy.SpawnExplosion(0.5f, rod.transform.position);
         DefaultHit(enemy);
     }
 

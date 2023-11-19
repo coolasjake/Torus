@@ -37,12 +37,50 @@ public class Enemy : TorusMotion
     [HideInInspector]
     public int armourDebuffs = 0;
 
-    [HideInInspector]
-    public bool frozen = false;
+    private bool _frozen = false;
+    public bool Frozen
+    {
+        get { return _frozen; }
+        set
+        {
+            if (value != _frozen)
+            {
+                if (value == true)
+                {
+                    //enable frozen effect
+                }
+                else
+                {
+                    //diable frozen effect
+                }
+                _frozen = value;
+            }
+        }
+    }
+    private bool _onFire = false;
+    public bool OnFire
+    {
+        get { return _onFire; }
+        set
+        {
+            if (value != _onFire)
+            {
+                if (value == true)
+                {
+                    //enable on fire effect
+                }
+                else
+                {
+                    //diable on fire effect
+                }
+                _onFire = value;
+            }
+        }
+    }
 
-    /// <summary> Stack of poison on this enemy. Poison deals infrequent DOT and doesn't diminish, but can be completely resisted. </summary>
+    /// <summary> Stack of radiation on this enemy. Radiation deals infrequent DOT and doesn't diminish, but can be completely resisted. </summary>
     [HideInInspector]
-    public float poison = 0;
+    public float radiation = 0;
     /// <summary> Stack of acid on this enemy. Acid deals constant DOT until stack runs out, and explodes when enemy is on fire. </summary>
     [HideInInspector]
     public float acid = 0;
@@ -54,7 +92,7 @@ public class Enemy : TorusMotion
     [HideInInspector]
     public float nanites = 0;
     /// <summary> Stack of antimatter on this enemy. Antimatter creates an explosion with damage AND radius based on the stack size when hit by matter attacks:
-    /// physical, acid, poison, nanites. </summary>
+    /// physical, acid, nanites. </summary>
     [HideInInspector]
     public float antimatter = 0;
 
@@ -139,6 +177,14 @@ public class Enemy : TorusMotion
         if (data.explosionPrefab != null)
         {
             GameObject explosion = Instantiate(data.explosionPrefab, transform.position, transform.rotation, transform.parent);
+            explosion.transform.localScale = new Vector3(scale, scale, scale);
+        }
+    }
+    public void SpawnExplosion(float scale, Vector2 pos)
+    {
+        if (data.explosionPrefab != null)
+        {
+            GameObject explosion = Instantiate(data.explosionPrefab, pos, transform.rotation, transform.parent);
             explosion.transform.localScale = new Vector3(scale, scale, scale);
         }
     }

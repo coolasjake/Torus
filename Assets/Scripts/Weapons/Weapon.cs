@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Random = UnityEngine.Random;
 
 public abstract class Weapon : TorusMotion
 {
@@ -19,6 +20,9 @@ public abstract class Weapon : TorusMotion
     public ModifiableFloat lightningRange = new ModifiableFloat(5f, 0f, 20f);
     public ModifiableFloat acidDamage = new ModifiableFloat(5f, 0f, 20f);
 
+    public ModifiableFloat igniteChance = new ModifiableFloat(0f, 0f, 1f);
+    public ModifiableFloat armourPierce = new ModifiableFloat(0f, 0f, 10f);
+
     protected float _lastShot = 0f;
 
     public SpriteRenderer weaponRenderer;
@@ -27,7 +31,9 @@ public abstract class Weapon : TorusMotion
 
     public Transform firingPoint;
 
-    public List<Ability> unlockedAbilities = new List<Ability>();
+    protected List<AbilityEffect> unlockedAbilities = new List<AbilityEffect>();
+
+    protected int[] powers;
 
     private float experience = 0;
     private float experienceNeeded = 100f;
@@ -91,39 +97,122 @@ public abstract class Weapon : TorusMotion
         {
             case "movespeed":
                 moveSpeed.AddModifier(modifierName, value, operation);
-                break;
+                return;
             case "aimingmult":
                 aimingMult.AddModifier(modifierName, value, operation);
-                break;
+                return;
             case "firerate":
                 fireRate.AddModifier(modifierName, value, operation);
-                break;
+                return;
+            case "acidDamage":
+                acidDamage.AddModifier(modifierName, value, operation);
+                return;
+            case "armourPierce":
+                armourPierce.AddModifier(modifierName, value, operation);
+                return;
+            case "igniteChance":
+                igniteChance.AddModifier(modifierName, value, operation);
+                return;
+            case "lightningRange":
+                lightningRange.AddModifier(modifierName, value, operation);
+                return;
         }
     }
 
+    public abstract void UnlockPower(string powerName, int level);
+
     public void DefaultHit(Enemy enemy)
     {
-        //Basic Damage
-        enemy.health -= damageStats.basic.Value;
-
-        //Physical Damage
-        float physicalDamage = DamageAfterArmour(enemy.Armour, DamageType.physical);
-        if (enemy.frozen)
-            physicalDamage *= 2f;
-        physicalDamage *= enemy.ResistanceMult(DamageType.physical);
-        enemy.health -= physicalDamage;
-
-        //Heat Damage
-        float heatDamage = DamageAfterArmour(enemy.Armour, DamageType.heat);
-        enemy.temperature += heatDamage;
-
-        //Lightning
-        float lightningDamage = DamageAfterArmour(enemy.Armour, DamageType.lightning);
+        NormalBasicDamage(enemy);
+        NormalAntimatterDamage(enemy);
+        NormalAcidDamage(enemy);
+        NormalNanitesDamage(enemy);
+        NormalRadiationDamage(enemy);
+        NormalPhysicalDamage(enemy);
+        NormalHeatDamage(enemy);
+        NormalLightningDamage(enemy);
 
         if (enemy.health <= 0)
             KillEnemy(enemy);
         else
             enemy.lastHitBy = this;
+    }
+
+    protected void NormalBasicDamage(Enemy enemy)
+    {
+        //Basic Damage
+        enemy.health -= damageStats.basic.Value;
+    }
+
+    protected void NormalPhysicalDamage(Enemy enemy)
+    {
+        if (damageStats.physical.Value == 0)
+            return;
+
+        //Physical Damage
+        float physicalDamage = DamageAfterArmour(enemy.Armour, DamageType.physical);
+        if (enemy.Frozen)
+            physicalDamage *= 2f;
+        physicalDamage *= enemy.ResistanceMult(DamageType.physical);
+        enemy.health -= physicalDamage;
+    }
+
+    protected void NormalHeatDamage(Enemy enemy)
+    {
+        if (damageStats.heat.Value == 0 && igniteChance.Value == 0)
+            return;
+
+        //Heat Damage
+        float heatDamage = DamageAfterArmour(enemy.Armour, DamageType.heat);
+        enemy.temperature += heatDamage;
+
+        if (igniteChance.Value > Random.value)
+            enemy.OnFire = true;
+    }
+
+    protected void NormalLightningDamage(Enemy enemy)
+    {
+        if (damageStats.lightning.Value == 0)
+            return;
+
+        //Lightning
+        float lightningDamage = DamageAfterArmour(enemy.Armour, DamageType.lightning);
+    }
+
+    protected void NormalRadiationDamage(Enemy enemy)
+    {
+        if (damageStats.radiation.Value == 0)
+            return;
+
+        float radiationDamage = DamageAfterArmour(enemy.Armour, DamageType.radiation);
+        enemy.radiation += radiationDamage;
+    }
+
+    protected void NormalAcidDamage(Enemy enemy)
+    {
+        if (damageStats.acid.Value == 0)
+            return;
+
+        float acidDamage = DamageAfterArmour(enemy.Armour, DamageType.acid);
+        enemy.acid += acidDamage;
+    }
+
+    protected void NormalNanitesDamage(Enemy enemy)
+    {
+        if (damageStats.nanites.Value == 0)
+            return;
+
+        float nanitesDamage = DamageAfterArmour(enemy.Armour, DamageType.nanites);
+        enemy.nanites += nanitesDamage;
+    }
+
+    protected void NormalAntimatterDamage(Enemy enemy)
+    {
+        if (damageStats.antimatter.Value == 0)
+            return;
+
+        float antimatterDamage = DamageAfterArmour(enemy.Armour, DamageType.antimatter);
+        enemy.antimatter += antimatterDamage;
     }
 
     protected float DamageAfterArmour(int armourLevel, DamageType type)
@@ -133,7 +222,7 @@ public abstract class Weapon : TorusMotion
 
         float damage = damageStats.GetDamage(type);
         //Reduce damage by 5% per armour level
-        damage -= damage * Mathf.Clamp(armourLevel, 0, 10) * 0.05f;
+        damage -= damage * Mathf.Clamp(armourLevel - armourPierce.Value, 0, 10) * 0.05f;
         return damage;
     }
 
@@ -168,10 +257,10 @@ public enum DamageType
     physical,   //kinetic damage. Applied instantly, heavily effected by armor, deals bonus damage to frozen
     heat,       //temperature change. Enemy freezes when low enough, and takes heat damage when high enough
     lightning,  //splits some of the damage to other nearby enemies based on conductivity value
-    poison,     //add poison to target, target takes slow damage over time, often completely resisted
+    radiation,  //add radiation to target, target takes slow damage over time, often completely resisted
     acid,       //add acid to target, target takes quick damage over time, value reduces each time
     nanites,    //add nanites to target, target takes damage over time that goes down when their health gets lower and does nothing when below 10%.
-    antimatter  //add antimatter to target, target explodes dealing basic damage to self and nearby enemies when hit by physical, poison, acid or nanites.
+    antimatter  //add antimatter to target, target explodes dealing basic damage to self and nearby enemies when hit by physical, acid or nanites.
 }
 
 [System.Serializable]
@@ -193,7 +282,7 @@ public class AllDamage
     public float Basic => damageTypes[(int)DamageType.basic];
     public float Physical => damageTypes[(int)DamageType.physical];
     public float Heat => damageTypes[(int)DamageType.heat];
-    public float Poison => damageTypes[(int)DamageType.poison];
+    public float Radiation => damageTypes[(int)DamageType.radiation];
     public float Acid => damageTypes[(int)DamageType.acid];
     public float Lightning => damageTypes[(int)DamageType.lightning];
     public float Nanites => damageTypes[(int)DamageType.nanites];
@@ -206,7 +295,7 @@ public class DamageStats
     public ModifiableFloat basic = new ModifiableFloat(0, 0, float.PositiveInfinity);
     public ModifiableFloat physical = new ModifiableFloat(0, 0, float.PositiveInfinity);
     public ModifiableFloat heat = new ModifiableFloat(0, 0, float.PositiveInfinity);
-    public ModifiableFloat poison = new ModifiableFloat(0, 0, float.PositiveInfinity);
+    public ModifiableFloat radiation = new ModifiableFloat(0, 0, float.PositiveInfinity);
     public ModifiableFloat acid = new ModifiableFloat(0, 0, float.PositiveInfinity);
     public ModifiableFloat lightning = new ModifiableFloat(0, 0, float.PositiveInfinity);
     public ModifiableFloat nanites = new ModifiableFloat(0, 0, float.PositiveInfinity);
@@ -218,8 +307,8 @@ public class DamageStats
             return physical.Value;
         else if (type == DamageType.heat)
             return heat.Value;
-        else if (type == DamageType.poison)
-            return poison.Value;
+        else if (type == DamageType.radiation)
+            return radiation.Value;
         else if (type == DamageType.acid)
             return acid.Value;
         else if (type == DamageType.lightning)

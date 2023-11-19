@@ -2,46 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Ability : MonoBehaviour
+public class AbilityUI : MonoBehaviour
+{
+    private AbilityGroup chosenGroup;
+    private int abilityIndex = 0;
+}
+
+public class ValidAbilityGroups : ScriptableObject
+{
+    public List<AbilityGroup> validAbilityGroups;
+}
+
+public class AbilityGroup : ScriptableObject
 {
     public WeaponType targetType;
+    public List<string> preReqAbilities = new List<string>();
+    public List<string> incompatibleAbilities = new List<string>();
+    public List<Ability> abilities = new List<Ability>();
+}
+
+public class Ability : ScriptableObject
+{
+    //public string name;
+    public string description;
+    public List<AbilityEffect> effects;
+}
+
+public abstract class AbilityEffect
+{
     [Tooltip("Larger numbers will be applied later, and override effects of lower numbers")]
+    public string name = "";
     public int priority = 0;
+    public bool isPower = false;
+    public string statName = "";
+    public StatChangeOperation operation;
+    public float change = 1f;
 
-    public abstract void Apply(Weapon weapon);
-}
-
-public class AttackPrefabChange : Ability
-{
-    public GameObject newAttackPrefab;
-
-    public override void Apply(Weapon weapon)
+    public void Apply(Weapon weapon)
     {
-        weapon.attackPrefab = newAttackPrefab;
-    }
-}
-public class AppearanceChange : Ability
-{
-    public Sprite newWeaponSprite; //May need to change to account for animations etc
-
-    public override void Apply(Weapon weapon)
-    {
-        weapon.weaponRenderer.sprite = newWeaponSprite;
+        if (isPower)
+            weapon.UnlockPower(statName, (int)change);
+        else
+            weapon.AddModifier(statName, name, operation, change);
     }
 }
 
-public class StatChange : Ability
-{
-    public string statName;
-    public StatChangeOperation operation = StatChangeOperation.Add;
-    public float newValue;
-
-    public override void Apply(Weapon weapon)
-    {
-        weapon.AddModifier(statName, name, operation, newValue);
-    }
-
-}
 public enum StatChangeOperation
 {
     Add,
