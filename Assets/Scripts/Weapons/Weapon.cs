@@ -10,6 +10,8 @@ public abstract class Weapon : TorusMotion
     [Header("Weapon Options")]
     public int weaponIndex = 0;
 
+    public abstract WeaponType Type();
+
     public ModifiableFloat moveSpeed = new ModifiableFloat(10f);
     public ModifiableFloat aimingMult = new ModifiableFloat(0.5f, 0f, 1f);
 
@@ -37,8 +39,10 @@ public abstract class Weapon : TorusMotion
 
     private float experience = 0;
     private float experienceNeeded = 100f;
-    private int level = 0;
-    private int upgradePoints = 0;
+    [HideInInspector]
+    public int level = 0;
+    [HideInInspector]
+    public int upgradePoints = 0;
 
     /*
     public delegate void EnemyHitEvent(Weapon origin, Enemy target);

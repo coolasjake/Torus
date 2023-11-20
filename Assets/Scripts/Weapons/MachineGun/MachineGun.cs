@@ -6,6 +6,11 @@ using Random = UnityEngine.Random;
 
 public class MachineGun : Weapon
 {
+    public override WeaponType Type()
+    {
+        return WeaponType.MachineGun;
+    }
+
     [Header("Machinegun Stats")]
     public ModifiableFloat randomSpreadAngle = new ModifiableFloat(10f, 0f, 90f);
 
@@ -54,7 +59,7 @@ public class MachineGun : Weapon
     public override void UnlockPower(string powerName, int level)
     {
         MachineGunPowers power;
-        if (Enum.TryParse<MachineGunPowers>(powerName, out power))
+        if (Enum.TryParse(powerName, out power))
         {
             powers[(int)power] = level;
         }

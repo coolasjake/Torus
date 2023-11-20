@@ -11,6 +11,8 @@ public class StaticRefs : MonoBehaviour
 
     [SerializeField]
     private List<Sprite> healthArmourBorders = new List<Sprite>();
+    [SerializeField]
+    private List<Sprite> upgradeLvlIcons = new List<Sprite>();
 
     [SerializeField]
     private HealthBar healthBarPrefab;
@@ -19,6 +21,12 @@ public class StaticRefs : MonoBehaviour
     {
         level = Mathf.Clamp(level, 0, singleton.healthArmourBorders.Count - 1);
         return singleton.healthArmourBorders[level];
+    }
+
+    public static Sprite UpgradeLvlIcon(int level)
+    {
+        level = Mathf.Clamp(level, 0, singleton.upgradeLvlIcons.Count - 1);
+        return singleton.upgradeLvlIcons[level];
     }
 
     public static HealthBar SpawnHealthBar(int armourLvl)
