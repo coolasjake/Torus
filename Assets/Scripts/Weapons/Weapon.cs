@@ -4,22 +4,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using Random = UnityEngine.Random;
+using UnityEngine.InputSystem;
 
 public abstract class Weapon : TorusMotion
 {
-    [Header("Weapon Options")]
-    public int weaponIndex = 0;
-
     public abstract WeaponType Type();
 
+    public int playerIndex = 0;
+    public GameObject inputPrefab;
+    private WeaponInput weaponInput;
+
+    [Header("Weapon Options")]
     public ModifiableFloat moveSpeed = new ModifiableFloat(10f);
     public ModifiableFloat aimingMult = new ModifiableFloat(0.5f, 0f, 1f);
 
-    public ModifiableFloat fireRate = new ModifiableFloat(1f, 0.0001f, 60f);
+    public ModifiableFloat attacksPerSecond = new ModifiableFloat(1f, 0.0001f, 60f);
+    protected float FireRate => 1f / attacksPerSecond.Value;
 
     public DamageStats damageStats = new DamageStats();
 
     public ModifiableFloat lightningRange = new ModifiableFloat(5f, 0f, 20f);
+    public ModifiableFloat lightningChains = new ModifiableFloat(1f, 0f, 20f);
     public ModifiableFloat acidDamage = new ModifiableFloat(5f, 0f, 20f);
 
     public ModifiableFloat igniteChance = new ModifiableFloat(0f, 0f, 1f);
@@ -54,6 +59,7 @@ public abstract class Weapon : TorusMotion
 
     void Start()
     {
+        CreateInputObject();
         Setup();
     }
 
@@ -68,7 +74,7 @@ public abstract class Weapon : TorusMotion
         _actualMoveSpeed = moveSpeed.Value;
 
         //Shoot
-        if (Input.GetButton("Fire" + weaponIndex))
+        if (weaponInput.Firing)
         {
             _firing = true;
             if (Fire())
@@ -78,7 +84,7 @@ public abstract class Weapon : TorusMotion
             _firing = false;
 
         //Move
-        float input = Input.GetAxis("Horizontal" + weaponIndex);
+        float input = weaponInput.Movement.x;
         if (input > 0)
         {
             MoveAround(-_actualMoveSpeed * Time.fixedDeltaTime);
@@ -87,8 +93,13 @@ public abstract class Weapon : TorusMotion
         {
             MoveAround(_actualMoveSpeed * Time.fixedDeltaTime);
         }
+    }
 
-
+    protected void CreateInputObject()
+    {
+        WeaponInput newInput = PlayerInput.Instantiate(inputPrefab, controlScheme: "Keyboard_" + playerIndex, pairWithDevice: Keyboard.current).GetComponent<WeaponInput>();
+        newInput.transform.SetParent(transform);
+        weaponInput = newInput;
     }
 
     protected abstract void Setup();
@@ -106,7 +117,7 @@ public abstract class Weapon : TorusMotion
                 aimingMult.AddModifier(modifierName, value, operation);
                 return;
             case "firerate":
-                fireRate.AddModifier(modifierName, value, operation);
+                attacksPerSecond.AddModifier(modifierName, value, operation);
                 return;
             case "acidDamage":
                 acidDamage.AddModifier(modifierName, value, operation);

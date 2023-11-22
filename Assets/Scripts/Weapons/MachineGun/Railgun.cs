@@ -18,7 +18,7 @@ public class Railgun : Weapon
 
     protected override bool Fire()
     {
-        if (Time.time > _lastShot + fireRate.Value)
+        if (Time.time > _lastShot + FireRate)
         {
             RailRod newBullet = Instantiate(rodPrefab, firingPoint.position, firingPoint.rotation);
             Vector2 dir = firingPoint.up;

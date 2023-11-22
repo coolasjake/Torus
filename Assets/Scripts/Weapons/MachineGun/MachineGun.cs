@@ -22,7 +22,7 @@ public class MachineGun : Weapon
 
     protected override bool Fire()
     {
-        if (Time.time > _lastShot + fireRate.Value)
+        if (Time.time > _lastShot + FireRate)
         {
             Bullet newBullet = Instantiate(bulletPrefab, firingPoint.position, firingPoint.rotation);
             Vector2 dir = firingPoint.up;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Enemy : TorusMotion
 {
@@ -99,6 +100,10 @@ public class Enemy : TorusMotion
     [HideInInspector]
     public Weapon lastHitBy;
 
+    public delegate void DestroyEvent(Enemy destroyedEnemy);
+    /// <summary> Events that happen when this enemy is destroyed - specifically designed to register deaths in game managers. </summary>
+    public DestroyEvent destroyEvents;
+
     void Awake()
     {
         healthBar = StaticRefs.SpawnHealthBar(Armour);
@@ -169,6 +174,7 @@ public class Enemy : TorusMotion
         Destroy(healthBar.gameObject);
         SpawnExplosion(EffectsScale);
         gameObject.SetActive(false);
+        destroyEvents.Invoke(this);
         Destroy(gameObject);
     }
 
@@ -180,6 +186,7 @@ public class Enemy : TorusMotion
             explosion.transform.localScale = new Vector3(scale, scale, scale);
         }
     }
+
     public void SpawnExplosion(float scale, Vector2 pos)
     {
         if (data.explosionPrefab != null)

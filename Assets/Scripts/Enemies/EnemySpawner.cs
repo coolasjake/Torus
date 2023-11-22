@@ -12,21 +12,18 @@ public class EnemySpawner : MonoBehaviour
     public Enemy[] classBasePrefabs = new Enemy[System.Enum.GetNames(typeof(EnemyClass)).Length];
     public float spawningHeight = 10f;
 
-    private List<EnemyFleet> fleets = new List<EnemyFleet>();
+    private List<EnemyFleet> fleetsToSpawn = new List<EnemyFleet>();
 
-    void Start()
+    private List<Enemy> enemies = new List<Enemy>();
+
+    public void StartWave()
     {
-        for(int i = 0; i < 360; i += 20)
+        for (int i = 0; i < 360; i += 20)
         {
             EnemyData randomMainType = missionData.mainEnemyTypes.Rand();
             EnemyClass randomClass = (EnemyClass)Random.Range(0, System.Enum.GetNames(typeof(EnemyClass)).Length);
             SpawnEnemy(i, randomMainType, randomClass);
         }
-    }
-
-    public void StartWave()
-    {
-
     }
 
     private void PlanWave()
@@ -39,6 +36,16 @@ public class EnemySpawner : MonoBehaviour
         Enemy newEnemy = Instantiate(classBasePrefabs[(int)enemyClass], transform);
         newEnemy.SetData(data);
         newEnemy.AngleAndHeight = new Vector2(angle, spawningHeight);
+        enemies.Add(newEnemy);
+        newEnemy.destroyEvents += EnemyDestroyed;
+    }
+
+    public void EnemyDestroyed(Enemy enemy)
+    {
+        enemies.Remove(enemy);
+
+        if (enemies.Count == 0 && fleetsToSpawn.Count == 0)
+            BattleController.EndWave();
     }
 
     private class EnemyFleet
