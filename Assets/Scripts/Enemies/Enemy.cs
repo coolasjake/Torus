@@ -87,7 +87,7 @@ public class Enemy : TorusMotion
     public float acid = 0;
     /// <summary> Tick damage of the most powerful acid effect applied. </summary>
     [HideInInspector]
-    public float acidDPS = 0;
+    public float acidDPS = 1;
     /// <summary> Stack of nanites on this enemy. Nanites deal DOT that is multiplied by the percentage of health remaining,
     /// and does nothing when health is below 10%. Nanites short when hit by lightining, doubling the effects. </summary>
     [HideInInspector]
@@ -221,8 +221,9 @@ public class Enemy : TorusMotion
         if (acid <= 0)
             return;
 
-        float acidDamage = acid;
-
+        _health -= acidDPS * Time.fixedDeltaTime;
+        healthBar.DOT(_health / MaxHealth);
+        acid -= 1;
     }
 
     public int PointsCost => data.Points(myClass);

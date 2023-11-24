@@ -51,5 +51,16 @@ public class TorusTester : MonoBehaviour
             Gizmos.DrawLine(lastPos, newPos);
             lastPos = newPos;
         }
+
+        for (int i = 0; i < gizmoSections / 5; ++i)
+        {
+            float angle = i * (360f / (gizmoSections / 5));
+            Vector2 origin = TorusMotion.GetPos(angle, 0.0001f);
+            Vector2 torusPoint = TorusMotion.GetPos(angle, 1);
+            Vector2 space = TorusMotion.GetPos(angle, 10);
+
+            Gizmos.DrawLine(origin, torusPoint);
+            Gizmos.DrawLine(torusPoint, space);
+        }
     }
 }

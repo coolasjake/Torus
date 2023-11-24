@@ -63,6 +63,8 @@ public class MachineGun : Weapon
         {
             powers[(int)power] = level;
         }
+        else
+            Debug.Log("Couldn't find power with name: " + powerName);
     }
 
     protected override void Setup()

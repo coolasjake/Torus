@@ -25,7 +25,7 @@ public class BattleController : MonoBehaviour
 
     public static void BecomeReady(UpgradeController player)
     {
-        int index = singleton.upgradeControllers.FindIndex(X => X = player);
+        int index = singleton.upgradeControllers.FindIndex(X => X == player);
         _readyPlayers[index] = true;
 
         numReadyPlayers = 0;
@@ -41,6 +41,8 @@ public class BattleController : MonoBehaviour
 
     public static void EndWave()
     {
+        for (int i = 0; i < _readyPlayers.Length; ++i)
+            _readyPlayers[i] = false;
         foreach (UpgradeController upgrader in singleton.upgradeControllers)
         {
             upgrader.StartUpgrading();

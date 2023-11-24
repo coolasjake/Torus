@@ -9,10 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: MG_FireRate1
-  m_EditorClassIdentifier: Assembly-CSharp::AbilityGroupData
-  targetType: 1
+  m_Script: {fileID: 11500000, guid: a3ee6e4866897e34285b16a9fcd9ea1f, type: 3}
+  m_Name: Basic Radiation
+  m_EditorClassIdentifier: 
+  targetType: 0
   preReqAbilities: []
   incompatibleAbilities: []
-  abilities: []
+  abilities:
+  - {fileID: 11400000, guid: 06b9973e77c780a44966742ba04dd227, type: 2}
+  - {fileID: 11400000, guid: 0c489212891b1d141ab4ab4aba612c91, type: 2}

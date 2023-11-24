@@ -25,7 +25,6 @@ public class Bullet : MonoBehaviour
         Enemy enemy = collision.collider.GetComponent<Enemy>();
         if (enemy)
         {
-            print(enemy.name);
             machinegun.BulletHit(this, enemy);
         }
     }

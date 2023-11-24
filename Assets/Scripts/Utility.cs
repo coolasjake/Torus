@@ -458,8 +458,6 @@ public class ModifiableFloat
         max = Max;
     }
 
-    //[SerializeField]
-    //private string name = "";
     [SerializeField]
     private float defaultValue = 0f;
     [SerializeField]

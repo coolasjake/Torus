@@ -42,12 +42,16 @@ public abstract class Weapon : TorusMotion
 
     protected int[] powers;
 
-    private float experience = 0;
-    private float experienceNeeded = 100f;
-    [HideInInspector]
-    public int level = 0;
-    [HideInInspector]
-    public int upgradePoints = 0;
+    public float Experience => _experience;
+    protected float _experience = 0;
+    public float ExperienceNeeded => _experienceNeeded;
+    protected float _experienceNeeded = 100f;
+    public int Level => _level;
+    protected int _level = 0;
+    public int UpgradePoints => _upgradePoints;
+    protected int _upgradePoints = 0;
+
+    protected bool leftIsClockwise = false;
 
     /*
     public delegate void EnemyHitEvent(Weapon origin, Enemy target);
@@ -83,8 +87,18 @@ public abstract class Weapon : TorusMotion
         else
             _firing = false;
 
+        if (weaponInput.MovementDown)
+        {
+            if (Angle.Inside(0f + StaticRefs.SwapAngle, 180f - StaticRefs.SwapAngle))
+                leftIsClockwise = false;
+            else if (Angle.Inside(180f + StaticRefs.SwapAngle, 360f - StaticRefs.SwapAngle))
+                leftIsClockwise = true;
+        }
+
         //Move
         float input = weaponInput.Movement.x;
+        if (leftIsClockwise)
+            input = -input;
         if (input > 0)
         {
             MoveAround(-_actualMoveSpeed * Time.fixedDeltaTime);
@@ -93,6 +107,13 @@ public abstract class Weapon : TorusMotion
         {
             MoveAround(_actualMoveSpeed * Time.fixedDeltaTime);
         }
+
+        WeaponFixedUpdate();
+    }
+
+    private void Update()
+    {
+        WeaponUpdate();
     }
 
     protected void CreateInputObject()
@@ -106,9 +127,25 @@ public abstract class Weapon : TorusMotion
 
     protected abstract bool Fire();
 
+    protected virtual void WeaponUpdate() { }
+
+    protected virtual void WeaponFixedUpdate() { }
+
     public virtual void AddModifier(string statName, string modifierName, StatChangeOperation operation, float value)
     {
-        switch (statName.ToLower())
+        statName = statName.ToLower();
+        if (statName.Contains(" power"))
+        {
+            string simplifiedName = statName.Replace(" power", "");
+            DamageType damageType;
+            if (Enum.TryParse(simplifiedName, out damageType))
+            {
+                damageStats.ModifyDamage(damageType, modifierName, operation, value);
+                return;
+            }
+        }
+
+        switch (statName)
         {
             case "movespeed":
                 moveSpeed.AddModifier(modifierName, value, operation);
@@ -132,6 +169,8 @@ public abstract class Weapon : TorusMotion
                 lightningRange.AddModifier(modifierName, value, operation);
                 return;
         }
+
+        Debug.Log("Couldn't find stat with name: " + statName);
     }
 
     public abstract void UnlockPower(string powerName, int level);
@@ -243,13 +282,30 @@ public abstract class Weapon : TorusMotion
 
     public void KillEnemy(Enemy enemy)
     {
-        experience += enemy.XPReward;
-        if (experience > experienceNeeded)
-            experience -= experienceNeeded;
-        level += 1;
-        upgradePoints += 1;
-
+        GainExperience(enemy.XPReward);
         enemy.Destroy();
+    }
+
+    public void GainExperience(float xp)
+    {
+        _experience += xp;
+        if (_experience > _experienceNeeded)
+        {
+            _experience -= _experienceNeeded;
+            _level += 1;
+            _upgradePoints += 1;
+            _experienceNeeded += _experienceNeeded * 0.1f;
+        }
+    }
+
+    public bool UseUpgradePoint()
+    {
+        if (_upgradePoints > 0)
+        {
+            --_upgradePoints;
+            return true;
+        }
+        return false;
     }
 }
 
@@ -270,7 +326,8 @@ public enum DamageType
 {
     basic,      //default damage, uneffected by resistances or armor
     physical,   //kinetic damage. Applied instantly, heavily effected by armor, deals bonus damage to frozen
-    heat,       //temperature change. Enemy freezes when low enough, and takes heat damage when high enough
+    heat,       //positive temperature change. Enemy takes heat damage when high enough
+    cold,       //negative temperature change. Enemy freezes when low enough
     lightning,  //splits some of the damage to other nearby enemies based on conductivity value
     radiation,  //add radiation to target, target takes slow damage over time, often completely resisted
     acid,       //add acid to target, target takes quick damage over time, value reduces each time
@@ -297,6 +354,7 @@ public class AllDamage
     public float Basic => damageTypes[(int)DamageType.basic];
     public float Physical => damageTypes[(int)DamageType.physical];
     public float Heat => damageTypes[(int)DamageType.heat];
+    public float Cold => damageTypes[(int)DamageType.cold];
     public float Radiation => damageTypes[(int)DamageType.radiation];
     public float Acid => damageTypes[(int)DamageType.acid];
     public float Lightning => damageTypes[(int)DamageType.lightning];
@@ -310,6 +368,7 @@ public class DamageStats
     public ModifiableFloat basic = new ModifiableFloat(0, 0, float.PositiveInfinity);
     public ModifiableFloat physical = new ModifiableFloat(0, 0, float.PositiveInfinity);
     public ModifiableFloat heat = new ModifiableFloat(0, 0, float.PositiveInfinity);
+    public ModifiableFloat cold = new ModifiableFloat(0, 0, float.PositiveInfinity);
     public ModifiableFloat radiation = new ModifiableFloat(0, 0, float.PositiveInfinity);
     public ModifiableFloat acid = new ModifiableFloat(0, 0, float.PositiveInfinity);
     public ModifiableFloat lightning = new ModifiableFloat(0, 0, float.PositiveInfinity);
@@ -322,6 +381,8 @@ public class DamageStats
             return physical.Value;
         else if (type == DamageType.heat)
             return heat.Value;
+        else if (type == DamageType.cold)
+            return cold.Value;
         else if (type == DamageType.radiation)
             return radiation.Value;
         else if (type == DamageType.acid)
@@ -334,5 +395,27 @@ public class DamageStats
             return antimatter.Value;
         else
             return basic.Value;
+    }
+
+    public void ModifyDamage(DamageType type, string modifierName, StatChangeOperation operation, float value)
+    {
+        if (type == DamageType.physical)
+            physical.AddModifier(modifierName, value, operation);
+        else if (type == DamageType.heat)
+            heat.AddModifier(modifierName, value, operation);
+        else if (type == DamageType.cold)
+            heat.AddModifier(modifierName, value, operation);
+        else if (type == DamageType.radiation)
+            radiation.AddModifier(modifierName, value, operation);
+        else if (type == DamageType.acid)
+            acid.AddModifier(modifierName, value, operation);
+        else if (type == DamageType.lightning)
+            lightning.AddModifier(modifierName, value, operation);
+        else if (type == DamageType.nanites)
+            nanites.AddModifier(modifierName, value, operation);
+        else if (type == DamageType.antimatter)
+            antimatter.AddModifier(modifierName, value, operation);
+        else
+            basic.AddModifier(modifierName, value, operation);
     }
 }

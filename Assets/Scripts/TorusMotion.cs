@@ -20,7 +20,7 @@ public class TorusMotion : MonoBehaviour
         get { return _angle; }
         set
         {
-            _angle = value % 360f;
+            _angle = (value + 360f) % 360f;
             UpdatePos();
         }
     }
@@ -67,9 +67,23 @@ public class TorusMotion : MonoBehaviour
     private void UpdatePos()
     {
         transform.position = GetPos(_angle, _height);
-        transform.rotation = Quaternion.Euler(0, 0, _angle - 90f);
+        //SimpleRotation();
+        AccurateRotation();
         transform.hasChanged = false;
     }
+
+    private void SimpleRotation()
+    {
+        transform.rotation = Quaternion.Euler(0, 0, _angle - 90f);
+    }
+
+    private void AccurateRotation()
+    {
+        Vector2 scaledPoint = new Vector2(Mathf.Cos(Mathf.Deg2Rad * _angle) * torusScale.x, Mathf.Sin(Mathf.Deg2Rad * _angle) * torusScale.y);
+        float angle = Vector2.SignedAngle(Vector2.right, scaledPoint);
+        transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
+    }
+
     public static Vector2 GetPos(float angle)
     {
         return GetPos(angle, 1);

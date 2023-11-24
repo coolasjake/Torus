@@ -564,8 +564,6 @@ GameObject:
   - component: {fileID: 548207670}
   - component: {fileID: 548207669}
   - component: {fileID: 548207671}
-  - component: {fileID: 548207673}
-  - component: {fileID: 548207672}
   m_Layer: 5
   m_Name: TopPanel
   m_TagString: Untagged
@@ -647,56 +645,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetWeapon: {fileID: 1891033584}
-  abilityDataFolder: /Data/AbiliyGroups
-  title: {fileID: 369956121}
+  abilityDataFolder: Data/AbilityGroups
+  title: {fileID: 1217850294}
   buttons:
   - {fileID: 928874878}
   - {fileID: 2052989815}
   - {fileID: 1542349281}
   possibleAbilityGroups: []
   validGroupPool: []
---- !u!114 &548207672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 548207667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MoveRepeatDelay: 0.5
-  m_MoveRepeatRate: 0.1
-  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_PointAction: {fileID: 1054132383583890850, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_MoveAction: {fileID: 3710738434707379630, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_SubmitAction: {fileID: 2064916234097673511, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_CancelAction: {fileID: -1967631576421560919, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_LeftClickAction: {fileID: 8056856818456041789, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_MiddleClickAction: {fileID: 3279352641294131588, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_RightClickAction: {fileID: 3837173908680883260, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_ScrollWheelAction: {fileID: 4502412055082496612, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_TrackedDevicePositionAction: {fileID: 4754684134866288074, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_TrackedDeviceOrientationAction: {fileID: 1025543830046995696, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_DeselectOnBackgroundClick: 1
-  m_PointerBehavior: 0
---- !u!114 &548207673
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 548207667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
-  m_DragThreshold: 10
+  chosenGroups: []
 --- !u!1 &794834578
 GameObject:
   m_ObjectHideFlags: 0
@@ -1493,6 +1450,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39f44fb095259e74bb84b8d6f6ac671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackMask:
+    serializedVersion: 2
+    m_Bits: 128
   healthBarCanvas: {fileID: 1428570012}
   healthArmourBorders:
   - {fileID: 6204561657245004913, guid: d33975cfc3fd38a4ba73efe18b5630cd, type: 3}
@@ -1513,6 +1473,7 @@ MonoBehaviour:
   - {fileID: 2278709590335091610, guid: cf86e098704ebc74cb6d0e1125f467d6, type: 3}
   - {fileID: 4352230217555344583, guid: cf86e098704ebc74cb6d0e1125f467d6, type: 3}
   healthBarPrefab: {fileID: 777844717229031917, guid: d72fb0602925330468c78f68565c1054, type: 3}
+  weaponDirectionSwapBuffer: 45
 --- !u!114 &1302523176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1586,6 +1547,10 @@ MonoBehaviour:
       defaultValue: 0
       min: 0
       max: Infinity
+    cold:
+      defaultValue: 0
+      min: 0
+      max: Infinity
     radiation:
       defaultValue: 0
       min: 0
@@ -1629,12 +1594,11 @@ MonoBehaviour:
   weaponRenderer: {fileID: 1312168639}
   attackPrefab: {fileID: 9123346512063545302, guid: bd71f6722dd550049a2bd2c13172be43, type: 3}
   firingPoint: {fileID: 1760913862}
-  level: 0
-  upgradePoints: 0
   bulletSpeed:
     defaultValue: 10
     min: 0.01
     max: 1000
+  aimingLaser: {fileID: 2101471614}
 --- !u!212 &1312168639
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1698,6 +1662,7 @@ Transform:
   m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children:
   - {fileID: 1760913862}
+  - {fileID: 2101471613}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2075,7 +2040,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetWeapon: {fileID: 1312168638}
-  abilityDataFolder: /Data/AbiliyGroups
+  abilityDataFolder: Data/AbilityGroups
   title: {fileID: 369956121}
   buttons:
   - {fileID: 296145541}
@@ -2083,6 +2048,7 @@ MonoBehaviour:
   - {fileID: 1766117361}
   possibleAbilityGroups: []
   validGroupPool: []
+  chosenGroups: []
 --- !u!114 &1443561733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2520,7 +2486,8 @@ MonoBehaviour:
   - {fileID: 5102851163617004104, guid: ed215da6fd960fd4e8ede122d96c9f00, type: 3}
   - {fileID: 8594121849087106520, guid: 5c69a2594dc8fb04d9f049f1ad4adf89, type: 3}
   - {fileID: 6843059617215851669, guid: a8f3614dec2d31a47ae0b79777f95b5a, type: 3}
-  spawningHeight: 7
+  spawningHeight: 6
+  DoEasyTestWave: 0
 --- !u!1 &1846198353
 GameObject:
   m_ObjectHideFlags: 0
@@ -2678,6 +2645,10 @@ MonoBehaviour:
       defaultValue: 0
       min: 0
       max: Infinity
+    cold:
+      defaultValue: 0
+      min: 0
+      max: Infinity
     radiation:
       defaultValue: 0
       min: 0
@@ -2721,8 +2692,6 @@ MonoBehaviour:
   weaponRenderer: {fileID: 1891033586}
   attackPrefab: {fileID: 8518275168281427132, guid: 170b78ca6b35e794c87e7144dc8dec0d, type: 3}
   firingPoint: {fileID: 249289962}
-  level: 0
-  upgradePoints: 0
   randomSpreadAngle:
     defaultValue: 0
     min: 0
@@ -2918,6 +2887,135 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 167733435695984161, guid: 149285cad306c5e4aa131ba965c7dc22, type: 3}
   m_PrefabInstance: {fileID: 2052989814}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2101471612
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2101471613}
+  - component: {fileID: 2101471614}
+  m_Layer: 0
+  m_Name: Laser
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &2101471613
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101471612}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.04, y: 0.03, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1312168640}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!120 &2101471614
+LineRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101471612}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 4, z: 0}
+  m_Parameters:
+    serializedVersion: 3
+    widthMultiplier: 0.005
+    widthCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    colorGradient:
+      serializedVersion: 2
+      key0: {r: 1, g: 0, b: 0, a: 1}
+      key1: {r: 1, g: 0, b: 0, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    numCornerVertices: 0
+    numCapVertices: 0
+    alignment: 1
+    textureMode: 0
+    shadowBias: 0.5
+    generateLightingData: 0
+  m_UseWorldSpace: 0
+  m_Loop: 0
 --- !u!1001 &167733436520394587
 PrefabInstance:
   m_ObjectHideFlags: 0

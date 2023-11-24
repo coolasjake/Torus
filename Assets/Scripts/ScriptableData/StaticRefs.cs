@@ -7,6 +7,9 @@ public class StaticRefs : MonoBehaviour
     private static StaticRefs singleton;
 
     [SerializeField]
+    private LayerMask attackMask;
+
+    [SerializeField]
     private Canvas healthBarCanvas;
 
     [SerializeField]
@@ -16,6 +19,11 @@ public class StaticRefs : MonoBehaviour
 
     [SerializeField]
     private HealthBar healthBarPrefab;
+
+    [SerializeField]
+    [Min(-90f)]
+    [Tooltip("Controls the angle that a weapon has to have before the left/right movement direction is flipped to be more intuitive.")]
+    private float weaponDirectionSwapBuffer = 0f;
 
     public static Sprite ArmourBorder(int level)
     {
@@ -35,6 +43,10 @@ public class StaticRefs : MonoBehaviour
         HB.SetArmour(armourLvl);
         return HB;
     }
+
+    public static LayerMask AttackMask => singleton.attackMask;
+
+    public static float SwapAngle => singleton.weaponDirectionSwapBuffer;
 
     void Awake()
     {

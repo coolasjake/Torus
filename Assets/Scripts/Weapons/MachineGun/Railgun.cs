@@ -14,6 +14,11 @@ public class Railgun : Weapon
     [Header("Railgun Stats")]
     public ModifiableFloat bulletSpeed = new ModifiableFloat(10f, 0.01f, 1000f);
 
+    [Header("Railgun Refs")]
+    public LineRenderer aimingLaser;
+
+    private RaycastHit2D aimLaserHit;
+
     private RailRod rodPrefab;
 
     protected override bool Fire()
@@ -27,6 +32,29 @@ public class Railgun : Weapon
             _lastShot = Time.time;
         }
         return true;
+    }
+
+    protected override void WeaponUpdate()
+    {
+        if (powers[(int)RailGunPowers.AimLaser] > 0)
+        {
+            aimLaserHit = Physics2D.Raycast(aimingLaser.transform.position, aimingLaser.transform.up, 5f, StaticRefs.AttackMask);
+            if (aimLaserHit.collider != null)
+                aimingLaser.SetPosition(1, aimLaserHit.point);
+        }
+    }
+
+    protected override void WeaponFixedUpdate()
+    {
+        if (powers[(int)RailGunPowers.AimLaser] > 1)
+        {
+            if (aimLaserHit.collider != null)
+            {
+                Enemy enemy = aimLaserHit.rigidbody.GetComponent<Enemy>();
+                enemy.radiation += 1f;
+                enemy.lastHitBy = this;
+            }
+        }
     }
 
     public void RodHit(RailRod rod, Enemy enemy)
@@ -53,6 +81,15 @@ public class Railgun : Weapon
         if (Enum.TryParse(powerName, out power))
         {
             powers[(int)power] = level;
+            Debug.Log("Upgrading power: " + powerName + " to " + level);
+        }
+        else
+            Debug.Log("Couldn't find power with name: " + powerName);
+
+        if (power == RailGunPowers.AimLaser)
+        {
+            if (level == 1)
+                aimingLaser.gameObject.SetActive(true);
         }
     }
 
@@ -64,5 +101,7 @@ public class Railgun : Weapon
 
     private enum RailGunPowers
     {
+        AimLaser,
+        HardeningRadiation,
     }
 }

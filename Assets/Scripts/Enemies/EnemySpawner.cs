@@ -16,7 +16,28 @@ public class EnemySpawner : MonoBehaviour
 
     private List<Enemy> enemies = new List<Enemy>();
 
+    public bool DoEasyTestWave = true;
+
     public void StartWave()
+    {
+        if (DoEasyTestWave)
+            EasyTestWave();
+        else
+        {
+            StartCoroutine(SpawnTestWaveDelayed(0f));
+            StartCoroutine(SpawnTestWaveDelayed(10f));
+            StartCoroutine(SpawnTestWaveDelayed(15f));
+            StartCoroutine(SpawnTestWaveDelayed(18f));
+        }
+    }
+
+    private IEnumerator SpawnTestWaveDelayed(float time)
+    {
+        yield return new WaitForSeconds(time);
+        TestWave();
+    }
+
+    private void TestWave()
     {
         for (int i = 0; i < 360; i += 20)
         {
@@ -24,6 +45,13 @@ public class EnemySpawner : MonoBehaviour
             EnemyClass randomClass = (EnemyClass)Random.Range(0, System.Enum.GetNames(typeof(EnemyClass)).Length);
             SpawnEnemy(i, randomMainType, randomClass);
         }
+    }
+
+    private void EasyTestWave()
+    {
+        EnemyData randomMainType = missionData.mainEnemyTypes.Rand();
+        SpawnEnemy(0, randomMainType, EnemyClass.fast);
+        SpawnEnemy(180, randomMainType, EnemyClass.fast);
     }
 
     private void PlanWave()

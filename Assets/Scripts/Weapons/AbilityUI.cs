@@ -12,16 +12,11 @@ public class AbilityUI : MonoBehaviour
     public Image levelIcon;
     public Button button;
 
-    [HideInInspector]
-    public int groupIndex = -1;
-
-    public void ShowAbility(Ability data, int index)
+    public void ShowAbility(Ability data)
     {
         nameText.text = data.name;
         descriptionText.text = data.description;
         //Rarity code here <---
-
-        groupIndex = index;
         gameObject.SetActive(true);
     }
 }
