@@ -85,9 +85,18 @@ public class Enemy : TorusMotion
     /// <summary> Stack of acid on this enemy. Acid deals constant DOT until stack runs out, and explodes when enemy is on fire. </summary>
     [HideInInspector]
     public float acid = 0;
+    /// <summary> Set to the higher of the old and new value. </summary>
+    public void SetAcidDPS(float dps)
+    {
+        acidDPS = Mathf.Max(acidDPS, dps);
+    }
     /// <summary> Tick damage of the most powerful acid effect applied. </summary>
     [HideInInspector]
     public float acidDPS = 1;
+    private float _lastAcidTick = 0;
+    private float _lastTempTick = 0;
+    private float _lastNanitesTick = 0;
+    private float _lastRadTick = 0;
     /// <summary> Stack of nanites on this enemy. Nanites deal DOT that is multiplied by the percentage of health remaining,
     /// and does nothing when health is below 10%. Nanites short when hit by lightining, doubling the effects. </summary>
     [HideInInspector]
@@ -154,8 +163,10 @@ public class Enemy : TorusMotion
 
     private void DOTEffects()
     {
-        UpdateTemperature();
+        NanitesDOT();
+        TempDOT();
         AcidDOT();
+        RadDOT();
 
         if (_health <= 0)
         {
@@ -196,16 +207,34 @@ public class Enemy : TorusMotion
         }
     }
 
-    private void UpdateTemperature()
+    private void NanitesDOT()
     {
+        if (nanites <= 0 || _health / MaxHealth < StaticRefs.NanitesCutoff || StaticRefs.DoRadiationTick(_lastNanitesTick) == false)
+            return;
+
+        _lastNanitesTick = Time.time;
+
+        //Note: DOT effects are effected by resistances when applied, not when dealing damage
+        _health -= nanites * (_health / MaxHealth);// * ResistanceMult(DamageType.radiation);
+        healthBar.DOT(_health / MaxHealth);
+    }
+
+    private void TempDOT()
+    {
+        if (StaticRefs.DoTempTick(_lastTempTick) == false)
+            return;
+
+        _lastTempTick = Time.deltaTime;
+
+        //Note: DOT effects are effected by resistances when applied, not when dealing damage
         if (data.damageFromHot && temperature > data.maxSafeTemp)
         {
-            _health -= (temperature - data.maxSafeTemp) * ResistanceMult(DamageType.heat);
+            _health -= (temperature - data.maxSafeTemp);// * ResistanceMult(DamageType.heat);
             healthBar.DOT(_health / MaxHealth);
         }
         if (data.damageFromCold && temperature < data.freezeTemp)
-        { 
-            _health -= -(temperature - data.freezeTemp) * ResistanceMult(DamageType.heat);
+        {
+            _health -= -(temperature - data.freezeTemp);// * ResistanceMult(DamageType.cold);
             healthBar.DOT(_health / MaxHealth);
         }
 
@@ -218,12 +247,27 @@ public class Enemy : TorusMotion
 
     private void AcidDOT()
     {
-        if (acid <= 0)
+        if (acid <= 0 || StaticRefs.DoAcidTick(_lastAcidTick) == false)
             return;
 
-        _health -= acidDPS * Time.fixedDeltaTime;
+        _lastAcidTick = Time.time;
+
+        //Note: DOT effects are effected by resistances when applied, not when dealing damage
+        _health -= StaticRefs.AcidTickDamage(acidDPS);// * ResistanceMult(DamageType.acid);
         healthBar.DOT(_health / MaxHealth);
         acid -= 1;
+    }
+
+    private void RadDOT()
+    {
+        if (radiation <= 0 || StaticRefs.DoRadiationTick(_lastRadTick) == false)
+            return;
+
+        _lastRadTick = Time.time;
+
+        //Note: DOT effects are effected by resistances when applied, not when dealing damage
+        _health -= radiation;// * ResistanceMult(DamageType.radiation);
+        healthBar.DOT(_health / MaxHealth);
     }
 
     public int PointsCost => data.Points(myClass);

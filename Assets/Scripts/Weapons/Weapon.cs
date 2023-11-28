@@ -25,7 +25,7 @@ public abstract class Weapon : TorusMotion
 
     public ModifiableFloat lightningRange = new ModifiableFloat(5f, 0f, 20f);
     public ModifiableFloat lightningChains = new ModifiableFloat(1f, 0f, 20f);
-    public ModifiableFloat acidDamage = new ModifiableFloat(5f, 0f, 20f);
+    public ModifiableFloat acidDamagePerSecond = new ModifiableFloat(5f, 0f, 20f);
 
     public ModifiableFloat igniteChance = new ModifiableFloat(0f, 0f, 1f);
     public ModifiableFloat armourPierce = new ModifiableFloat(0f, 0f, 10f);
@@ -157,7 +157,7 @@ public abstract class Weapon : TorusMotion
                 attacksPerSecond.AddModifier(modifierName, value, operation);
                 return;
             case "acidDamage":
-                acidDamage.AddModifier(modifierName, value, operation);
+                acidDamagePerSecond.AddModifier(modifierName, value, operation);
                 return;
             case "armourPierce":
                 armourPierce.AddModifier(modifierName, value, operation);
@@ -247,8 +247,9 @@ public abstract class Weapon : TorusMotion
         if (damageStats.acid.Value == 0)
             return;
 
-        float acidDamage = DamageAfterArmour(enemy.Armour, DamageType.acid);
-        enemy.acid += acidDamage;
+        float acidStack = DamageAfterArmour(enemy.Armour, DamageType.acid);
+        enemy.acid += acidStack;
+        enemy.SetAcidDPS(acidDamagePerSecond.Value);
     }
 
     protected void NormalNanitesDamage(Enemy enemy)

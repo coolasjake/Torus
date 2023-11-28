@@ -25,6 +25,27 @@ public class StaticRefs : MonoBehaviour
     [Tooltip("Controls the angle that a weapon has to have before the left/right movement direction is flipped to be more intuitive.")]
     private float weaponDirectionSwapBuffer = 0f;
 
+    [SerializeField]
+    [Min(0)]
+    [Tooltip("Controls how often acid deals damage.")]
+    private float timeBetweenAcidTicks = 0.2f;
+    [SerializeField]
+    [Min(0)]
+    [Tooltip("Controls how often acid deals damage.")]
+    private float timeBetweenNaniteTicks = 0.2f;
+    [SerializeField]
+    [Min(0)]
+    [Tooltip("Controls how often acid deals damage.")]
+    private float nanitesHealthCutoff = 0.2f;
+    [SerializeField]
+    [Min(0)]
+    [Tooltip("Controls how often acid deals damage.")]
+    private float timeBetweenTempTicks = 0.2f;
+    [SerializeField]
+    [Min(0)]
+    [Tooltip("Controls how often acid deals damage.")]
+    private float timeBetweenRadiationTicks = 0.2f;
+
     public static Sprite ArmourBorder(int level)
     {
         level = Mathf.Clamp(level, 0, singleton.healthArmourBorders.Count - 1);
@@ -47,6 +68,28 @@ public class StaticRefs : MonoBehaviour
     public static LayerMask AttackMask => singleton.attackMask;
 
     public static float SwapAngle => singleton.weaponDirectionSwapBuffer;
+
+    public static bool DoAcidTick(float lastTick)
+    {
+        return Time.time >= lastTick + singleton.timeBetweenAcidTicks;
+    }
+    public static float AcidTickDamage(float DPS)
+    {
+        return DPS * singleton.timeBetweenAcidTicks;
+    }
+    public static bool DoNanitesTick(float lastTick)
+    {
+        return Time.time >= lastTick + singleton.timeBetweenNaniteTicks;
+    }
+    public static float NanitesCutoff => singleton.nanitesHealthCutoff;
+    public static bool DoTempTick(float lastTick)
+    {
+        return Time.time >= lastTick + singleton.timeBetweenTempTicks;
+    }
+    public static bool DoRadiationTick(float lastTick)
+    {
+        return Time.time >= lastTick + singleton.timeBetweenRadiationTicks;
+    }
 
     void Awake()
     {

@@ -1474,6 +1474,7 @@ MonoBehaviour:
   - {fileID: 4352230217555344583, guid: cf86e098704ebc74cb6d0e1125f467d6, type: 3}
   healthBarPrefab: {fileID: 777844717229031917, guid: d72fb0602925330468c78f68565c1054, type: 3}
   weaponDirectionSwapBuffer: 45
+  timeBetweenAcidTicks: 0.2
 --- !u!114 &1302523176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1579,7 +1580,7 @@ MonoBehaviour:
     defaultValue: 1
     min: 0
     max: 20
-  acidDamage:
+  acidDamagePerSecond:
     defaultValue: 5
     min: 0
     max: 20
@@ -2654,7 +2655,7 @@ MonoBehaviour:
       min: 0
       max: Infinity
     acid:
-      defaultValue: 0
+      defaultValue: 10
       min: 0
       max: Infinity
     lightning:
@@ -2677,8 +2678,8 @@ MonoBehaviour:
     defaultValue: 1
     min: 0
     max: 20
-  acidDamage:
-    defaultValue: 5
+  acidDamagePerSecond:
+    defaultValue: 20
     min: 0
     max: 20
   igniteChance:
