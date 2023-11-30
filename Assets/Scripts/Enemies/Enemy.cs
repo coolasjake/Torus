@@ -109,6 +109,8 @@ public class Enemy : TorusMotion
     [HideInInspector]
     public Weapon lastHitBy;
 
+    public Enemy[] nearbyEnemies = new Enemy[5];
+
     public delegate void DestroyEvent(Enemy destroyedEnemy);
     /// <summary> Events that happen when this enemy is destroyed - specifically designed to register deaths in game managers. </summary>
     public DestroyEvent destroyEvents;

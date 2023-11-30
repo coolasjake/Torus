@@ -83,6 +83,13 @@ public class UpgradeController : MonoBehaviour
 
         foreach (AbilityUI button in buttons)
         {
+            if (validGroupPool.Count == 0)
+            {
+                button.BecomeBlank();
+                continue;
+            }
+
+
             int randIndex = Random.Range(0, validGroupPool.Count);
             AbilityGroup randomGroup = validGroupPool[randIndex];
             if (randomGroup.nextAbility == 0)
@@ -90,9 +97,8 @@ public class UpgradeController : MonoBehaviour
                 randIndex = Random.Range(0, validGroupPool.Count);
                 randomGroup = validGroupPool[randIndex];
             }
-            button.ShowAbility(randomGroup.data.abilities[randomGroup.nextAbility]);
+            button.ShowAbility(randomGroup.data.abilities[randomGroup.nextAbility], randomGroup.nextAbility);
             button.gameObject.SetActive(true);
-            button.levelIcon.sprite = StaticRefs.UpgradeLvlIcon(randomGroup.nextAbility);
             chosenGroups.Add(randomGroup);
             validGroupPool.RemoveAt(randIndex);
         }

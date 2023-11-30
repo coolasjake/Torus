@@ -56,12 +56,14 @@ public class TorusMotion : MonoBehaviour
         }
     }
 
-    protected void ApplyTransformPos()
+    public void ApplyTransformPos()
     {
-        //Set angle and height based on transform pos
-        float angle = Vector2.SignedAngle(Vector2.right, ((Vector2)transform.position / torusScale) - torusOrigin);
-        float height = Vector2.Distance(torusOrigin, transform.position / torusScale);
-        AngleAndHeight = new Vector2(angle, height);
+        AngleAndHeight = AngleHeightFromPos(transform.position);
+    }
+
+    public Vector2 VectorAsAngleHeight(Vector2 vector)
+    {
+        return AngleHeightFromPos((Vector2)transform.position + vector) - AngleAndHeight;
     }
 
     private void UpdatePos()
@@ -96,5 +98,13 @@ public class TorusMotion : MonoBehaviour
             torusOrigin.y + (Mathf.Sin(Mathf.Deg2Rad * angle) * torusScale.y * (height))
         );
         return worldPos;
+    }
+
+    public static Vector2 AngleHeightFromPos(Vector2 pos)
+    {
+        //Set angle and height based on transform pos
+        float angle = Vector2.SignedAngle(Vector2.right, ((Vector2)pos / torusScale) - torusOrigin);
+        float height = Vector2.Distance(torusOrigin, pos / torusScale);
+        return new Vector2(angle, height);
     }
 }

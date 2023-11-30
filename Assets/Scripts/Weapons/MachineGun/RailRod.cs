@@ -24,7 +24,6 @@ public class RailRod : MonoBehaviour
         Enemy enemy = collision.GetComponent<Enemy>();
         if (enemy)
         {
-            print(enemy.name);
             railgun.RodHit(this, enemy);
         }
     }

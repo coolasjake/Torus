@@ -11,6 +11,7 @@ public abstract class Weapon : TorusMotion
     public abstract WeaponType Type();
 
     public int playerIndex = 0;
+    public bool doDirectionSwapping = false;
     public GameObject inputPrefab;
     private WeaponInput weaponInput;
 
@@ -24,7 +25,10 @@ public abstract class Weapon : TorusMotion
     public DamageStats damageStats = new DamageStats();
 
     public ModifiableFloat lightningRange = new ModifiableFloat(5f, 0f, 20f);
+    /// <summary> How many times lightning splits after the initial hit. </summary>
     public ModifiableFloat lightningChains = new ModifiableFloat(1f, 0f, 20f);
+    /// <summary> How many splits lightning can do each time it hits an enemy. </summary>
+    public ModifiableFloat lightningSplits = new ModifiableFloat(1f, 0f, 20f);
     public ModifiableFloat acidDamagePerSecond = new ModifiableFloat(5f, 0f, 20f);
 
     public ModifiableFloat igniteChance = new ModifiableFloat(0f, 0f, 1f);
@@ -87,7 +91,7 @@ public abstract class Weapon : TorusMotion
         else
             _firing = false;
 
-        if (weaponInput.MovementDown)
+        if (weaponInput.MovementDown && doDirectionSwapping)
         {
             if (Angle.Inside(0f + StaticRefs.SwapAngle, 180f - StaticRefs.SwapAngle))
                 leftIsClockwise = false;

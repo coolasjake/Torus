@@ -8,7 +8,7 @@ public class MissionData : ScriptableObject
     [Min(1)]
     public int difficultLevel = 1;
 
-    public MissionType missionType;
+    public MissionPlan missionPlan;
 
     public List<EnemyData> mainEnemyTypes = new List<EnemyData>();
     public List<EnemyData> rareEnemyTypes = new List<EnemyData>();

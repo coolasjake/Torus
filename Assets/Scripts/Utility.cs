@@ -304,7 +304,7 @@ public static class Utility
         for (int i = 0; i < list.Count; i++)
         {
             T temp = list[i];
-            int randomIndex = Random.Range(i, list.Count);
+            int randomIndex = UnityEngine.Random.Range(i, list.Count);
             list[i] = list[randomIndex];
             list[randomIndex] = temp;
         }
@@ -338,18 +338,18 @@ public static class Utility
         return list[0];
     }
 
-    public static T Rand<T>(this T[] array)
+    public static T Random<T>(this T[] array)
     {
         if (array == null || array.Length == 0)
             return default(T);
-        return array[Random.Range(0, array.Length)];
+        return array[UnityEngine.Random.Range(0, array.Length)];
     }
 
-    public static T Rand<T>(this List<T> list)
+    public static T Random<T>(this List<T> list)
     {
         if (list == null || list.Count == 0)
             return default(T);
-        return list[Random.Range(0, list.Count)];
+        return list[UnityEngine.Random.Range(0, list.Count)];
     }
 
     public static string ElementsToString<T>(this List<T> list)

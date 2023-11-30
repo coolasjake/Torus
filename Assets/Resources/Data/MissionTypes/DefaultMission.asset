@@ -13,14 +13,10 @@ MonoBehaviour:
   m_Name: DefaultMission
   m_EditorClassIdentifier: 
   waves:
-  - difficultyMultipliesNumber: 0
-    difficultyMultipliesStats: 0
-    numMainTypes: 0
-    basePointsMainEnemies: 0
-    diffMultMain: 0
-    allowedMainTypes: 
-    numRareTypes: 0
-    baseNumRareEnemies: 0
-    diffNumMultRare: 0
-    diffStatsMultRare: 0
-    allowedRareTypes: 
+  - name: Wave 1
+    pointsForMainTypes: 9
+    possibleMainFleets:
+    - {fileID: 11400000, guid: 6dec0c9b9720dd54b8eb90cf2d7960aa, type: 2}
+    pointsForRareTypes: 1
+    possibleRareFleets:
+    - {fileID: 11400000, guid: 6dec0c9b9720dd54b8eb90cf2d7960aa, type: 2}
