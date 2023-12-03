@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8822168678729197941}
   - component: {fileID: 8822168678729197947}
   - component: {fileID: 3776036573458928184}
+  - component: {fileID: 2007945613}
   m_Layer: 0
   m_Name: SwarmBase
   m_TagString: Untagged
@@ -50,15 +51,21 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 6b6a8f5dcdcdd024bb48bc4b1588b0cc, type: 2}
   spriteRenderer: {fileID: 8822168678729197941}
   animator: {fileID: 3776036573458928184}
-  health: 100
   temperature: 0
   stunEndTime: 0
-  frozen: 0
-  poison: 0
+  armourDebuffs: 0
+  radiation: 0
   acid: 0
+  acidDPS: 1
   nanites: 0
   antimatter: 0
   lastHitBy: {fileID: 0}
+  nearbyEnemies:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!212 &8822168678729197941
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -99,7 +106,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 902df43e96cc7f14d929f25094c188a1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f64d80bda77742b478ec88ec64eba276, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -145,3 +152,14 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!210 &2007945613
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8822168678729197943}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0

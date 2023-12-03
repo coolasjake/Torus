@@ -21,7 +21,7 @@ public class EnemyData : ScriptableObject
     private float speed = 1f;
 
     [Header("Damage Settings")]
-    /// <summary> Reduces damage based on values (0 = full damage, 1 = no damage). DOT effects have damage reduced, not application reduced.  </summary>    
+    /// <summary> Reduces damage based on values (0 = full damage, 1 = no damage, -1 = double damage). DOT effects have damage reduced, not application reduced.  </summary>    
     public AllDamage resistances = new AllDamage();
 
     //Do multipliers for different enemy types
@@ -56,6 +56,7 @@ public class EnemyData : ScriptableObject
     public float Health(EnemyClass enemyClass) => health * classes[(int)enemyClass].healthMultiplier;
     public int Armour(EnemyClass enemyClass) => armourLevel + classes[(int)enemyClass].extraArmour;
     public float Speed(EnemyClass enemyClass) => speed * classes[(int)enemyClass].speedMultiplier;
+    public float Ability(EnemyClass enemyClass) => classes[(int)enemyClass].abilityPower;
     public Sprite ClassSprite(EnemyClass enemyClass) => classes[(int)enemyClass].sprite;
     public AnimatorController ClassAnimations(EnemyClass enemyClass) => classes[(int)enemyClass].animationController;
     public float EffectsScale(EnemyClass enemyClass) => classes[(int)enemyClass].effectsSize;
@@ -77,6 +78,7 @@ public class EnemyData : ScriptableObject
                 healthMultiplier = 5f;
                 extraArmour = 3;
                 speedMultiplier = 0.5f;
+                abilityPower = 1f;
                 effectsSize = 5f;
             }
             else if (enemyClass == EnemyClass.fast)
@@ -84,8 +86,8 @@ public class EnemyData : ScriptableObject
                 pointsCost = 5;
                 healthMultiplier = 2f;
                 extraArmour = 0;
-                speedMultiplier = 1.5f;
-                abilitySpeed = 2f;
+                speedMultiplier = 1.2f;
+                abilityPower = 1.5f;
                 effectsSize = 2f;
             }
             else if (enemyClass == EnemyClass.dodge)
@@ -94,7 +96,7 @@ public class EnemyData : ScriptableObject
                 healthMultiplier = 3f;
                 extraArmour = 1;
                 speedMultiplier = 1f;
-                abilitySpeed = 10f;
+                abilityPower = 10f;
                 effectsSize = 2f;
             }
         }
@@ -110,7 +112,9 @@ public class EnemyData : ScriptableObject
         public int extraArmour = 0;
         [Min(0.1f)]
         public float speedMultiplier = 1f;
-        public float abilitySpeed = 0f;
+        [Tooltip("Tank = Damage reduction per hit/type, Dodge = time between dodges, Fast = speed multiplier (when not stunned)")]
+        ///<summary> Tank = Damage reduction per hit/type, Dodge = time between dodges, Fast = speed multiplier (when not stunned). </summary>
+        public float abilityPower = 0f;
         public float effectsSize = 1f;
 
         public Sprite sprite;

@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 4643984064350047501}
   - component: {fileID: 2583318643049012901}
   - component: {fileID: 4162619490142546639}
+  - component: {fileID: 235578580}
   m_Layer: 0
   m_Name: TankBase
   m_TagString: Untagged
@@ -54,15 +55,21 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 6b6a8f5dcdcdd024bb48bc4b1588b0cc, type: 2}
   spriteRenderer: {fileID: 6843059617215851668}
   animator: {fileID: 5669748772302881622}
-  health: 100
   temperature: 0
   stunEndTime: 0
-  frozen: 0
-  poison: 0
+  armourDebuffs: 0
+  radiation: 0
   acid: 0
+  acidDPS: 1
   nanites: 0
   antimatter: 0
   lastHitBy: {fileID: 0}
+  nearbyEnemies:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!212 &6843059617215851668
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -103,12 +110,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e89e7a1811784714eb25386c1842bd12, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 95f36083d3dba734c8fff5145018c680, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 5.76, y: 6.4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -213,3 +220,14 @@ CircleCollider2D:
   m_Offset: {x: -0.6, y: 0}
   serializedVersion: 2
   m_Radius: 0.4
+--- !u!210 &235578580
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6843059617215851670}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0

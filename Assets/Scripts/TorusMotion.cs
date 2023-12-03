@@ -40,6 +40,7 @@ public class TorusMotion : MonoBehaviour
         Height -= dist;
     }
 
+    /// <summary> Move the object a fixed distance around the torus, by changing the angle relative to its height. </summary>
     public void MoveAround(float dist)
     {
         Angle += dist / (2 * _height);
@@ -103,8 +104,18 @@ public class TorusMotion : MonoBehaviour
     public static Vector2 AngleHeightFromPos(Vector2 pos)
     {
         //Set angle and height based on transform pos
-        float angle = Vector2.SignedAngle(Vector2.right, ((Vector2)pos / torusScale) - torusOrigin);
-        float height = Vector2.Distance(torusOrigin, pos / torusScale);
+        float angle = AngleFromPos(pos);
+        float height = DistanceFromPos(pos);
         return new Vector2(angle, height);
     }
+
+    public static float AngleFromPos(Vector2 pos)
+    {
+        return (Vector2.SignedAngle(Vector2.right, ((Vector2)pos / torusScale) - torusOrigin) + 360f) % 360f;
+    }
+
+    public static float DistanceFromPos(Vector2 pos)
+    {
+        return Vector2.Distance(torusOrigin, pos / torusScale);
+    }    
 }

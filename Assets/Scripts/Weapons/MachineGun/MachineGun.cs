@@ -36,6 +36,8 @@ public class MachineGun : Weapon
 
     public void BulletHit(Bullet bullet, Enemy enemy)
     {
+        if (enemy.CheckDodge(bullet.transform.position))
+            return;
         DefaultHit(enemy);
         bullet.gameObject.SetActive(false);
         Destroy(bullet.gameObject);

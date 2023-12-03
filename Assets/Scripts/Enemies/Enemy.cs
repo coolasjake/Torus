@@ -12,21 +12,39 @@ public class Enemy : TorusMotion
     public SpriteRenderer spriteRenderer;
     public Animator animator;
 
+    private SpriteRenderer _tempEffectSR;
+    private GameObject _frozenEffect;
+    private GameObject _fireEffect;
+
     private HealthBar healthBar;
 
     private float _health;
-    public float health
+    public float Health => _health;
+
+    /// <summary> Reduce the health of the enemy after applying tank ability and rounding up to 1, then show changes on the healthbar. </summary>
+    public void ReduceHealthBy(float damage, Weapon hitBy)
     {
-        get { return _health; }
-        set
-        {
-            if (value != _health)
-            {
-                _health = value;
-                healthBar.Hit(_health / MaxHealth);
-            }
-        }
+        lastHitBy = hitBy;
+        Damage(damage);
+        healthBar.Hit(_health / MaxHealth);
     }
+
+    /// <summary> Reduce the health of the enemy after applying tank ability and rounding up to 1, then show changes on the healthbar. </summary>
+    public void DOTDamage(float damage)
+    {
+        Damage(damage);
+        healthBar.DOT(_health / MaxHealth);
+    }
+
+    /// <summary> Reduce the health of the enemy after applying tank ability and rounding up to 1. </summary>
+    private void Damage(float damage)
+    {
+        if (myClass == EnemyClass.tank)
+            damage -= AbilityPower;
+        damage = Mathf.Max(damage, 1);
+        _health -= damage;
+    }
+
     [HideInInspector]
     public float temperature = 0f;
 
@@ -35,8 +53,14 @@ public class Enemy : TorusMotion
     public float stunEndTime = 0f;
     public bool Stunned => (stunEndTime > Time.time);
 
+    public bool lightningStruck = false;
+    //private bool _lastLightningStruck = 0f;
+
     [HideInInspector]
     public int armourDebuffs = 0;
+
+    private bool _disabled = false;
+    public bool Disabled => _disabled || _frozen;
 
     private bool _frozen = false;
     public bool Frozen
@@ -47,13 +71,9 @@ public class Enemy : TorusMotion
             if (value != _frozen)
             {
                 if (value == true)
-                {
-                    //enable frozen effect
-                }
+                    ShowFrozenEffect();
                 else
-                {
-                    //diable frozen effect
-                }
+                    HideFrozenEffect();
                 _frozen = value;
             }
         }
@@ -67,13 +87,9 @@ public class Enemy : TorusMotion
             if (value != _onFire)
             {
                 if (value == true)
-                {
-                    //enable on fire effect
-                }
+                    ShowFireEffect();
                 else
-                {
-                    //diable on fire effect
-                }
+                    HideFireEffect();
                 _onFire = value;
             }
         }
@@ -81,7 +97,8 @@ public class Enemy : TorusMotion
 
     /// <summary> Stack of radiation on this enemy. Radiation deals infrequent DOT and doesn't diminish, but can be completely resisted. </summary>
     [HideInInspector]
-    public float radiation = 0;
+    private float _radiation = 0;
+    public float Radiation => _radiation;
     /// <summary> Stack of acid on this enemy. Acid deals constant DOT until stack runs out, and explodes when enemy is on fire. </summary>
     [HideInInspector]
     public float acid = 0;
@@ -97,6 +114,7 @@ public class Enemy : TorusMotion
     private float _lastTempTick = 0;
     private float _lastNanitesTick = 0;
     private float _lastRadTick = 0;
+    private float _lastDodge = 0;
     /// <summary> Stack of nanites on this enemy. Nanites deal DOT that is multiplied by the percentage of health remaining,
     /// and does nothing when health is below 10%. Nanites short when hit by lightining, doubling the effects. </summary>
     [HideInInspector]
@@ -109,15 +127,17 @@ public class Enemy : TorusMotion
     [HideInInspector]
     public Weapon lastHitBy;
 
+    [HideInInspector]
     public Enemy[] nearbyEnemies = new Enemy[5];
 
     public delegate void DestroyEvent(Enemy destroyedEnemy);
     /// <summary> Events that happen when this enemy is destroyed - specifically designed to register deaths in game managers. </summary>
     public DestroyEvent destroyEvents;
 
-    void Awake()
+    void Initialize()
     {
         healthBar = StaticRefs.SpawnHealthBar(Armour);
+        _tempEffectSR = StaticRefs.SpawnTempEffect(this);
     }
 
 #if UNITY_EDITOR
@@ -152,7 +172,28 @@ public class Enemy : TorusMotion
 
         //Clamp modifier to not be less than the maximum slow value
         modifier = Mathf.Clamp(modifier, 1f - data.maxSlow, 2f);
-        return BaseSpeed * modifier * Time.fixedDeltaTime * 0.01f;
+        return ClassSpeed * modifier * Time.fixedDeltaTime * StaticRefs.BaseSpeed;
+    }
+
+    public bool CheckDodge(Vector2 hitPos)
+    {
+        if (myClass == EnemyClass.dodge && Time.time > _lastDodge + AbilityPower)
+        {
+            float movement = StaticRefs.DodgeDist;
+            if (TorusMotion.AngleFromPos(hitPos) > Angle)
+                movement *= -1;
+            MoveAround(movement);
+            _lastDodge = Time.time;
+            return true;
+        }
+        return false;
+    }
+
+    public void RadiationHit(float damage)
+    {
+        if (_radiation <= 0)
+            _lastRadTick = Time.time;
+        _radiation += damage;
     }
 
     public void CheckReachedStation()
@@ -169,6 +210,7 @@ public class Enemy : TorusMotion
         TempDOT();
         AcidDOT();
         RadDOT();
+        lightningStruck = false;
 
         if (_health <= 0)
         {
@@ -176,36 +218,9 @@ public class Enemy : TorusMotion
                 lastHitBy.KillEnemy(this);
             else
             {
-                Destroy(gameObject);
                 Debug.LogError("Enemy killed before being hit by weapon.");
+                Destroy();
             }
-        }
-    }
-
-    public void Destroy()
-    {
-        Destroy(healthBar.gameObject);
-        SpawnExplosion(EffectsScale);
-        gameObject.SetActive(false);
-        destroyEvents.Invoke(this);
-        Destroy(gameObject);
-    }
-
-    public void SpawnExplosion(float scale)
-    {
-        if (data.explosionPrefab != null)
-        {
-            GameObject explosion = Instantiate(data.explosionPrefab, transform.position, transform.rotation, transform.parent);
-            explosion.transform.localScale = new Vector3(scale, scale, scale);
-        }
-    }
-
-    public void SpawnExplosion(float scale, Vector2 pos)
-    {
-        if (data.explosionPrefab != null)
-        {
-            GameObject explosion = Instantiate(data.explosionPrefab, pos, transform.rotation, transform.parent);
-            explosion.transform.localScale = new Vector3(scale, scale, scale);
         }
     }
 
@@ -217,8 +232,7 @@ public class Enemy : TorusMotion
         _lastNanitesTick = Time.time;
 
         //Note: DOT effects are effected by resistances when applied, not when dealing damage
-        _health -= nanites * (_health / MaxHealth);// * ResistanceMult(DamageType.radiation);
-        healthBar.DOT(_health / MaxHealth);
+        DOTDamage(nanites * (_health / MaxHealth));
     }
 
     private void TempDOT()
@@ -228,23 +242,27 @@ public class Enemy : TorusMotion
 
         _lastTempTick = Time.deltaTime;
 
+        if (OnFire)
+            temperature += 2f;
+
         //Note: DOT effects are effected by resistances when applied, not when dealing damage
         if (data.damageFromHot && temperature > data.maxSafeTemp)
         {
-            _health -= (temperature - data.maxSafeTemp);// * ResistanceMult(DamageType.heat);
-            healthBar.DOT(_health / MaxHealth);
+            DOTDamage(temperature - data.maxSafeTemp);
         }
-        if (data.damageFromCold && temperature < data.freezeTemp)
+        if (temperature < data.freezeTemp)
         {
-            _health -= -(temperature - data.freezeTemp);// * ResistanceMult(DamageType.cold);
-            healthBar.DOT(_health / MaxHealth);
+            Frozen = true;
+            if (data.damageFromCold)
+            {
+                DOTDamage(-(temperature - data.freezeTemp));
+            }
         }
-
-
-        if (temperature > data.restingTemp)
-            temperature -= data.baseTempChange;
         else
-            temperature += data.baseTempChange;
+            Frozen = false;
+
+        temperature = temperature.Lerp(data.restingTemp, data.baseTempChange * StaticRefs.TempTickRate);
+        UpdateTempEffect();
     }
 
     private void AcidDOT()
@@ -255,29 +273,75 @@ public class Enemy : TorusMotion
         _lastAcidTick = Time.time;
 
         //Note: DOT effects are effected by resistances when applied, not when dealing damage
-        _health -= StaticRefs.AcidTickDamage(acidDPS);// * ResistanceMult(DamageType.acid);
-        healthBar.DOT(_health / MaxHealth);
+        DOTDamage(StaticRefs.AcidTickDamage(acidDPS));
         acid -= 1;
     }
 
     private void RadDOT()
     {
-        if (radiation <= 0 || StaticRefs.DoRadiationTick(_lastRadTick) == false)
+        if (_radiation <= 0 || StaticRefs.DoRadiationTick(_lastRadTick) == false)
             return;
 
         _lastRadTick = Time.time;
 
         //Note: DOT effects are effected by resistances when applied, not when dealing damage
-        _health -= radiation;// * ResistanceMult(DamageType.radiation);
-        healthBar.DOT(_health / MaxHealth);
+        DOTDamage(_radiation);
+    }
+
+    public void Destroy()
+    {
+        Destroy(healthBar.gameObject);
+        StaticRefs.SpawnExplosion(EffectsScale, transform.position);
+        gameObject.SetActive(false);
+        destroyEvents.Invoke(this);
+        Destroy(gameObject);
+    }
+
+    private void UpdateTempEffect()
+    {
+        if (temperature >= data.restingTemp)
+        {
+            _tempEffectSR.color = StaticRefs.HotColour((temperature - data.restingTemp) / data.maxSafeTemp);
+        }
+        else if (temperature < data.restingTemp)
+        {
+            _tempEffectSR.color = StaticRefs.ColdColour(((temperature - data.restingTemp) / data.freezeTemp));
+        }
+    }
+
+    private void ShowFrozenEffect()
+    {
+        if (_frozenEffect == null)
+            _frozenEffect = StaticRefs.SpawnFrozenEffect(this);
+        else
+            _frozenEffect.SetActive(true);
+    }
+
+    private void HideFrozenEffect()
+    {
+        _frozenEffect.SetActive(false);
+    }
+
+    private void ShowFireEffect()
+    {
+        if (_fireEffect == null)
+            _fireEffect = StaticRefs.SpawnFireEffect(this);
+        else
+            _fireEffect.SetActive(true);
+    }
+
+    private void HideFireEffect()
+    {
+        _fireEffect.SetActive(false);
     }
 
     public int PointsCost => data.Points(myClass);
     public float MaxHealth => data.Health(myClass);
     public int Armour => data.Armour(myClass) - armourDebuffs;
-    public float BaseSpeed => data.Speed(myClass);
+    public float ClassSpeed => data.Speed(myClass);
     public float XPReward => data.Points(myClass);
     public float EffectsScale => data.EffectsScale(myClass);
+    public float AbilityPower => data.Ability(myClass);
     public float ResistanceMult(DamageType type) => (1f - data.resistances.GetDamage(type));
 
     public void SetData(EnemyData enemyData)
@@ -288,7 +352,10 @@ public class Enemy : TorusMotion
         temperature = data.restingTemp;
 
         spriteRenderer.sprite = data.ClassSprite(myClass);
+
         animator.runtimeAnimatorController = data.ClassAnimations(myClass);
+
+        Initialize();
     }
 }
 

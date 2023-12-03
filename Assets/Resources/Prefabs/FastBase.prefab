@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5102851163617004105}
   - component: {fileID: 9009755150189006556}
   - component: {fileID: 6561980635606752520}
+  - component: {fileID: 931261055}
   m_Layer: 0
   m_Name: FastBase
   m_TagString: Untagged
@@ -50,15 +51,21 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 6b6a8f5dcdcdd024bb48bc4b1588b0cc, type: 2}
   spriteRenderer: {fileID: 5102851163617004105}
   animator: {fileID: 6561980635606752520}
-  health: 100
   temperature: 0
   stunEndTime: 0
-  frozen: 0
-  poison: 0
+  armourDebuffs: 0
+  radiation: 0
   acid: 0
+  acidDPS: 1
   nanites: 0
   antimatter: 0
   lastHitBy: {fileID: 0}
+  nearbyEnemies:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!212 &5102851163617004105
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -99,7 +106,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 1c421c08e71578045b8d8288492b3600, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e500427ff86225f45824c9d39ae1ac57, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -127,7 +134,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.575, y: 0.85}
+    oldSize: {x: 0.6666667, y: 0.76666665}
     newSize: {x: 0.23, y: 0.34}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -155,3 +162,14 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!210 &931261055
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5102851163617004111}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0

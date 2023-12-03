@@ -6,6 +6,7 @@ public class RailRod : MonoBehaviour
 {
     [HideInInspector]
     public Railgun railgun;
+    public int remainingPierces = 1;
 
     // Start is called before the first frame update
     void Start()

@@ -25,9 +25,11 @@ public class EnemySpawner : MonoBehaviour
     private List<EnemyFleet> fleetsToSpawn = new List<EnemyFleet>();
     private List<float> fleetAngles = new List<float>();
 
+    [SerializeField]
     private List<Enemy> enemies = new List<Enemy>();
 
     public bool DoEasyTestWave = true;
+    public List<EnemyClass> easyTestWave = new List<EnemyClass>();
 
     private float _lastSpacing = 0;
 
@@ -171,10 +173,12 @@ public class EnemySpawner : MonoBehaviour
     private void EasyTestWave()
     {
         EnemyData randomMainType = missionData.mainEnemyTypes.Random();
-        SpawnEnemy(0, randomMainType, EnemyClass.swarm);
-        SpawnEnemy(0, randomMainType, EnemyClass.tank);
-        SpawnEnemy(180, randomMainType, EnemyClass.dodge);
-        SpawnEnemy(180, randomMainType, EnemyClass.fast);
+
+        foreach (EnemyClass enemyClass in easyTestWave)
+        {
+            SpawnEnemy(0, randomMainType, enemyClass);
+            SpawnEnemy(180, randomMainType, enemyClass);
+        }
     }
 
     private IEnumerator SpawnFleet(EnemyFleet fleet, float startDelay)
@@ -210,9 +214,24 @@ public class EnemySpawner : MonoBehaviour
         Enemy newEnemy = Instantiate(classBasePrefabs[(int)enemyClass], transform);
         newEnemy.SetData(data);
         float height = spawningHeight;
+        angle = angle + Random.Range(-2f, 2f);
         if (enemyClass == EnemyClass.swarm)
+        {
             height += Random.Range(0, 0.5f);
-        newEnemy.AngleAndHeight = new Vector2(angle + Random.Range(-2, 2), height);
+            if (Random.value > data.Ability(EnemyClass.swarm))
+                SpawnExtraSwarmEnemy(angle, data);
+        }
+        newEnemy.AngleAndHeight = new Vector2(angle, height);
+        enemies.Add(newEnemy);
+        newEnemy.destroyEvents += EnemyDestroyed;
+    }
+
+    private void SpawnExtraSwarmEnemy(float originAngle, EnemyData data)
+    {
+        Enemy newEnemy = Instantiate(classBasePrefabs[(int)EnemyClass.swarm], transform);
+        newEnemy.SetData(data);
+        float height = spawningHeight;
+        newEnemy.AngleAndHeight = new Vector2(originAngle + 1f, spawningHeight + Random.Range(0, 0.5f));
         enemies.Add(newEnemy);
         newEnemy.destroyEvents += EnemyDestroyed;
     }
@@ -293,7 +312,10 @@ public class EnemySpawner : MonoBehaviour
                     //Add spacing
                     float maxSpacingDist = _enemySize + enemySpacing[(int)otherEnemy.myClass];
                     if (dist < maxSpacingDist)
-                        _spacingDir += _diff * ((maxSpacingDist - dist) / maxSpacingDist);
+                    {
+                        float inverter = (maxSpacingDist - dist) / (maxSpacingDist / 2);
+                        _spacingDir += (_diff * inverter * inverter);
+                    }
                 }
 
                 //Place other enemy in nearby enemies list (contains 5 nearest enemies sorted from closest to furthest)

@@ -13,6 +13,7 @@ public class Railgun : Weapon
 
     [Header("Railgun Stats")]
     public ModifiableFloat bulletSpeed = new ModifiableFloat(10f, 0.01f, 1000f);
+    public ModifiableFloat pierces = new ModifiableFloat(1f, 0f, 100f);
 
     [Header("Railgun Refs")]
     public LineRenderer aimingLaser;
@@ -25,10 +26,11 @@ public class Railgun : Weapon
     {
         if (Time.time > _lastShot + FireRate)
         {
-            RailRod newBullet = Instantiate(rodPrefab, firingPoint.position, firingPoint.rotation);
+            RailRod newRod = Instantiate(rodPrefab, firingPoint.position, firingPoint.rotation);
             Vector2 dir = firingPoint.up;
-            newBullet.GetComponent<Rigidbody2D>().velocity = dir * bulletSpeed.Value;
-            newBullet.railgun = this;
+            newRod.GetComponent<Rigidbody2D>().velocity = dir * bulletSpeed.Value;
+            newRod.railgun = this;
+            newRod.remainingPierces = Mathf.RoundToInt(pierces.Value);
             _lastShot = Time.time;
         }
         return true;
@@ -51,7 +53,7 @@ public class Railgun : Weapon
             if (aimLaserHit.collider != null)
             {
                 Enemy enemy = aimLaserHit.rigidbody.GetComponent<Enemy>();
-                enemy.radiation += 1f;
+                enemy.RadiationHit(10);
                 enemy.lastHitBy = this;
             }
         }
@@ -59,8 +61,12 @@ public class Railgun : Weapon
 
     public void RodHit(RailRod rod, Enemy enemy)
     {
-        enemy.SpawnExplosion(0.5f, rod.transform.position);
+        if (enemy.CheckDodge(rod.transform.position))
+            return;
+        StaticRefs.SpawnExplosion(0.5f, rod.transform.position);
         DefaultHit(enemy);
+        if (rod.remainingPierces-- <= 0)
+            Destroy(rod.gameObject);
     }
 
     public override void AddModifier(string statName, string modifierName, StatChangeOperation operation, float value)

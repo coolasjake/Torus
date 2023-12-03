@@ -68,6 +68,7 @@ public abstract class Weapon : TorusMotion
     void Start()
     {
         CreateInputObject();
+        AssignDefaultEvents();
         Setup();
     }
 
@@ -135,6 +136,11 @@ public abstract class Weapon : TorusMotion
 
     protected virtual void WeaponFixedUpdate() { }
 
+    protected virtual void AssignDefaultEvents()
+    {
+        lightningDamageEvent += NormalLightningDamage;
+    }
+
     public virtual void AddModifier(string statName, string modifierName, StatChangeOperation operation, float value)
     {
         statName = statName.ToLower();
@@ -188,18 +194,18 @@ public abstract class Weapon : TorusMotion
         NormalRadiationDamage(enemy);
         NormalPhysicalDamage(enemy);
         NormalHeatDamage(enemy);
-        NormalLightningDamage(enemy);
+        NormalColdDamage(enemy);
+        NormalLightningChain(enemy);
 
-        if (enemy.health <= 0)
+        enemy.lastHitBy = this;
+        if (enemy.Health <= 0)
             KillEnemy(enemy);
-        else
-            enemy.lastHitBy = this;
     }
 
     protected void NormalBasicDamage(Enemy enemy)
     {
         //Basic Damage
-        enemy.health -= damageStats.basic.Value;
+        enemy.ReduceHealthBy(damageStats.basic.Value, this);
     }
 
     protected void NormalPhysicalDamage(Enemy enemy)
@@ -212,7 +218,7 @@ public abstract class Weapon : TorusMotion
         if (enemy.Frozen)
             physicalDamage *= 2f;
         physicalDamage *= enemy.ResistanceMult(DamageType.physical);
-        enemy.health -= physicalDamage;
+        enemy.ReduceHealthBy(physicalDamage, this);
     }
 
     protected void NormalHeatDamage(Enemy enemy)
@@ -222,20 +228,76 @@ public abstract class Weapon : TorusMotion
 
         //Heat Damage
         float heatDamage = DamageAfterArmour(enemy.Armour, DamageType.heat);
+        heatDamage *= enemy.ResistanceMult(DamageType.heat);
         enemy.temperature += heatDamage;
 
-        if (igniteChance.Value > Random.value)
+        if (Random.value < igniteChance.Value)
+        {
             enemy.OnFire = true;
+        }
     }
 
-    protected void NormalLightningDamage(Enemy enemy)
+    protected void NormalColdDamage(Enemy enemy)
+    {
+        if (damageStats.cold.Value == 0)
+            return;
+
+        //Heat Damage
+        float coldDamage = DamageAfterArmour(enemy.Armour, DamageType.cold);
+        coldDamage *= enemy.ResistanceMult(DamageType.cold);
+        enemy.temperature -= coldDamage;
+    }
+
+    protected void NormalLightningChain(Enemy enemy)
     {
         if (damageStats.lightning.Value == 0)
             return;
 
-        //Lightning
-        float lightningDamage = DamageAfterArmour(enemy.Armour, DamageType.lightning);
+        lightningDamageEvent?.Invoke(enemy);
+        enemy.lightningStruck = true;
+        //Split to nearby enemies
+        for (int i = 0; i < lightningSplits.Value; ++i)
+        {
+            Enemy chainTarget = ChooseLightningChain(enemy);
+            if (chainTarget == null)
+                break;
+            lightningDamageEvent?.Invoke(chainTarget);
+            //Chain to enemies near split targets
+            for (int j = 0; j < lightningChains.Value; ++j)
+            {
+                chainTarget = ChooseLightningChain(chainTarget);
+                if (chainTarget == null)
+                    break;
+                lightningDamageEvent?.Invoke(chainTarget);
+            }
+        }
     }
+
+    protected Enemy ChooseLightningChain(Enemy startingEnemy)
+    {
+        Enemy chosen = null;
+        foreach (Enemy enemy in startingEnemy.nearbyEnemies)
+        {
+            if (enemy != null && enemy.lightningStruck == false && Utility.WithinRange(enemy.transform.position, startingEnemy.transform.position, lightningRange.Value))
+            {
+                chosen = enemy;
+                chosen.lightningStruck = true;
+                StaticRefs.SpawnLightning(startingEnemy, chosen);
+                break;
+            }
+        }
+        return chosen;
+    }
+
+    protected void NormalLightningDamage(Enemy enemy)
+    {
+        float lightningDamage = DamageAfterArmour(enemy.Armour, DamageType.lightning);
+        lightningDamage *= enemy.ResistanceMult(DamageType.lightning);
+        enemy.ReduceHealthBy(lightningDamage, this);
+    }
+
+    protected delegate void EnemyHit(Enemy enemy);
+    protected EnemyHit lightningDamageEvent;
 
     protected void NormalRadiationDamage(Enemy enemy)
     {
@@ -243,7 +305,8 @@ public abstract class Weapon : TorusMotion
             return;
 
         float radiationDamage = DamageAfterArmour(enemy.Armour, DamageType.radiation);
-        enemy.radiation += radiationDamage;
+        radiationDamage *= enemy.ResistanceMult(DamageType.radiation);
+        enemy.RadiationHit(radiationDamage);
     }
 
     protected void NormalAcidDamage(Enemy enemy)
@@ -252,6 +315,7 @@ public abstract class Weapon : TorusMotion
             return;
 
         float acidStack = DamageAfterArmour(enemy.Armour, DamageType.acid);
+        acidStack *= enemy.ResistanceMult(DamageType.acid);
         enemy.acid += acidStack;
         enemy.SetAcidDPS(acidDamagePerSecond.Value);
     }
@@ -262,6 +326,7 @@ public abstract class Weapon : TorusMotion
             return;
 
         float nanitesDamage = DamageAfterArmour(enemy.Armour, DamageType.nanites);
+        nanitesDamage *= enemy.ResistanceMult(DamageType.nanites);
         enemy.nanites += nanitesDamage;
     }
 
@@ -271,6 +336,7 @@ public abstract class Weapon : TorusMotion
             return;
 
         float antimatterDamage = DamageAfterArmour(enemy.Armour, DamageType.antimatter);
+        antimatterDamage *= enemy.ResistanceMult(DamageType.antimatter);
         enemy.antimatter += antimatterDamage;
     }
 
