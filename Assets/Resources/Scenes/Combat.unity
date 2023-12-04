@@ -1508,9 +1508,9 @@ MonoBehaviour:
   weaponDirectionSwapBuffer: 45
   damageSettings:
     timeBetweenAcidTicks: 0.2
-    timeBetweenNaniteTicks: 0.2
+    timeBetweenNaniteTicks: 0.75
     nanitesHealthCutoff: 0.2
-    timeBetweenTempTicks: 0.2
+    timeBetweenTempTicks: 0.333
     timeBetweenRadiationTicks: 2
 --- !u!114 &1302523176
 MonoBehaviour:
@@ -1583,7 +1583,7 @@ MonoBehaviour:
       min: 0
       max: Infinity
     heat:
-      defaultValue: 0
+      defaultValue: 90
       min: 0
       max: Infinity
     cold:
@@ -1599,7 +1599,7 @@ MonoBehaviour:
       min: 0
       max: Infinity
     lightning:
-      defaultValue: 60
+      defaultValue: 0
       min: 0
       max: Infinity
     nanites:
@@ -2715,7 +2715,7 @@ MonoBehaviour:
       min: 0
       max: Infinity
     heat:
-      defaultValue: 0
+      defaultValue: 5
       min: 0
       max: Infinity
     cold:

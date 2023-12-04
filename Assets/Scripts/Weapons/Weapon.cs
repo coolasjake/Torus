@@ -204,6 +204,8 @@ public abstract class Weapon : TorusMotion
 
     protected void NormalBasicDamage(Enemy enemy)
     {
+        if (damageStats.basic.Value == 0)
+            return;
         //Basic Damage
         enemy.ReduceHealthBy(damageStats.basic.Value, this);
     }

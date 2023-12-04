@@ -41,6 +41,7 @@ public class Enemy : TorusMotion
     {
         if (myClass == EnemyClass.tank)
             damage -= AbilityPower;
+        print(damage + " Damage");
         damage = Mathf.Max(damage, 1);
         _health -= damage;
     }
@@ -53,6 +54,7 @@ public class Enemy : TorusMotion
     public float stunEndTime = 0f;
     public bool Stunned => (stunEndTime > Time.time);
 
+    [HideInInspector]
     public bool lightningStruck = false;
     //private bool _lastLightningStruck = 0f;
 
@@ -240,22 +242,30 @@ public class Enemy : TorusMotion
         if (StaticRefs.DoTempTick(_lastTempTick) == false)
             return;
 
-        _lastTempTick = Time.deltaTime;
+        _lastTempTick = Time.time;
 
         if (OnFire)
-            temperature += 2f;
+            temperature += 10f * StaticRefs.TempTickRate;
 
         //Note: DOT effects are effected by resistances when applied, not when dealing damage
         if (data.damageFromHot && temperature > data.maxSafeTemp)
         {
-            DOTDamage(temperature - data.maxSafeTemp);
+            float excess = temperature - data.maxSafeTemp;
+            DOTDamage(excess);
+            //Reduce temp by a fraction of the excess
+            //Note: should NOT be relative to tick rate, or damage will increase exponentially with rate instead of linearly
+            temperature = temperature.Lerp(data.restingTemp, excess * 0.5f);
         }
         if (temperature < data.freezeTemp)
         {
             Frozen = true;
             if (data.damageFromCold)
             {
-                DOTDamage(-(temperature - data.freezeTemp));
+                float excess = -(temperature - data.freezeTemp);
+                DOTDamage(excess);
+                //Reduce temp by a fraction of the excess
+                //Note: should NOT be relative to tick rate, or damage will increase exponentially with rate instead of linearly
+                temperature = temperature.Lerp(data.restingTemp, excess * 0.5f);
             }
         }
         else

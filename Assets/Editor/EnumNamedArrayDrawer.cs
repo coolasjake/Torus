@@ -5,7 +5,7 @@ using UnityEditor;
 
 
 [CustomPropertyDrawer(typeof(EnumNamedArrayAttribute))]
-public class DrawerEnumNamedArray : PropertyDrawer
+public class EnumNamedArrayDrawer : PropertyDrawer
 {
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

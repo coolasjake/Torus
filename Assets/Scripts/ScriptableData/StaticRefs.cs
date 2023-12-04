@@ -138,17 +138,17 @@ public class StaticRefs : MonoBehaviour
         [Tooltip("Controls how often acid deals damage.")]
         public float timeBetweenAcidTicks = 0.2f;
         [Min(0)]
-        [Tooltip("Controls how often acid deals damage.")]
-        public float timeBetweenNaniteTicks = 0.2f;
+        [Tooltip("Controls how often nanites deal damage.")]
+        public float timeBetweenNaniteTicks = 0.75f;
         [Min(0)]
-        [Tooltip("Controls how often acid deals damage.")]
+        [Tooltip("Controls the fraction of health where nanites cannot deal any damage.")]
         public float nanitesHealthCutoff = 0.2f;
         [Min(0)]
-        [Tooltip("Controls how often acid deals damage.")]
-        public float timeBetweenTempTicks = 0.2f;
+        [Tooltip("Controls how often temperature deals damage and falls back towards resting.")]
+        public float timeBetweenTempTicks = 0.5f;
         [Min(0)]
-        [Tooltip("Controls how often acid deals damage.")]
-        public float timeBetweenRadiationTicks = 0.2f;
+        [Tooltip("Controls how often radiation deals damage, and how long before the first tick starts (unlike other DOTs).")]
+        public float timeBetweenRadiationTicks = 2f;
     }
 
     public static bool DoAcidTick(float lastTick)
