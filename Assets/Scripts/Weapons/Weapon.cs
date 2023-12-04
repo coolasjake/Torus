@@ -16,7 +16,7 @@ public abstract class Weapon : TorusMotion
     private WeaponInput weaponInput;
 
     [Header("Weapon Options")]
-    public ModifiableFloat moveSpeed = new ModifiableFloat(10f);
+    public ModifiableFloat moveSpeed = new ModifiableFloat(90f);
     public ModifiableFloat aimingMult = new ModifiableFloat(0.5f, 0f, 1f);
 
     public ModifiableFloat attacksPerSecond = new ModifiableFloat(1f, 0.0001f, 60f);
@@ -157,25 +157,25 @@ public abstract class Weapon : TorusMotion
 
         switch (statName)
         {
-            case "movespeed":
+            case "move speed":
                 moveSpeed.AddModifier(modifierName, value, operation);
                 return;
-            case "aimingmult":
+            case "aiming mult":
                 aimingMult.AddModifier(modifierName, value, operation);
                 return;
-            case "firerate":
+            case "fire rate":
                 attacksPerSecond.AddModifier(modifierName, value, operation);
                 return;
-            case "acidDamage":
+            case "acid damage":
                 acidDamagePerSecond.AddModifier(modifierName, value, operation);
                 return;
-            case "armourPierce":
+            case "armour pierce":
                 armourPierce.AddModifier(modifierName, value, operation);
                 return;
-            case "igniteChance":
+            case "ignite chance":
                 igniteChance.AddModifier(modifierName, value, operation);
                 return;
-            case "lightningRange":
+            case "lightning range":
                 lightningRange.AddModifier(modifierName, value, operation);
                 return;
         }
@@ -231,7 +231,7 @@ public abstract class Weapon : TorusMotion
         //Heat Damage
         float heatDamage = DamageAfterArmour(enemy.Armour, DamageType.heat);
         heatDamage *= enemy.ResistanceMult(DamageType.heat);
-        enemy.temperature += heatDamage;
+        enemy.ChangeTemp(heatDamage);
 
         if (Random.value < igniteChance.Value)
         {
@@ -247,7 +247,7 @@ public abstract class Weapon : TorusMotion
         //Heat Damage
         float coldDamage = DamageAfterArmour(enemy.Armour, DamageType.cold);
         coldDamage *= enemy.ResistanceMult(DamageType.cold);
-        enemy.temperature -= coldDamage;
+        enemy.ChangeTemp(-coldDamage);
     }
 
     protected void NormalLightningChain(Enemy enemy)

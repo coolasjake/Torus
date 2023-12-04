@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Ability
   description: Boosts the aim laser to deal radiation damage.
   effects:
-  - name: AimLaserDamage
+  - name: Aim Laser Damage
     priority: 0
     isPower: 0
     operation: 0

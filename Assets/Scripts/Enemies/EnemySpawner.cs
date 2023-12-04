@@ -218,7 +218,7 @@ public class EnemySpawner : MonoBehaviour
         if (enemyClass == EnemyClass.swarm)
         {
             height += Random.Range(0, 0.5f);
-            if (Random.value > data.Ability(EnemyClass.swarm))
+            if (Random.value < data.Ability(EnemyClass.swarm))
                 SpawnExtraSwarmEnemy(angle, data);
         }
         newEnemy.AngleAndHeight = new Vector2(angle, height);

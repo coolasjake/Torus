@@ -72,14 +72,14 @@ public class StaticRefs : MonoBehaviour
     public static GameObject SpawnFrozenEffect(Enemy enemy)
     {
         GameObject effect = Instantiate(singleton.effectSettings.frozenEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
-        effect.transform.localScale = new Vector3(enemy.EffectsScale, enemy.EffectsScale, enemy.EffectsScale);
+        effect.transform.localScale = new Vector3(enemy.Size, enemy.Size, enemy.Size);
         return effect;
     }
 
     public static GameObject SpawnFireEffect(Enemy enemy)
     {
         GameObject effect = Instantiate(singleton.effectSettings.fireEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
-        effect.transform.localScale = new Vector3(enemy.EffectsScale, enemy.EffectsScale, enemy.EffectsScale);
+        effect.transform.localScale = new Vector3(enemy.Size, enemy.Size, enemy.Size);
         return effect;
     }
 

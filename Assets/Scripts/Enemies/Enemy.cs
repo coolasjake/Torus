@@ -39,15 +39,21 @@ public class Enemy : TorusMotion
     /// <summary> Reduce the health of the enemy after applying tank ability and rounding up to 1. </summary>
     private void Damage(float damage)
     {
+        if (damage <= 0)
+            return;
         if (myClass == EnemyClass.tank)
             damage -= AbilityPower;
-        print(damage + " Damage");
         damage = Mathf.Max(damage, 1);
         _health -= damage;
     }
 
     [HideInInspector]
     public float temperature = 0f;
+    
+    public void ChangeTemp(float byValue)
+    {
+        temperature += byValue / Size;
+    }
 
     /// <summary> Time that the latest stun effect on this enemy will end. </summary>
     [HideInInspector]
@@ -214,6 +220,8 @@ public class Enemy : TorusMotion
         RadDOT();
         lightningStruck = false;
 
+        UpdateTempEffect();
+
         if (_health <= 0)
         {
             if (lastHitBy != null)
@@ -272,7 +280,6 @@ public class Enemy : TorusMotion
             Frozen = false;
 
         temperature = temperature.Lerp(data.restingTemp, data.baseTempChange * StaticRefs.TempTickRate);
-        UpdateTempEffect();
     }
 
     private void AcidDOT()
@@ -301,7 +308,7 @@ public class Enemy : TorusMotion
     public void Destroy()
     {
         Destroy(healthBar.gameObject);
-        StaticRefs.SpawnExplosion(EffectsScale, transform.position);
+        StaticRefs.SpawnExplosion(Size, transform.position);
         gameObject.SetActive(false);
         destroyEvents.Invoke(this);
         Destroy(gameObject);
@@ -350,7 +357,7 @@ public class Enemy : TorusMotion
     public int Armour => data.Armour(myClass) - armourDebuffs;
     public float ClassSpeed => data.Speed(myClass);
     public float XPReward => data.Points(myClass);
-    public float EffectsScale => data.EffectsScale(myClass);
+    public float Size => data.Size(myClass);
     public float AbilityPower => data.Ability(myClass);
     public float ResistanceMult(DamageType type) => (1f - data.resistances.GetDamage(type));
 

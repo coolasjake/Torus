@@ -42,8 +42,8 @@ MonoBehaviour:
     healthMultiplier: 0.5
     extraArmour: 0
     speedMultiplier: 1
-    abilityPower: 0
-    effectsSize: 1
+    abilityPower: 0.2
+    size: 1
     sprite: {fileID: 21300000, guid: 902df43e96cc7f14d929f25094c188a1, type: 3}
     animationController: {fileID: 0}
   - name: fast
@@ -53,7 +53,7 @@ MonoBehaviour:
     extraArmour: 0
     speedMultiplier: 3
     abilityPower: 1.5
-    effectsSize: 2
+    size: 2
     sprite: {fileID: 21300000, guid: 1c421c08e71578045b8d8288492b3600, type: 3}
     animationController: {fileID: 0}
   - name: dodge
@@ -63,17 +63,17 @@ MonoBehaviour:
     extraArmour: 1
     speedMultiplier: 1
     abilityPower: 5
-    effectsSize: 2
+    size: 2
     sprite: {fileID: 21300000, guid: a53a833bd89f70b429a7e40b5730cd3c, type: 3}
     animationController: {fileID: 0}
   - name: tank
     className: tank
     pointsCost: 10
-    healthMultiplier: 10
+    healthMultiplier: 20
     extraArmour: 5
     speedMultiplier: 0.8
     abilityPower: 1
-    effectsSize: 5
+    size: 5
     sprite: {fileID: 21300000, guid: e89e7a1811784714eb25386c1842bd12, type: 3}
     animationController: {fileID: 0}
   explosionPrefab: {fileID: 8423020550156484834, guid: 7b5c60a2d443b75419f215e94796e1ee, type: 3}

@@ -59,7 +59,7 @@ public class EnemyData : ScriptableObject
     public float Ability(EnemyClass enemyClass) => classes[(int)enemyClass].abilityPower;
     public Sprite ClassSprite(EnemyClass enemyClass) => classes[(int)enemyClass].sprite;
     public AnimatorController ClassAnimations(EnemyClass enemyClass) => classes[(int)enemyClass].animationController;
-    public float EffectsScale(EnemyClass enemyClass) => classes[(int)enemyClass].effectsSize;
+    public float Size(EnemyClass enemyClass) => classes[(int)enemyClass].size;
 
     [Header("Effect Prefabs")]
     public GameObject explosionPrefab;
@@ -79,7 +79,7 @@ public class EnemyData : ScriptableObject
                 extraArmour = 3;
                 speedMultiplier = 0.5f;
                 abilityPower = 1f;
-                effectsSize = 5f;
+                size = 5f;
             }
             else if (enemyClass == EnemyClass.fast)
             {
@@ -88,7 +88,7 @@ public class EnemyData : ScriptableObject
                 extraArmour = 0;
                 speedMultiplier = 1.2f;
                 abilityPower = 1.5f;
-                effectsSize = 2f;
+                size = 2f;
             }
             else if (enemyClass == EnemyClass.dodge)
             {
@@ -97,7 +97,7 @@ public class EnemyData : ScriptableObject
                 extraArmour = 1;
                 speedMultiplier = 1f;
                 abilityPower = 10f;
-                effectsSize = 2f;
+                size = 2f;
             }
         }
 
@@ -115,7 +115,7 @@ public class EnemyData : ScriptableObject
         [Tooltip("Tank = Damage reduction per hit/type, Dodge = time between dodges, Fast = speed multiplier (when not stunned)")]
         ///<summary> Tank = Damage reduction per hit/type, Dodge = time between dodges, Fast = speed multiplier (when not stunned). </summary>
         public float abilityPower = 0f;
-        public float effectsSize = 1f;
+        public float size = 1f;
 
         public Sprite sprite;
         public AnimatorController animationController;

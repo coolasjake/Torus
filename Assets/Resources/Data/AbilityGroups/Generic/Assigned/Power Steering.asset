@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Ability
   description: Send unused power to the movement systems, increasing speed by 20%.
   effects:
-  - name: MoveSpeed
+  - name: Move Speed
     priority: 0
     isPower: 0
     operation: 1

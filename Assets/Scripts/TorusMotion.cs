@@ -82,9 +82,7 @@ public class TorusMotion : MonoBehaviour
 
     private void AccurateRotation()
     {
-        Vector2 scaledPoint = new Vector2(Mathf.Cos(Mathf.Deg2Rad * _angle) * torusScale.x, Mathf.Sin(Mathf.Deg2Rad * _angle) * torusScale.y);
-        float angle = Vector2.SignedAngle(Vector2.right, scaledPoint);
-        transform.rotation = Quaternion.Euler(0, 0, angle - 90f);
+        transform.rotation = RotFromAngle(_angle);
     }
 
     public static Vector2 GetPos(float angle)
@@ -117,5 +115,16 @@ public class TorusMotion : MonoBehaviour
     public static float DistanceFromPos(Vector2 pos)
     {
         return Vector2.Distance(torusOrigin, pos / torusScale);
-    }    
+    }
+
+    public static Quaternion RotFromAngle(float angle)
+    {
+        return Quaternion.Euler(0, 0, RealAngleFromAngle(angle));
+    }
+
+    public static float RealAngleFromAngle(float angle)
+    {
+        Vector2 scaledPoint = new Vector2(Mathf.Cos(Mathf.Deg2Rad * angle) * torusScale.x, Mathf.Sin(Mathf.Deg2Rad * angle) * torusScale.y);
+        return Vector2.SignedAngle(Vector2.right, scaledPoint) - 90f;
+    }
 }

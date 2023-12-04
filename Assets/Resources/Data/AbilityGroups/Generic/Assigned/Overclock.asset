@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Ability
   description: Overclock the weapon to fire faster.
   effects:
-  - name: FireRate
+  - name: Fire Rate
     priority: 0
     isPower: 0
     operation: 1

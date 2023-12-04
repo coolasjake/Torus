@@ -17,7 +17,7 @@ MonoBehaviour:
     Warning:
     may reduce heat damage.'
   effects:
-  - name: FireRate
+  - name: Fire Rate
     priority: 0
     isPower: 0
     operation: 1
