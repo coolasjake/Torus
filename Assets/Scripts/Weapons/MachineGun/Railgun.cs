@@ -53,7 +53,7 @@ public class Railgun : Weapon
             if (aimLaserHit.collider != null)
             {
                 Enemy enemy = aimLaserHit.rigidbody.GetComponent<Enemy>();
-                enemy.RadiationHit(10);
+                enemy.radiation += 10;
                 enemy.lastHitBy = this;
             }
         }

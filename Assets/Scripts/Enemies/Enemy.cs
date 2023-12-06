@@ -15,6 +15,8 @@ public class Enemy : TorusMotion
     private SpriteRenderer _tempEffectSR;
     private GameObject _frozenEffect;
     private GameObject _fireEffect;
+    private GameObject _acidEffect;
+    private GameObject _nanitesEffect;
 
     private HealthBar healthBar;
 
@@ -78,11 +80,14 @@ public class Enemy : TorusMotion
         {
             if (value != _frozen)
             {
+                temperature = Mathf.Min(data.freezeTemp, temperature);
                 if (value == true)
                     ShowFrozenEffect();
                 else
                     HideFrozenEffect();
                 _frozen = value;
+                if (_onFire && _frozen)
+                    DamageEvents.IceFire?.Invoke(this);
             }
         }
     }
@@ -94,19 +99,24 @@ public class Enemy : TorusMotion
         {
             if (value != _onFire)
             {
+                if (temperature < data.restingTemp)
+                    return;
                 if (value == true)
                     ShowFireEffect();
                 else
                     HideFireEffect();
                 _onFire = value;
+                if (_onFire && _frozen)
+                    DamageEvents.IceFire?.Invoke(this);
+                if (OnFire && acid > 0)
+                    DamageEvents.AcidFireExplosion?.Invoke(this);
             }
         }
     }
 
     /// <summary> Stack of radiation on this enemy. Radiation deals infrequent DOT and doesn't diminish, but can be completely resisted. </summary>
     [HideInInspector]
-    private float _radiation = 0;
-    public float Radiation => _radiation;
+    public float radiation = 0;
     /// <summary> Stack of acid on this enemy. Acid deals constant DOT until stack runs out, and explodes when enemy is on fire. </summary>
     [HideInInspector]
     public float acid = 0;
@@ -197,18 +207,11 @@ public class Enemy : TorusMotion
         return false;
     }
 
-    public void RadiationHit(float damage)
-    {
-        if (_radiation <= 0)
-            _lastRadTick = Time.time;
-        _radiation += damage;
-    }
-
     public void CheckReachedStation()
     {
         if (Height <= 0)
         {
-            //Damage Station
+            BattleController.DamageStation((int)Size);
         }
     }
 
@@ -236,13 +239,24 @@ public class Enemy : TorusMotion
 
     private void NanitesDOT()
     {
-        if (nanites <= 0 || _health / MaxHealth < StaticRefs.NanitesCutoff || StaticRefs.DoRadiationTick(_lastNanitesTick) == false)
-            return;
+        if (nanites > 0)
+        {
+            ShowNanitesEffect();
 
-        _lastNanitesTick = Time.time;
+            float damageCutoff = MaxHealth * StaticRefs.NanitesCutoff;
+            if (_health <= damageCutoff || StaticRefs.DoNanitesTick(_lastNanitesTick, _frozen) == false)
+                return;
 
-        //Note: DOT effects are effected by resistances when applied, not when dealing damage
-        DOTDamage(nanites * (_health / MaxHealth));
+            _lastNanitesTick = Time.time;
+
+            //Note: DOT effects are effected by resistances when applied, not when dealing damage
+            DOTDamage(Mathf.Min(nanites * (_health / MaxHealth) * StaticRefs.NanitesTickRate, _health - damageCutoff));
+        }
+        else
+        {
+            _lastNanitesTick = Time.time;
+            HideNanitesEffect();
+        }
     }
 
     private void TempDOT()
@@ -251,6 +265,12 @@ public class Enemy : TorusMotion
             return;
 
         _lastTempTick = Time.time;
+
+        //Remove frozen/fire if temp is on the wrong side of resting
+        if (temperature >= data.restingTemp)
+            Frozen = false;
+        else if (temperature <= data.restingTemp)
+            OnFire = false;
 
         if (OnFire)
             temperature += 10f * StaticRefs.TempTickRate;
@@ -264,7 +284,7 @@ public class Enemy : TorusMotion
             //Note: should NOT be relative to tick rate, or damage will increase exponentially with rate instead of linearly
             temperature = temperature.Lerp(data.restingTemp, excess * 0.5f);
         }
-        if (temperature < data.freezeTemp)
+        else if (temperature < data.freezeTemp)
         {
             Frozen = true;
             if (data.damageFromCold)
@@ -276,33 +296,60 @@ public class Enemy : TorusMotion
                 temperature = temperature.Lerp(data.restingTemp, excess * 0.5f);
             }
         }
-        else
-            Frozen = false;
 
         temperature = temperature.Lerp(data.restingTemp, data.baseTempChange * StaticRefs.TempTickRate);
     }
 
     private void AcidDOT()
     {
-        if (acid <= 0 || StaticRefs.DoAcidTick(_lastAcidTick) == false)
-            return;
+        if (OnFire && acid > 0)
+            DamageEvents.AcidFireExplosion?.Invoke(this);
 
-        _lastAcidTick = Time.time;
+        if (acid > 0)
+        {
+            ShowAcidEffect();
 
-        //Note: DOT effects are effected by resistances when applied, not when dealing damage
-        DOTDamage(StaticRefs.AcidTickDamage(acidDPS));
-        acid -= 1;
+            if (StaticRefs.DoAcidTick(_lastAcidTick) == false)
+                return;
+
+            _lastAcidTick = Time.time;
+
+            if (nanites > 0)
+                nanites -= StaticRefs.AcidTickDamage(acidDPS);
+            else
+                //Note: DOT effects are effected by resistances when applied, not when dealing damage
+                DOTDamage(StaticRefs.AcidTickDamage(acidDPS));
+
+            acid -= 1;
+            if (acid < 0)
+                acid = 0;
+        }
+        else
+        {
+            _lastAcidTick = Time.time;
+            HideAcidEffect();
+        }
     }
 
     private void RadDOT()
     {
-        if (_radiation <= 0 || StaticRefs.DoRadiationTick(_lastRadTick) == false)
-            return;
+        if (radiation > 0)
+        {
+            ShowRadiationEffect();
 
-        _lastRadTick = Time.time;
+            if (radiation <= 0 || StaticRefs.DoRadiationTick(_lastRadTick) == false)
+                return;
 
-        //Note: DOT effects are effected by resistances when applied, not when dealing damage
-        DOTDamage(_radiation);
+            _lastRadTick = Time.time;
+
+            //Note: DOT effects are effected by resistances when applied, not when dealing damage
+            DOTDamage(radiation);
+        }
+        else
+        {
+            HideRadiationEffect();
+            _lastRadTick = Time.time;
+        }
     }
 
     public void Destroy()
@@ -350,6 +397,42 @@ public class Enemy : TorusMotion
     private void HideFireEffect()
     {
         _fireEffect.SetActive(false);
+    }
+
+    private void ShowAcidEffect()
+    {
+        if (_acidEffect == null)
+            _acidEffect = StaticRefs.SpawnAcidEffect(this);
+        else
+            _acidEffect.SetActive(true);
+    }
+
+    private void HideAcidEffect()
+    {
+        if (_acidEffect != null)
+            _acidEffect.SetActive(false);
+    }
+
+    private void ShowNanitesEffect()
+    {
+        if (_nanitesEffect == null)
+            _nanitesEffect = StaticRefs.SpawnNanitesEffect(this);
+        else
+            _nanitesEffect.SetActive(true);
+    }
+
+    private void HideNanitesEffect()
+    {
+        if (_nanitesEffect != null)
+            _nanitesEffect.SetActive(false);
+    }
+
+    private void ShowRadiationEffect()
+    {
+    }
+
+    private void HideRadiationEffect()
+    {
     }
 
     public int PointsCost => data.Points(myClass);

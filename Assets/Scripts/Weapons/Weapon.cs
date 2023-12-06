@@ -217,6 +217,8 @@ public abstract class Weapon : TorusMotion
 
         //Physical Damage
         float physicalDamage = DamageAfterArmour(enemy.Armour, DamageType.physical);
+        if (enemy.acid > 0)
+            physicalDamage -= 1f;
         if (enemy.Frozen)
             physicalDamage *= 2f;
         physicalDamage *= enemy.ResistanceMult(DamageType.physical);
@@ -277,6 +279,8 @@ public abstract class Weapon : TorusMotion
 
     protected Enemy ChooseLightningChain(Enemy startingEnemy)
     {
+        if (startingEnemy.Frozen)
+            return null;
         Enemy chosen = null;
         foreach (Enemy enemy in startingEnemy.nearbyEnemies)
         {
@@ -295,10 +299,13 @@ public abstract class Weapon : TorusMotion
     {
         float lightningDamage = DamageAfterArmour(enemy.Armour, DamageType.lightning);
         lightningDamage *= enemy.ResistanceMult(DamageType.lightning);
+        if (enemy.acid > 0)
+            lightningDamage *= 2f;
+        if (enemy.nanites > 0)
+            lightningDamage += DamageEvents.NanitesLightningBonus(enemy);
         enemy.ReduceHealthBy(lightningDamage, this);
     }
 
-    protected delegate void EnemyHit(Enemy enemy);
     protected EnemyHit lightningDamageEvent;
 
     protected void NormalRadiationDamage(Enemy enemy)
@@ -308,7 +315,7 @@ public abstract class Weapon : TorusMotion
 
         float radiationDamage = DamageAfterArmour(enemy.Armour, DamageType.radiation);
         radiationDamage *= enemy.ResistanceMult(DamageType.radiation);
-        enemy.RadiationHit(radiationDamage);
+        enemy.radiation += radiationDamage;
     }
 
     protected void NormalAcidDamage(Enemy enemy)

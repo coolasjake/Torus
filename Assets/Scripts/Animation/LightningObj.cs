@@ -32,7 +32,7 @@ public class LightningObj : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, angle);
         float dist = Vector2.Distance(enemyA.transform.position, enemyB.transform.position);
         //print("origin: " + transform.position + ", dest: " + enemyB.transform.position + ", angle: " + angle + " diff: " + (enemyB.transform.position - enemyA.transform.position));
-        spriteRenderer.size = new Vector2(dist, 0.2f);
+        spriteRenderer.size = new Vector2(dist, spriteRenderer.size.y);
     }
 
     public void Destroy()

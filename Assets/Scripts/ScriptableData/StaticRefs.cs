@@ -34,11 +34,15 @@ public class StaticRefs : MonoBehaviour
     {
         public GameObject frozenEffectPrefab;
         public GameObject fireEffectPrefab;
+        public GameObject nanitesEffectPrefab;
+        public GameObject acidEffectPrefab;
         public GameObject tempEffectPrefab;
         public Color coldColour = Color.blue;
         public Color hotColour = Color.red;
         public GameObject explosionPrefab;
+        public GameObject acidExplosionPrefab;
         public LightningObj lightningPrefab;
+        public GameObject lightningExplosionPrefab;
     }
 
     public static void SpawnExplosion(float scale, Vector2 pos)
@@ -46,6 +50,27 @@ public class StaticRefs : MonoBehaviour
         if (singleton.effectSettings.explosionPrefab != null)
         {
             GameObject explosion = Instantiate(singleton.effectSettings.explosionPrefab, pos, Quaternion.identity, singleton.transform);
+            explosion.transform.localScale = new Vector3(scale, scale, scale);
+        }
+    }
+
+    public static void SpawnAcidExplosion(float scale, Vector2 pos)
+    {
+        Debug.Log("Here");
+        if (singleton.effectSettings.acidExplosionPrefab != null)
+        {
+            //scale = scale * 0.5f;
+            //Debug.LogWarning("Acid explosion is scaled down.");
+            GameObject explosion = Instantiate(singleton.effectSettings.acidExplosionPrefab, pos, Quaternion.identity, singleton.transform);
+            explosion.transform.localScale = new Vector3(scale, scale, scale);
+        }
+    }
+
+    public static void SpawnLightningExplosion(float scale, Vector2 pos)
+    {
+        if (singleton.effectSettings.lightningExplosionPrefab != null)
+        {
+            GameObject explosion = Instantiate(singleton.effectSettings.lightningExplosionPrefab, pos, Quaternion.identity, singleton.transform);
             explosion.transform.localScale = new Vector3(scale, scale, scale);
         }
     }
@@ -79,6 +104,20 @@ public class StaticRefs : MonoBehaviour
     public static GameObject SpawnFireEffect(Enemy enemy)
     {
         GameObject effect = Instantiate(singleton.effectSettings.fireEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
+        effect.transform.localScale = new Vector3(enemy.Size, enemy.Size, enemy.Size);
+        return effect;
+    }
+
+    public static GameObject SpawnNanitesEffect(Enemy enemy)
+    {
+        GameObject effect = Instantiate(singleton.effectSettings.nanitesEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
+        effect.transform.localScale = new Vector3(enemy.Size, enemy.Size, enemy.Size);
+        return effect;
+    }
+
+    public static GameObject SpawnAcidEffect(Enemy enemy)
+    {
+        GameObject effect = Instantiate(singleton.effectSettings.acidEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
         effect.transform.localScale = new Vector3(enemy.Size, enemy.Size, enemy.Size);
         return effect;
     }
@@ -149,6 +188,9 @@ public class StaticRefs : MonoBehaviour
         [Min(0)]
         [Tooltip("Controls how often radiation deals damage, and how long before the first tick starts (unlike other DOTs).")]
         public float timeBetweenRadiationTicks = 2f;
+        [Min(0)]
+        [Tooltip("Value of radiation at which double damage and other effects trigger.")]
+        public float criticalMassThreshold = 100f;
     }
 
     public static bool DoAcidTick(float lastTick)
@@ -159,11 +201,12 @@ public class StaticRefs : MonoBehaviour
     {
         return DPS * singleton.damageSettings.timeBetweenAcidTicks;
     }
-    public static bool DoNanitesTick(float lastTick)
+    public static bool DoNanitesTick(float lastTick, bool frozen)
     {
-        return Time.time >= lastTick + singleton.damageSettings.timeBetweenNaniteTicks;
+        return Time.time >= lastTick + (singleton.damageSettings.timeBetweenNaniteTicks * (frozen ? 2f : 1f));
     }
     public static float NanitesCutoff => singleton.damageSettings.nanitesHealthCutoff;
+    public static float NanitesTickRate => singleton.damageSettings.timeBetweenNaniteTicks;
     public static bool DoTempTick(float lastTick)
     {
         return Time.time >= lastTick + singleton.damageSettings.timeBetweenTempTicks;
