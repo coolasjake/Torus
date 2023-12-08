@@ -8,7 +8,6 @@ public class LightningObj : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     public Enemy enemyA;
     public Enemy enemyB;
-    private int _animationFrame = 0;
 
     public void SetTargets(Enemy A, Enemy B)
     {
@@ -31,7 +30,6 @@ public class LightningObj : MonoBehaviour
         float angle = Vector2.SignedAngle(Vector2.right, (enemyB.transform.position - enemyA.transform.position));
         transform.rotation = Quaternion.Euler(0, 0, angle);
         float dist = Vector2.Distance(enemyA.transform.position, enemyB.transform.position);
-        //print("origin: " + transform.position + ", dest: " + enemyB.transform.position + ", angle: " + angle + " diff: " + (enemyB.transform.position - enemyA.transform.position));
         spriteRenderer.size = new Vector2(dist, spriteRenderer.size.y);
     }
 

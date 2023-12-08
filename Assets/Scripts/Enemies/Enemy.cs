@@ -171,7 +171,6 @@ public class Enemy : TorusMotion
     {
         DOTEffects();
         MoveCloser(CalculateSpeed());
-        CheckReachedStation();
         healthBar.Move(transform.position);
     }
 
@@ -205,14 +204,6 @@ public class Enemy : TorusMotion
             return true;
         }
         return false;
-    }
-
-    public void CheckReachedStation()
-    {
-        if (Height <= 0)
-        {
-            BattleController.DamageStation((int)Size);
-        }
     }
 
     private void DOTEffects()

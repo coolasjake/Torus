@@ -30,4 +30,9 @@ public class WeaponInput : MonoBehaviour
     {
         _fireInput = context.action.triggered;
     }
+
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        PauseManager.TogglePause();
+    }
 }

@@ -8,9 +8,25 @@ public class StaticRefs : MonoBehaviour
     private static StaticRefs singleton;
 
     [SerializeField]
+    private Vector2 torusScale = Vector2.one;
+
+    [SerializeField]
     private LayerMask attackMask;
 
     public static LayerMask AttackMask => singleton.attackMask;
+
+    [SerializeField]
+    private GameObject stationExplosionPrefab;
+
+    public static void SpawnStationExplosion(float maxSize)
+    {
+        if (singleton.stationExplosionPrefab != null)
+        {
+            GameObject explosion = Instantiate(singleton.stationExplosionPrefab, TorusMotion.torusOrigin, Quaternion.identity, singleton.transform);
+            explosion.transform.localScale = new Vector3(maxSize, maxSize, maxSize);
+        }
+    }
+
 
     [Header("UI and Effects")]
 
@@ -222,5 +238,11 @@ public class StaticRefs : MonoBehaviour
     void Awake()
     {
         singleton = this;
+        TorusMotion.torusScale = torusScale;
+    }
+
+    void OnDrawGizmos()
+    {
+        TorusMotion.torusScale = torusScale;
     }
 }

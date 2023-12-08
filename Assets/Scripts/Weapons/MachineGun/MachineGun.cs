@@ -16,7 +16,7 @@ public class MachineGun : Weapon
 
     public ModifiableFloat bulletSpeed = new ModifiableFloat(10f, 0.01f, 1000f);
 
-    private float fireRateDebit = 0;
+    //private float fireRateDebit = 0;
 
     private Bullet bulletPrefab;
 

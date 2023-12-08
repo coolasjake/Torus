@@ -9,6 +9,7 @@ public class BattleController : MonoBehaviour
     public int stationHealth = 9;
     public SpriteRenderer spaceStation;
     public List<Sprite> stationHealthSprites = new List<Sprite>();
+    public TorusTester tester;
 
     private static bool[] _readyPlayers;
     public static int numReadyPlayers = 0;
@@ -66,16 +67,17 @@ public class BattleController : MonoBehaviour
 
     public static void DamageStation(int damage)
     {
-        singleton.stationHealth -= damage;
         if (singleton.stationHealth <= 0)
             GameOver();
         else
+        {
+            singleton.stationHealth -= damage;
             singleton.ShowStationDamage();
-    }
-
-    private static void StationExplosion(int size)
-    {
-
+            float explosionHeight = ((damage / 5f) * (singleton.enemySpawner.spawningHeight - 1f)) + 1f;
+            singleton.enemySpawner.ExplodeEnemies(explosionHeight);
+            StaticRefs.SpawnStationExplosion(explosionHeight * 10f);
+            singleton.tester.gizmoHeight = explosionHeight;
+        }
     }
 
     public static void GameOver()

@@ -17,6 +17,8 @@ public class EnemySpawner : MonoBehaviour
     public float spacingRate = 0.001f;
     [Min(0.001f)]
     public float spacingForce = 0.5f;
+    [Min(0.0001f)]
+    public float maxSpacingMove = 0.01f;
     [EnumNamedArray(typeof(EnemyClass))]
     public FleetType[] defaultFleets = new FleetType[Enum.GetNames(typeof(EnemyClass)).Length];
 
@@ -217,7 +219,7 @@ public class EnemySpawner : MonoBehaviour
         angle = angle + Random.Range(-2f, 2f);
         if (enemyClass == EnemyClass.swarm)
         {
-            height += Random.Range(0, 0.5f);
+            //height += Random.Range(0, 0.5f);
             if (Random.value < data.Ability(EnemyClass.swarm))
                 SpawnExtraSwarmEnemy(angle, data);
         }
@@ -268,6 +270,22 @@ public class EnemySpawner : MonoBehaviour
         return 0;
     }
 
+    public void ExplodeEnemies(float height)
+    {
+        List<Enemy> enemiesToDestroy = new List<Enemy>();
+        foreach (Enemy enemy in enemies)
+        {
+            if (enemy.Height < height)
+            {
+                enemiesToDestroy.Add(enemy);
+            }
+        }
+        foreach (Enemy enemy in enemiesToDestroy)
+        {
+            enemy.Destroy();
+        }
+    }
+
     #region Enemy Spacing
     private void FixedUpdate()
     {
@@ -276,13 +294,20 @@ public class EnemySpawner : MonoBehaviour
     }
 
     private float[] _enemyDists = new float[5];
-    private float _dist = 0;
     private float _tempDist = 0;
     private Vector2 _diff;
     private Vector2 _spacingDir = Vector2.zero;
     private float _enemySize = 0;
     private void SpaceEnemies()
     {
+        for(int i = 0; i < enemySpacing.Length; ++i)
+        {
+            if (enemySpacing[i] <= 0)
+            {
+                Debug.LogError("Spacings cannot go below 0!");
+                enemySpacing[i] = 0.001f;
+            }
+        }
         _lastSpacing = Time.time;
 
         //Loop through each enemy
@@ -311,10 +336,11 @@ public class EnemySpawner : MonoBehaviour
                 {
                     //Add spacing
                     float maxSpacingDist = _enemySize + enemySpacing[(int)otherEnemy.myClass];
-                    if (dist < maxSpacingDist)
+                    if (dist < maxSpacingDist * maxSpacingDist)
                     {
-                        float inverter = (maxSpacingDist - dist) / (maxSpacingDist / 2);
-                        _spacingDir += (_diff * inverter * inverter);
+                        Vector2 spacing = _diff / (dist / maxSpacingDist);
+                        spacing = spacing - spacing.normalized;
+                        _spacingDir += spacing;
                     }
                 }
 
@@ -332,9 +358,42 @@ public class EnemySpawner : MonoBehaviour
 
             }
 
-            _spacingDir = enemy.VectorAsAngleHeight((_spacingDir * spacingForce * spacingRate) / _enemySize);
+            //Apply rates and limits
+            _spacingDir = _spacingDir * (spacingForce * spacingRate);
+            if (_spacingDir.SqrMagnitude() > maxSpacingMove * maxSpacingMove)
+                _spacingDir = _spacingDir.normalized * maxSpacingMove;
+
+            //Convert to angle/height, then reduce height element (so enemies space out around instead of away/towards station)
+            _spacingDir = enemy.VectorAsAngleHeight(_spacingDir);
             _spacingDir.y *= 0.8f;
+
+            //Apply to enemy
             enemy.AngleAndHeight += _spacingDir;
+        }
+        CheckReachedStation();
+        if (breakAfterSpacing)
+            Debug.Break();
+    }
+
+    public void CheckReachedStation()
+    {
+        foreach (Enemy enemy in enemies)
+        {
+            if (enemy.Height <= 1 + enemySpacing[(int)enemy.myClass])
+            {
+                BattleController.DamageStation((int)enemy.Size);
+                break;
+            }
+        }
+    }
+
+    public bool breakAfterSpacing = false;
+    private void OnDrawGizmosSelected()
+    {
+        for (int i = 0; i < Mathf.Min(enemies.Count); ++i)
+        {
+            Gizmos.color = Color.red.ChangeHue((i * 256f) / enemies.Count);
+            Gizmos.DrawWireSphere(enemies[i].transform.position, enemySpacing[(int)enemies[i].myClass]);
         }
     }
     #endregion
