@@ -181,6 +181,9 @@ public class Enemy : TorusMotion
 
         float modifier = 1f;
 
+        if (myClass == EnemyClass.fast && Height < StaticRefs.BoostStartingHeight)
+            modifier += AbilityPower;
+
         //Apply cold and frozen modifiers
         if (temperature <= data.freezeTemp)
             modifier -= data.frozenSlow + data.maxColdSlow;
@@ -188,7 +191,7 @@ public class Enemy : TorusMotion
             modifier -= (temperature / data.freezeTemp) * data.maxColdSlow;
 
         //Clamp modifier to not be less than the maximum slow value
-        modifier = Mathf.Clamp(modifier, 1f - data.maxSlow, 2f);
+        modifier = Mathf.Clamp(modifier, 1f - data.maxSlow, 3f);
         return ClassSpeed * modifier * Time.fixedDeltaTime * StaticRefs.BaseSpeed;
     }
 

@@ -23,6 +23,8 @@ public class EnemySpawner : MonoBehaviour
     public FleetType[] defaultFleets = new FleetType[Enum.GetNames(typeof(EnemyClass)).Length];
 
     private int _waveNumber = 0;
+    private bool _startSpawning = false;
+    private float _waveStartTime = 0;
 
     private List<EnemyFleet> fleetsToSpawn = new List<EnemyFleet>();
     private List<float> fleetAngles = new List<float>();
@@ -45,89 +47,155 @@ public class EnemySpawner : MonoBehaviour
 
         //Randomly assign difficulty points to fleets of main/rare enemies
         fleetAngles.Clear();
-        ChooseFleets(missionData.missionPlan.waves[_waveNumber].possibleMainFleets, missionData.missionPlan.waves[_waveNumber].pointsForMainTypes);
-        ChooseFleets(missionData.missionPlan.waves[_waveNumber].possibleRareFleets, missionData.missionPlan.waves[_waveNumber].pointsForRareTypes);
-        fleetsToSpawn.ShuffleList();
+        ChooseAllFleets(missionData.missionPlan.waves[_waveNumber]);
 
+        string waveDescription = "Wave " + _waveNumber + " (" + missionData.missionPlan.waves[_waveNumber].name + ") = ";
         foreach (EnemyFleet fleet in fleetsToSpawn)
         {
             StartCoroutine(SpawnFleet(fleet, fleet.startDelay));
+            waveDescription += "\n" + fleet.plan.name + " of " + fleet.enemyType.name + ", starting at " + fleet.startDelay;
         }
+        Debug.Log(waveDescription);
+
+        _startSpawning = true;
+        _waveStartTime = Time.time;
     }
 
-    private void ChooseMainFleets()
+    private void ChooseFleets(MissionPlan.WaveData wave, bool main)
     {
-        int points = missionData.missionPlan.waves[_waveNumber].pointsForMainTypes;
-        List<FleetType> mainFleetTypes = missionData.missionPlan.waves[_waveNumber].possibleMainFleets;
-        List<int> fleetTypeIndexes = Utility.CreateIndexList(mainFleetTypes.Count);
+        List<int> fleetTypeIndexes = Utility.CreateIndexList(wave.fleets.Count);
+        int usedPoints = 0;
+        int totalPoints = main ? wave.pointsForMainTypes : wave.pointsForRareTypes;
+        int numMainBursts = wave.pointsForMainTypes / wave.numBursts;
+        int numRareBursts = wave.pointsForRareTypes / wave.numBursts;
 
-        while (points > 0)
+        int fleetNum = 0;
+        int randomOffset = Random.Range(0, wave.fleets.Count);
+        while (usedPoints < totalPoints)
         {
+            //Choose a fleet plan
             FleetType plan;
             if (fleetTypeIndexes.Count == 0)
                 plan = defaultFleets.Random();
+            else if (wave.pickFleetsRandomly)
+                plan = wave.fleets[fleetTypeIndexes.Random()];
             else
-                plan = mainFleetTypes[fleetTypeIndexes.Random()];
-            EnemyData randomMainType = missionData.mainEnemyTypes.Random();
+                plan = wave.fleets[(fleetNum + randomOffset) % wave.fleets.Count];
+
+            //Choose an enemy type
+            EnemyData chosenType;
+            if (main)
+                chosenType = missionData.mainEnemyTypes.Random();
+            else
+                chosenType = missionData.rareEnemyTypes.Random();
+
+            //Choose angle and start time, then add the fleet to the list
             float angle = ChooseFleetAngle();
-            fleetsToSpawn.Add(new EnemyFleet { baseAngle = angle, enemyType = randomMainType, plan = plan, startDelay = plan.difficultyPoints });
-            points -= plan.difficultyPoints;
+            float startTime;
+            if (main)
+                startTime = (usedPoints / wave.numBursts) * (wave.waveTime / numMainBursts);
+            else
+                startTime = (usedPoints / wave.numBursts) * (wave.waveTime / numMainBursts);
+            fleetsToSpawn.Add(new EnemyFleet { baseAngle = angle, enemyType = chosenType, plan = plan, startDelay = startTime });
+            ++fleetNum;
+            usedPoints += plan.difficultyPoints;
 
             //Remove fleet types that require more than the remaining points
             for (int i = 0; i < fleetTypeIndexes.Count; ++i)
             {
-                if (mainFleetTypes[fleetTypeIndexes[i]].difficultyPoints > points)
+                if (wave.fleets[fleetTypeIndexes[i]].difficultyPoints > (totalPoints - usedPoints))
                     fleetTypeIndexes.RemoveAt(i--);
             }
         }
     }
-    private void ChooseRareFleets()
+    private void ChooseAllFleets(MissionPlan.WaveData wave)
     {
-        int points = missionData.missionPlan.waves[_waveNumber].pointsForRareTypes;
-        List<FleetType> rareFleetTypes = missionData.missionPlan.waves[_waveNumber].possibleRareFleets;
-        List<int> fleetTypeIndexes = Utility.CreateIndexList(rareFleetTypes.Count);
+        List<int> mainTypeIndexes = Utility.CreateIndexList(wave.fleets.Count);
+        List<int> rareTypeIndexes = Utility.CreateIndexList(wave.fleets.Count);
+        int mPoints = 0;
+        int rPoints = 0;
+        int totalPoints = wave.pointsForMainTypes + wave.pointsForRareTypes;
+        int currentBurst = 0;
 
-        while (points > 0)
+        int rareStartingPoint = Mathf.RoundToInt(wave.pointsForMainTypes * wave.rareTypesStartTime);
+        int rareSectionSize = Mathf.CeilToInt((totalPoints - rareStartingPoint) * wave.rareTypesEndTime);
+
+        for (int i = 0; i < mainTypeIndexes.Count; ++i)
         {
-            FleetType plan;
-            if (fleetTypeIndexes.Count == 0)
-                plan = defaultFleets.Random();
-            else
-                plan = rareFleetTypes[fleetTypeIndexes.Random()];
-            EnemyData randomMainType = missionData.mainEnemyTypes.Random();
-            float angle = ChooseFleetAngle();
-            fleetsToSpawn.Add(new EnemyFleet { baseAngle = angle, enemyType = randomMainType, plan = plan, startDelay = plan.difficultyPoints });
-            points -= plan.difficultyPoints;
-
-            //Remove fleet types that require more than the remaining points
-            for (int i = 0; i < fleetTypeIndexes.Count; ++i)
-            {
-                if (rareFleetTypes[fleetTypeIndexes[i]].difficultyPoints > points)
-                    fleetTypeIndexes.RemoveAt(i--);
-            }
+            if (wave.fleets[mainTypeIndexes[i]].difficultyPoints > (wave.pointsForMainTypes - mPoints))
+                mainTypeIndexes.RemoveAt(i--);
         }
-    }
-    private void ChooseFleets(List<FleetType> fleetOptions, int points)
-    {
-        List<int> fleetTypeIndexes = Utility.CreateIndexList(fleetOptions.Count);
-
-        while (points > 0)
+        for (int i = 0; i < rareTypeIndexes.Count; ++i)
         {
+            if (wave.fleets[rareTypeIndexes[i]].difficultyPoints > (wave.pointsForRareTypes - mPoints))
+                rareTypeIndexes.RemoveAt(i--);
+        }
+
+        int fleetNum = 0;
+        int randomOffset = Random.Range(0, wave.fleets.Count);
+        while (mPoints + rPoints < totalPoints)
+        {
+            //Choose between a Main or Rare fleet
+            bool spawningMain = true;
+            if (mPoints + rPoints >= rareStartingPoint)
+            {
+                if (rPoints >= wave.pointsForRareTypes)
+                    //If rares have used more than their allowed points, spawn a main
+                    spawningMain = true;
+                else if (mPoints + rPoints >= rareStartingPoint + rareSectionSize)
+                    //If the total points is greater than the end of the rare section, spawn a rare (also stops /0 errors)
+                    spawningMain = false;
+                else if ((wave.pointsForRareTypes - rPoints) / (float)wave.pointsForRareTypes >=
+                    (rareSectionSize - (rPoints + mPoints - rareStartingPoint)) / rareSectionSize)
+                    //If the % of rares remaining is greater than the % of points remaining in the rare section, spawn a rare
+                    spawningMain = false;
+                //Else, spawn a main
+            }
+
+            //Choose a fleet plan
             FleetType plan;
-            if (fleetTypeIndexes.Count == 0)
+            if ((spawningMain ? mainTypeIndexes.Count : rareTypeIndexes.Count) == 0)
                 plan = defaultFleets.Random();
+            else if (wave.pickFleetsRandomly)
+                plan = wave.fleets[(spawningMain ? mainTypeIndexes : rareTypeIndexes).Random()];
             else
-                plan = fleetOptions[fleetTypeIndexes.Random()];
-            EnemyData randomMainType = missionData.mainEnemyTypes.Random();
+            {
+                if (spawningMain)
+                    plan = wave.fleets[mainTypeIndexes[(fleetNum + randomOffset) % mainTypeIndexes.Count]];
+                else
+                    plan = wave.fleets[rareTypeIndexes[(fleetNum + randomOffset) % rareTypeIndexes.Count]];
+            }
+
+            //Choose an enemy type
+            EnemyData chosenType;
+            if (spawningMain)
+                chosenType = missionData.mainEnemyTypes.Random();
+            else
+                chosenType = missionData.rareEnemyTypes.Random();
+
+            //Choose angle and start time, then add the fleet to the list
             float angle = ChooseFleetAngle();
-            fleetsToSpawn.Add(new EnemyFleet { baseAngle = angle, enemyType = randomMainType, plan = plan, startDelay = plan.difficultyPoints });
-            points -= plan.difficultyPoints;
+            float startTime = ((float)currentBurst / wave.numBursts) * wave.waveTime;
+            fleetsToSpawn.Add(new EnemyFleet { baseAngle = angle, enemyType = chosenType, plan = plan, startDelay = startTime });
+            ++fleetNum;
+            if (spawningMain)
+                mPoints += plan.difficultyPoints;
+            else
+                rPoints += plan.difficultyPoints;
+
+            currentBurst = (mPoints + rPoints) / (totalPoints / wave.numBursts);
+
 
             //Remove fleet types that require more than the remaining points
-            for (int i = 0; i < fleetTypeIndexes.Count; ++i)
+            for (int i = 0; i < mainTypeIndexes.Count; ++i)
             {
-                if (fleetOptions[fleetTypeIndexes[i]].difficultyPoints > points)
-                    fleetTypeIndexes.RemoveAt(i--);
+                if (wave.fleets[mainTypeIndexes[i]].difficultyPoints > (wave.pointsForMainTypes - mPoints))
+                    mainTypeIndexes.RemoveAt(i--);
+            }
+            for (int i = 0; i < rareTypeIndexes.Count; ++i)
+            {
+                if (wave.fleets[rareTypeIndexes[i]].difficultyPoints > (wave.pointsForRareTypes - mPoints))
+                    rareTypeIndexes.RemoveAt(i--);
             }
         }
     }
@@ -243,7 +311,15 @@ public class EnemySpawner : MonoBehaviour
         enemies.Remove(enemy);
 
         if (enemies.Count == 0 && fleetsToSpawn.Count == 0)
-            BattleController.EndWave();
+            EndWave();
+    }
+
+    private void EndWave()
+    {
+        _waveNumber += 1;
+        if (_waveNumber >= missionData.missionPlan.waves.Count)
+            _waveNumber = missionData.missionPlan.waves.Count - 1;
+        BattleController.EndWave();
     }
 
     public struct EnemyFleet

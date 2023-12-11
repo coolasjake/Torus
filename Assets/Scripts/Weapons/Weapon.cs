@@ -368,6 +368,7 @@ public abstract class Weapon : TorusMotion
 
     public void GainExperience(float xp)
     {
+        return;
         _experience += xp;
         if (_experience > _experienceNeeded)
         {
@@ -376,6 +377,14 @@ public abstract class Weapon : TorusMotion
             _upgradePoints += 1;
             _experienceNeeded += _experienceNeeded * 0.1f;
         }
+    }
+
+    public void LevelUp()
+    {
+        _experience -= _experienceNeeded;
+        _level += 1;
+        _upgradePoints += 1;
+        _experienceNeeded += _experienceNeeded * 0.1f;
     }
 
     public bool UseUpgradePoint()

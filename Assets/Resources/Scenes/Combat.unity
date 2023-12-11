@@ -306,7 +306,7 @@ MonoBehaviour:
       min: 0
       max: Infinity
     heat:
-      defaultValue: 0
+      defaultValue: 5
       min: 0
       max: Infinity
     cold:
@@ -326,7 +326,7 @@ MonoBehaviour:
       min: 0
       max: Infinity
     nanites:
-      defaultValue: 10.03
+      defaultValue: 0
       min: 0
       max: Infinity
     antimatter:
@@ -350,7 +350,7 @@ MonoBehaviour:
     min: 0
     max: 20
   igniteChance:
-    defaultValue: 1
+    defaultValue: 0
     min: 0
     max: 1
   armourPierce:
@@ -1741,6 +1741,7 @@ MonoBehaviour:
   attackMask:
     serializedVersion: 2
     m_Bits: 128
+  boostStartingHeight: 4.5
   stationExplosionPrefab: {fileID: 8423020550156484834, guid: 98b24fac84533794a9545110c45dc35a, type: 3}
   UIRefs:
     healthBarCanvas: {fileID: 1428570012}
@@ -1850,7 +1851,7 @@ MonoBehaviour:
     min: 0
     max: 1
   attacksPerSecond:
-    defaultValue: 1
+    defaultValue: 0.35
     min: 0.0001
     max: 60
   damageStats:
@@ -1859,7 +1860,7 @@ MonoBehaviour:
       min: 0
       max: Infinity
     physical:
-      defaultValue: 0
+      defaultValue: 150
       min: 0
       max: Infinity
     heat:
@@ -1875,11 +1876,11 @@ MonoBehaviour:
       min: 0
       max: Infinity
     acid:
-      defaultValue: 65.26
+      defaultValue: 0
       min: 0
       max: Infinity
     lightning:
-      defaultValue: 20
+      defaultValue: 0
       min: 0
       max: Infinity
     nanites:
@@ -1895,7 +1896,7 @@ MonoBehaviour:
     min: 0
     max: 20
   lightningChains:
-    defaultValue: 2
+    defaultValue: 0
     min: 0
     max: 20
   lightningSplits:
@@ -1918,7 +1919,7 @@ MonoBehaviour:
   attackPrefab: {fileID: 9123346512063545302, guid: bd71f6722dd550049a2bd2c13172be43, type: 3}
   firingPoint: {fileID: 1760913862}
   bulletSpeed:
-    defaultValue: 10
+    defaultValue: 20
     min: 0.01
     max: 1000
   pierces:
@@ -1985,7 +1986,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1312168637}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.26, y: 0, z: 0}
+  m_LocalPosition: {x: 2.26, y: 0, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children:
   - {fileID: 1760913862}
@@ -2749,7 +2750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4272a01272bb811428b1986902b676bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gizmoHeight: 5
+  gizmoHeight: 3.5
   gizmoColour: {r: 0, g: 0.24680638, b: 1, a: 1}
   gizmoSections: 180
   target: {fileID: 0}
@@ -2974,7 +2975,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bdac6d63210ea0a40aa215284512c338, type: 2}
   - {fileID: 11400000, guid: 8e0e0585872200f40bbed41fa4995f9b, type: 2}
   enemies: []
-  DoEasyTestWave: 1
+  DoEasyTestWave: 0
   easyTestWave: 03000000030000000300000003000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   breakAfterSpacing: 0
 --- !u!1001 &1791646210

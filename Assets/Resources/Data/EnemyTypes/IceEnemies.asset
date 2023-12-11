@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13a1d09c0dd7bac4599f75eb6dd6c7f3, type: 3}
-  m_Name: PurploidSettings
+  m_Name: IceEnemies
   m_EditorClassIdentifier: 
   health: 50
   armourLevel: 0
@@ -26,35 +26,35 @@ MonoBehaviour:
     - 0
     - 0
   maxSafeTemp: 100
-  restingTemp: 35
-  freezeTemp: -30
+  restingTemp: -30
+  freezeTemp: -20
   damageFromHot: 1
   damageFromCold: 0
   maxSlow: 0.8
-  maxColdSlow: 0.2
-  frozenSlow: 0.2
+  maxColdSlow: 0
+  frozenSlow: 0
   baseTempChange: 1
   conductivity: 50
   classes:
   - name: swarm
     className: swarm
     pointsCost: 1
-    healthMultiplier: 0.5
+    healthMultiplier: 1
     extraArmour: 0
     speedMultiplier: 1
-    abilityPower: 0.2
+    abilityPower: 0
     size: 1
-    sprite: {fileID: 21300000, guid: 902df43e96cc7f14d929f25094c188a1, type: 3}
+    sprite: {fileID: 21300000, guid: f64d80bda77742b478ec88ec64eba276, type: 3}
     animationController: {fileID: 0}
   - name: fast
     className: fast
     pointsCost: 5
     healthMultiplier: 2
     extraArmour: 0
-    speedMultiplier: 3
-    abilityPower: 1.5
+    speedMultiplier: 1.5
+    abilityPower: 2
     size: 2
-    sprite: {fileID: 21300000, guid: 1c421c08e71578045b8d8288492b3600, type: 3}
+    sprite: {fileID: 21300000, guid: e500427ff86225f45824c9d39ae1ac57, type: 3}
     animationController: {fileID: 0}
   - name: dodge
     className: dodge
@@ -64,16 +64,16 @@ MonoBehaviour:
     speedMultiplier: 1
     abilityPower: 5
     size: 2
-    sprite: {fileID: 21300000, guid: a53a833bd89f70b429a7e40b5730cd3c, type: 3}
+    sprite: {fileID: 21300000, guid: 6d5450a5f1f7f51469dfc1245de6821d, type: 3}
     animationController: {fileID: 0}
   - name: tank
     className: tank
     pointsCost: 10
-    healthMultiplier: 20
+    healthMultiplier: 10
     extraArmour: 5
     speedMultiplier: 0.8
     abilityPower: 1
     size: 5
-    sprite: {fileID: 21300000, guid: e89e7a1811784714eb25386c1842bd12, type: 3}
+    sprite: {fileID: 21300000, guid: 95f36083d3dba734c8fff5145018c680, type: 3}
     animationController: {fileID: 0}
   explosionPrefab: {fileID: 8423020550156484834, guid: 7b5c60a2d443b75419f215e94796e1ee, type: 3}

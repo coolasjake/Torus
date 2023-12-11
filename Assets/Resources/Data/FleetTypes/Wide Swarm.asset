@@ -10,32 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ed8997edfd4384419c756ce9aef74b2, type: 3}
-  m_Name: Normal Fleet
+  m_Name: Wide Swarm
   m_EditorClassIdentifier: 
   difficultyPoints: 4
   Groups:
   - name: Swarm 1
     enemyClass: 0
     numberOfEnemies: 5
-    relativeAngle: -5
+    relativeAngle: -10
     arrivalDelay: 0
   - name: Swarm 2
     enemyClass: 0
     numberOfEnemies: 5
-    relativeAngle: 5
-    arrivalDelay: 0
-  - name: Tank
-    enemyClass: 3
-    numberOfEnemies: 1
+    relativeAngle: -5
+    arrivalDelay: 0.5
+  - name: Swarm 3
+    enemyClass: 0
+    numberOfEnemies: 5
     relativeAngle: 0
-    arrivalDelay: 1
-  - name: Dodge Group
-    enemyClass: 2
-    numberOfEnemies: 3
-    relativeAngle: 20
-    arrivalDelay: 1.5
-  - name: Fast Flankers
-    enemyClass: 1
-    numberOfEnemies: 3
-    relativeAngle: -60
-    arrivalDelay: 1.5
+    arrivalDelay: 0
+  - name: Swarm 4
+    enemyClass: 0
+    numberOfEnemies: 5
+    relativeAngle: 5
+    arrivalDelay: 0.5
+  - name: Swarm 6
+    enemyClass: 0
+    numberOfEnemies: 5
+    relativeAngle: 10
+    arrivalDelay: 0

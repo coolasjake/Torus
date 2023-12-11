@@ -12,8 +12,11 @@ public class StaticRefs : MonoBehaviour
 
     [SerializeField]
     private LayerMask attackMask;
-
     public static LayerMask AttackMask => singleton.attackMask;
+
+    [SerializeField]
+    private float boostStartingHeight = 6f;
+    public static float BoostStartingHeight => singleton.boostStartingHeight;
 
     [SerializeField]
     private GameObject stationExplosionPrefab;

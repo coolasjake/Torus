@@ -10,12 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ed8997edfd4384419c756ce9aef74b2, type: 3}
-  m_Name: Solo Tank
+  m_Name: Tank Flank
   m_EditorClassIdentifier: 
-  difficultyPoints: 1
+  difficultyPoints: 3
   Groups:
   - name: Tank
     enemyClass: 3
-    numberOfEnemies: 1
+    numberOfEnemies: 2
     relativeAngle: 0
+    arrivalDelay: 0
+  - name: Flank Tank
+    enemyClass: 3
+    numberOfEnemies: 1
+    relativeAngle: 180
     arrivalDelay: 0

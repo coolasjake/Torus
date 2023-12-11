@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13a1d09c0dd7bac4599f75eb6dd6c7f3, type: 3}
-  m_Name: DefaultEnemySettings
+  m_Name: Purploids
   m_EditorClassIdentifier: 
-  health: 10
+  health: 50
   armourLevel: 0
-  speed: 1
+  speed: 7
   resistances:
     damageTypes:
     - 0
@@ -39,12 +39,12 @@ MonoBehaviour:
   - name: swarm
     className: swarm
     pointsCost: 1
-    healthMultiplier: 1
+    healthMultiplier: 0.5
     extraArmour: 0
     speedMultiplier: 1
-    abilityPower: 0
-    effectsSize: 1
-    sprite: {fileID: 0}
+    abilityPower: 0.2
+    size: 1
+    sprite: {fileID: 21300000, guid: 902df43e96cc7f14d929f25094c188a1, type: 3}
     animationController: {fileID: 0}
   - name: fast
     className: fast
@@ -52,9 +52,9 @@ MonoBehaviour:
     healthMultiplier: 2
     extraArmour: 0
     speedMultiplier: 1.5
-    abilityPower: 1.5
-    effectsSize: 2
-    sprite: {fileID: 0}
+    abilityPower: 2
+    size: 2
+    sprite: {fileID: 21300000, guid: 1c421c08e71578045b8d8288492b3600, type: 3}
     animationController: {fileID: 0}
   - name: dodge
     className: dodge
@@ -63,17 +63,17 @@ MonoBehaviour:
     extraArmour: 1
     speedMultiplier: 1
     abilityPower: 5
-    effectsSize: 2
-    sprite: {fileID: 0}
+    size: 2
+    sprite: {fileID: 21300000, guid: a53a833bd89f70b429a7e40b5730cd3c, type: 3}
     animationController: {fileID: 0}
   - name: tank
     className: tank
     pointsCost: 10
-    healthMultiplier: 5
-    extraArmour: 3
-    speedMultiplier: 0.5
+    healthMultiplier: 20
+    extraArmour: 5
+    speedMultiplier: 0.8
     abilityPower: 1
-    effectsSize: 5
-    sprite: {fileID: 0}
+    size: 5
+    sprite: {fileID: 21300000, guid: e89e7a1811784714eb25386c1842bd12, type: 3}
     animationController: {fileID: 0}
   explosionPrefab: {fileID: 8423020550156484834, guid: 7b5c60a2d443b75419f215e94796e1ee, type: 3}

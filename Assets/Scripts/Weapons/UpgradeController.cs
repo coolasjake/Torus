@@ -69,7 +69,7 @@ public class UpgradeController : MonoBehaviour
 
     private void GiveTestPoints()
     {
-        targetWeapon.GainExperience(targetWeapon.ExperienceNeeded);
+        targetWeapon.LevelUp();
     }
 
     private void ChooseOptions()

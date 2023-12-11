@@ -13,13 +13,18 @@ public class MissionPlan : ScriptableObject
     public class WaveData
     {
         public string name = "";
+        public float waveTime = 180f;
         [Min(1)]
         public int pointsForMainTypes = 1;
-        public List<FleetType> possibleMainFleets = new List<FleetType>();
-
+        [Min(0)]
+        public int pointsForRareTypes = 0;
+        [Range(0f, 1f)]
+        public float rareTypesStartTime = 0.0f;
+        [Range(0f, 1f)]
+        public float rareTypesEndTime = 1f;
         [Min(1)]
-        public int pointsForRareTypes = 1;
-        public List<FleetType> possibleRareFleets = new List<FleetType>();
-
+        public int numBursts = 3;
+        public bool pickFleetsRandomly = true;
+        public List<FleetType> fleets = new List<FleetType>();
     }
 }

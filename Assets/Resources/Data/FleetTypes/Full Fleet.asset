@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ed8997edfd4384419c756ce9aef74b2, type: 3}
+  m_Name: Full Fleet
+  m_EditorClassIdentifier: 
+  difficultyPoints: 6
+  Groups:
+  - name: Swarm 1
+    enemyClass: 0
+    numberOfEnemies: 5
+    relativeAngle: -5
+    arrivalDelay: 0
+  - name: Swarm 2
+    enemyClass: 0
+    numberOfEnemies: 5
+    relativeAngle: 5
+    arrivalDelay: 0
+  - name: Tank
+    enemyClass: 3
+    numberOfEnemies: 1
+    relativeAngle: 0
+    arrivalDelay: 1
+  - name: Dodge Group
+    enemyClass: 2
+    numberOfEnemies: 3
+    relativeAngle: 20
+    arrivalDelay: 1.5
+  - name: Fast Flankers
+    enemyClass: 1
+    numberOfEnemies: 3
+    relativeAngle: -60
+    arrivalDelay: 1.5
