@@ -1,0 +1,287 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6896147028036198649
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6896147028036198648}
+  - component: {fileID: 6896147028036198655}
+  m_Layer: 0
+  m_Name: EnemySpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6896147028036198648
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6896147028036198649}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6896147028492663557}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6896147028036198655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6896147028036198649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84139d3d6a2976b4d81d8628ba4014c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  missionData: {fileID: 11400000, guid: a43e13458e94cab4883a5cd41854d9e4, type: 2}
+  classBasePrefabs:
+  - {fileID: 8822168678729197942, guid: c22da2352466911479db7da97e04fa4a, type: 3}
+  - {fileID: 5102851163617004104, guid: ed215da6fd960fd4e8ede122d96c9f00, type: 3}
+  - {fileID: 8594121849087106520, guid: 5c69a2594dc8fb04d9f049f1ad4adf89, type: 3}
+  - {fileID: 6843059617215851669, guid: a8f3614dec2d31a47ae0b79777f95b5a, type: 3}
+  spawningHeight: 5.5
+  enemySpacing:
+  - 0.2
+  - 0.4
+  - 0.5
+  - 1.2
+  spacingRate: 0.02
+  spacingForce: 3
+  maxSpacingMove: 0.5
+  defaultFleets:
+  - {fileID: 11400000, guid: 237a5831b226d2e4eab966b3ac198fb9, type: 2}
+  - {fileID: 11400000, guid: c2f593cff4c240c46b5069ecc20b4319, type: 2}
+  - {fileID: 11400000, guid: bdac6d63210ea0a40aa215284512c338, type: 2}
+  - {fileID: 11400000, guid: 8e0e0585872200f40bbed41fa4995f9b, type: 2}
+  enemies: []
+  DoEasyTestWave: 0
+  easyTestWave: 03000000030000000300000003000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  breakAfterSpacing: 0
+--- !u!1 &6896147028492663559
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6896147028492663557}
+  - component: {fileID: 6896147028492663556}
+  - component: {fileID: 6896147028492663563}
+  - component: {fileID: 6896147028492663558}
+  m_Layer: 0
+  m_Name: Controllers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6896147028492663557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6896147028492663559}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 6896147028036198648}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6896147028492663556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6896147028492663559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39f44fb095259e74bb84b8d6f6ac671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  torusScale: {x: 2.25, y: 1.3}
+  attackMask:
+    serializedVersion: 2
+    m_Bits: 128
+  typeCompatibilities: fffffffffffffffff7000000b7010000d90100003f010000770100006b0000008f0000003d010000
+  boostStartingHeight: 4.5
+  stationExplosionPrefab: {fileID: 8423020550156484834, guid: 98b24fac84533794a9545110c45dc35a, type: 3}
+  UIRefs:
+    healthBarCanvas: {fileID: 0}
+    healthBarPrefab: {fileID: 777844717229031917, guid: d72fb0602925330468c78f68565c1054, type: 3}
+    healthArmourBorders:
+    - {fileID: 6204561657245004913, guid: d33975cfc3fd38a4ba73efe18b5630cd, type: 3}
+    - {fileID: -3518075911240734721, guid: d33975cfc3fd38a4ba73efe18b5630cd, type: 3}
+    - {fileID: 6937523590807553356, guid: d33975cfc3fd38a4ba73efe18b5630cd, type: 3}
+    - {fileID: -8446003698704536245, guid: d33975cfc3fd38a4ba73efe18b5630cd, type: 3}
+    - {fileID: 3288076902728288076, guid: d33975cfc3fd38a4ba73efe18b5630cd, type: 3}
+    - {fileID: -8762234015217352737, guid: d33975cfc3fd38a4ba73efe18b5630cd, type: 3}
+    - {fileID: 1245513755167034237, guid: d33975cfc3fd38a4ba73efe18b5630cd, type: 3}
+    - {fileID: 8806246660846694191, guid: d33975cfc3fd38a4ba73efe18b5630cd, type: 3}
+    - {fileID: -170873314978524786, guid: d33975cfc3fd38a4ba73efe18b5630cd, type: 3}
+    - {fileID: -2842347581010163773, guid: d33975cfc3fd38a4ba73efe18b5630cd, type: 3}
+    - {fileID: 1818520014205810042, guid: d33975cfc3fd38a4ba73efe18b5630cd, type: 3}
+    upgradeLvlIcons:
+    - {fileID: 4762009713580613760, guid: cf86e098704ebc74cb6d0e1125f467d6, type: 3}
+    - {fileID: -6712698649904361022, guid: cf86e098704ebc74cb6d0e1125f467d6, type: 3}
+    - {fileID: 2355136428685865615, guid: cf86e098704ebc74cb6d0e1125f467d6, type: 3}
+    - {fileID: 2278709590335091610, guid: cf86e098704ebc74cb6d0e1125f467d6, type: 3}
+    - {fileID: 4352230217555344583, guid: cf86e098704ebc74cb6d0e1125f467d6, type: 3}
+  effectSettings:
+    frozenEffectPrefab: {fileID: 5738904673690302976, guid: 52b43fa1833fae64f80258482f62a924, type: 3}
+    fireEffectPrefab: {fileID: 2362476774211909589, guid: 96c163754e153944f8ed096e1bf42dc0, type: 3}
+    nanitesEffectPrefab: {fileID: 2418681238365804432, guid: 19fff0b11c041e64b90771d6efeb0c7b, type: 3}
+    acidEffectPrefab: {fileID: 6983119616652451749, guid: c80f59d2f7a635a44b033e1a1fec9a04, type: 3}
+    tempEffectPrefab: {fileID: 4090255103206762803, guid: 62b416e88801303498a42bb98602c994, type: 3}
+    coldColour: {r: 0, g: 0, b: 1, a: 1}
+    hotColour: {r: 1, g: 0, b: 0, a: 1}
+    explosionPrefab: {fileID: 8423020550156484834, guid: 7b5c60a2d443b75419f215e94796e1ee, type: 3}
+    acidExplosionPrefab: {fileID: 2986729771775196781, guid: 7be001f397101ed42b2f7fe248469861, type: 3}
+    lightningPrefab: {fileID: 8301029585495753416, guid: 03f90e1d3f46fd54883e9a4e6e8580df, type: 3}
+    lightningExplosionPrefab: {fileID: 1446598337663847966, guid: cec0f3961eb436d44aa93e8d033ca393, type: 3}
+  baseEnemySpeed: 0.01
+  dodgeDist: 50
+  weaponDirectionSwapBuffer: 45
+  damageSettings:
+    timeBetweenAcidTicks: 0.2
+    timeBetweenNaniteTicks: 0.2
+    nanitesHealthCutoff: 0.2
+    timeBetweenTempTicks: 0.333
+    timeBetweenRadiationTicks: 2
+    criticalMassThreshold: 100
+--- !u!114 &6896147028492663563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6896147028492663559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d42a5ed75ec3b2b41a85b602915f8055, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stationHealth: 9
+  spaceStation: {fileID: 0}
+  stationHealthSprites:
+  - {fileID: -5514930293929046941, guid: 3c8b97eb099afdd49b1e0f485c510e68, type: 3}
+  - {fileID: 2442775970515315765, guid: 3c8b97eb099afdd49b1e0f485c510e68, type: 3}
+  - {fileID: 4822650453181630194, guid: 3c8b97eb099afdd49b1e0f485c510e68, type: 3}
+  tester: {fileID: 0}
+  upgradeControllers:
+  - {fileID: 0}
+  - {fileID: 0}
+  enemySpawner: {fileID: 6896147028036198655}
+--- !u!114 &6896147028492663558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6896147028492663559}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcbbb3b01a74048448f259a323b786d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  function1:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: HealthBar, Assembly-CSharp
+        m_MethodName: SetArmour
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0.9
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: HealthBar, Assembly-CSharp
+        m_MethodName: Hit
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0.5
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  function2:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: HealthBar, Assembly-CSharp
+        m_MethodName: SetArmour
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0.8
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  function3:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: HealthBar, Assembly-CSharp
+        m_MethodName: SetArmour
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 5
+          m_FloatArgument: 0.78
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  function4:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: HealthBar, Assembly-CSharp
+        m_MethodName: SetArmour
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 8
+          m_FloatArgument: 0.75
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  function5:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: HealthBar, Assembly-CSharp
+        m_MethodName: SetArmour
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 10
+          m_FloatArgument: 0.4
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

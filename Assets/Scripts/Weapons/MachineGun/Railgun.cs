@@ -103,6 +103,7 @@ public class Railgun : Weapon
     {
         rodPrefab = attackPrefab.GetComponent<RailRod>();
         powers = new int[Enum.GetNames(typeof(RailGunPowers)).Length];
+        SetupDamageTypes();
     }
 
     private enum RailGunPowers

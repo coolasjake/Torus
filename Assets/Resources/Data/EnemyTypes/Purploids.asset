@@ -41,7 +41,7 @@ MonoBehaviour:
     pointsCost: 1
     healthMultiplier: 0.5
     extraArmour: 0
-    speedMultiplier: 1
+    speedMultiplier: 0.8
     abilityPower: 0.2
     size: 1
     sprite: {fileID: 21300000, guid: 902df43e96cc7f14d929f25094c188a1, type: 3}

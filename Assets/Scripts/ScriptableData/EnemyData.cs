@@ -121,3 +121,31 @@ public class EnemyData : ScriptableObject
         public AnimatorController animationController;
     }
 }
+
+
+[System.Serializable]
+public class AllDamage
+{
+    [EnumNamedArray(typeof(DamageType))]
+    public float[] damageTypes = new float[Enum.GetNames(typeof(DamageType)).Length];
+
+    public void SetDamage(DamageType type, float value)
+    {
+        damageTypes[(int)type] = value;
+    }
+
+    public float GetDamage(DamageType type)
+    {
+        return damageTypes[(int)type];
+    }
+
+    public float Basic => damageTypes[(int)DamageType.basic];
+    public float Physical => damageTypes[(int)DamageType.physical];
+    public float Heat => damageTypes[(int)DamageType.heat];
+    public float Cold => damageTypes[(int)DamageType.cold];
+    public float Radiation => damageTypes[(int)DamageType.radiation];
+    public float Acid => damageTypes[(int)DamageType.acid];
+    public float Lightning => damageTypes[(int)DamageType.lightning];
+    public float Nanites => damageTypes[(int)DamageType.nanites];
+    public float Antimatter => damageTypes[(int)DamageType.antimatter];
+}

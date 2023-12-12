@@ -455,7 +455,7 @@ public class EnemySpawner : MonoBehaviour
     {
         foreach (Enemy enemy in enemies)
         {
-            if (enemy.Height <= 1 + enemySpacing[(int)enemy.myClass])
+            if (enemy.Height <= 1 + (enemySpacing[(int)enemy.myClass] * 0.5f))
             {
                 BattleController.DamageStation((int)enemy.Size);
                 break;

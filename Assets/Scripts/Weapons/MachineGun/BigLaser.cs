@@ -87,6 +87,7 @@ public class BigLaser : Weapon
             GameObject laser = Instantiate(attackPrefab, transform);
             laserRenderer = laser.GetComponent<LineRenderer>();
         }
+        SetupDamageTypes();
     }
 
     private enum BigLaserPowers

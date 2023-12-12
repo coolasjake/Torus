@@ -444,18 +444,22 @@ public static class Utility
     }
 }
 
+/// <summary> Stores modifiers to a stat, and calculates the value every time one is added or removed using the function (default * multipliers * (percentage * 0.01) + additions).
+/// Default is set in inspector, multipliers multiply together (e.g. 3 & 3 = 9), percentages and additions add together (e.g. 3% & 3% = 6%, +3 & +3 = +6)</summary>
 [System.Serializable]
 public class ModifiableFloat
 {
     public ModifiableFloat(float Default)
     {
         defaultValue = Default;
+        _value = Default;
     }
     public ModifiableFloat(float Default, float Min, float Max)
     {
         defaultValue = Default;
         min = Min;
         max = Max;
+        _value = Default;
     }
 
     [SerializeField]
@@ -466,11 +470,22 @@ public class ModifiableFloat
     private float max = float.PositiveInfinity;
     private float addition = 0;
     private float multiplier = 1;
+    private float percentage = 100;
+    [SerializeField]
+    private float _value = 0;
 
-    public float Value => Mathf.Clamp((defaultValue + addition) * multiplier, min, max);
+    public float Value
+    {
+        get
+        {
+            _value = Mathf.Clamp(defaultValue * multiplier * (percentage * 0.01f) + addition, min, max);
+            return _value;
+        }
+     }
 
     private List<NamedFloat> additionModifiers = new List<NamedFloat>();
     private List<NamedFloat> multiplyModifiers = new List<NamedFloat>();
+    private List<NamedFloat> percentageModifiers = new List<NamedFloat>();
 
     public void AddModifier(string name, float value, StatChangeOperation operation)
     {
@@ -490,7 +505,15 @@ public class ModifiableFloat
             else
                 multiplyModifiers[index] = new NamedFloat(name, value);
         }
-        else
+        else if (operation == StatChangeOperation.Percentage)
+        {
+            int index = percentageModifiers.FindIndex(X => X.name == name);
+            if (index == -1)
+                percentageModifiers.Add(new NamedFloat(name, value));
+            else
+                percentageModifiers[index] = new NamedFloat(name, value);
+        }
+        else //Set
             defaultValue = value;
 
         CalculateModifierSums();
@@ -504,7 +527,11 @@ public class ModifiableFloat
 
         multiplier = 1;
         foreach (NamedFloat mod in multiplyModifiers)
-            multiplier += mod.value;
+            multiplier *= mod.value;
+
+        percentage = 100;
+        foreach (NamedFloat mod in percentageModifiers)
+            percentage += mod.value;
     }
 }
 [System.Serializable]

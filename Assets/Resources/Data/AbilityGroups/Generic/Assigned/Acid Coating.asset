@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b24d2c40d1402841b8d2e98b1177a0b, type: 3}
   m_Name: Acid Coating
   m_EditorClassIdentifier: Assembly-CSharp::Ability
+  level: 1
+  maxLevel: 20
   description: Weapon inflicts acid damage.
   effects:
   - name: Acid Power

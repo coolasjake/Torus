@@ -6,6 +6,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Ability", menuName = "ScriptableObjects/Ability", order = 1)]
 public class Ability : ScriptableObject
 {
+    public int level = 1;
+    public int maxLevel = 20;
     [TextArea(3, 8)]
     public string description;
     public List<AbilityEffect> effects;
@@ -36,5 +38,6 @@ public enum StatChangeOperation
 {
     Add,
     Multiply,
+    Percentage,
     Set
 }

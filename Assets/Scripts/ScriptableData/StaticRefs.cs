@@ -13,6 +13,14 @@ public class StaticRefs : MonoBehaviour
     [SerializeField]
     private LayerMask attackMask;
     public static LayerMask AttackMask => singleton.attackMask;
+    [EnumNamedArray(typeof(DamageType))]
+    public DamageTypeFlags[] typeCompatibilities = new DamageTypeFlags[System.Enum.GetNames(typeof(DamageType)).Length];
+
+    /// <summary> Check if type A is allowed with type B (order will matter if type compatabilities are not symetrical). </summary>
+    public static bool DamageTypesAreCompatible(DamageType typeA, DamageType typeB)
+    {
+        return singleton.typeCompatibilities[(int)typeB].Includes(typeA);
+    }
 
     [SerializeField]
     private float boostStartingHeight = 6f;
@@ -247,5 +255,60 @@ public class StaticRefs : MonoBehaviour
     void OnDrawGizmos()
     {
         TorusMotion.torusScale = torusScale;
+    }
+}
+
+[System.Flags]
+public enum WeaponType
+{
+    None = 0,
+    MachineGun = 1 << 0,
+    Railgun = 1 << 1,
+    FlameThrower = 1 << 2,
+    Laser = 1 << 3,
+    MissileLauncher = 1 << 4,
+    FreezeRay = 1 << 5,
+    BoomerangChainsaw = 1 << 6,
+    Antimatter = 1 << 7
+}
+
+public enum DamageType
+{
+    none = 0,
+    basic = 1,      //default damage, uneffected by resistances or armor
+    physical = 2,   //kinetic damage. Applied instantly, heavily effected by armor, deals bonus damage to frozen
+    heat = 3,       //positive temperature change. Enemy takes heat damage when high enough
+    cold = 4,       //negative temperature change. Enemy freezes when low enough
+    lightning = 5,  //splits some of the damage to other nearby enemies based on conductivity value
+    radiation = 6,  //add radiation to target, target takes slow damage over time, often completely resisted
+    acid = 7,       //add acid to target, target takes quick damage over time, value reduces each time
+    nanites = 8,    //add nanites to target, target takes damage over time that goes down when their health gets lower and does nothing when below 10%.
+    antimatter = 9  //add antimatter to target, target explodes dealing basic damage to self and nearby enemies when hit by physical, acid or nanites.
+}
+
+[System.Flags]
+public enum DamageTypeFlags
+{
+    none = 0,
+    basic = 1 << 0,
+    physical = 1 << 1,
+    heat = 1 << 2,
+    cold = 1 << 3,
+    lightning = 1 << 4,
+    radiation = 1 << 5,
+    acid = 1 << 6,
+    nanites = 1 << 7,
+    antimatter = 1 << 8
+}
+
+public static class DamageInteractions
+{
+    public static bool Includes(this DamageTypeFlags flag, DamageType damageType)
+    {
+        DamageTypeFlags flagOfType = (DamageTypeFlags)(1 << (int)damageType - 1);
+        Debug.Log(damageType + " in flag = " + flag.HasFlag(flagOfType));
+        if (flag.HasFlag(flagOfType))
+            return true;
+        return false;
     }
 }

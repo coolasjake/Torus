@@ -44,7 +44,7 @@ public class UpgradeController : MonoBehaviour
             Debug.LogError("No abilities found at path: " + abilityDataFolder);
         foreach (AbilityGroupData groupData in allGroupData)
         {
-            if (groupData.targetType == WeaponType.Any || groupData.targetType == targetWeapon.Type())
+            if ((groupData.allowedTypes & targetWeapon.Type()) == targetWeapon.Type())
             {
                 possibleAbilityGroups.Add(new AbilityGroup(groupData));
             }

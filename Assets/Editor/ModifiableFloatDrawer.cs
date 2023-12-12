@@ -11,7 +11,8 @@ public class ModifiableFloatDrawer : PropertyDrawer
         SerializedProperty defaultVal = property.FindPropertyRelative("defaultValue");
         SerializedProperty min = property.FindPropertyRelative("min");
         SerializedProperty max = property.FindPropertyRelative("max");
-        EditorGUI.PropertyField(position, defaultVal, new GUIContent(ObjectNames.NicifyVariableName(property.name)));
+        SerializedProperty endValue = property.FindPropertyRelative("_value");
+        EditorGUI.PropertyField(position, defaultVal, new GUIContent(ObjectNames.NicifyVariableName(property.name) + " (" + endValue.floatValue.ToString() + ")"));
         defaultVal.floatValue = Mathf.Clamp(defaultVal.floatValue, min.floatValue, max.floatValue);
     }
 }

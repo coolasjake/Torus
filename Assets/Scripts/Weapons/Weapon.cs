@@ -10,6 +10,9 @@ public abstract class Weapon : TorusMotion
 {
     public abstract WeaponType Type();
 
+    public DamageTypeFlags incompatibleDamageTypes = DamageTypeFlags.none;
+    public DamageTypeFlags existingDamageTypes = DamageTypeFlags.none;
+
     public int playerIndex = 0;
     public bool doDirectionSwapping = false;
     public GameObject inputPrefab;
@@ -396,59 +399,22 @@ public abstract class Weapon : TorusMotion
         }
         return false;
     }
-}
 
-public enum WeaponType
-{
-    Any,
-    MachineGun,
-    Railgun,
-    FlameThrower,
-    Laser,
-    MissileLauncher,
-    FreezeRay,
-    BoomerangChainsaw,
-    Antimatter
-}
-
-public enum DamageType
-{
-    basic,      //default damage, uneffected by resistances or armor
-    physical,   //kinetic damage. Applied instantly, heavily effected by armor, deals bonus damage to frozen
-    heat,       //positive temperature change. Enemy takes heat damage when high enough
-    cold,       //negative temperature change. Enemy freezes when low enough
-    lightning,  //splits some of the damage to other nearby enemies based on conductivity value
-    radiation,  //add radiation to target, target takes slow damage over time, often completely resisted
-    acid,       //add acid to target, target takes quick damage over time, value reduces each time
-    nanites,    //add nanites to target, target takes damage over time that goes down when their health gets lower and does nothing when below 10%.
-    antimatter  //add antimatter to target, target explodes dealing basic damage to self and nearby enemies when hit by physical, acid or nanites.
-}
-
-[System.Serializable]
-public class AllDamage
-{
-    [EnumNamedArray(typeof(DamageType))]
-    public float[] damageTypes = new float[Enum.GetNames(typeof(DamageType)).Length];
-
-    public void SetDamage(DamageType type, float value)
+    protected void SetupDamageTypes()
     {
-        damageTypes[(int)type] = value;
+        foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
+        {
+            if (damageType == DamageType.none)
+                continue;
+            if (existingDamageTypes.Includes(damageType) == false)
+            {
+                damageStats.ModifyDamage(damageType, Type().ToString(), StatChangeOperation.Percentage, -100f);
+                print(damageType.ToString() + " now has a value of " + damageStats.GetDamage(damageType));
+            }
+            else
+                print(damageType.ToString() + " value remains at " + damageStats.GetDamage(damageType));
+        }
     }
-
-    public float GetDamage(DamageType type)
-    {
-        return damageTypes[(int)type];
-    }
-
-    public float Basic => damageTypes[(int)DamageType.basic];
-    public float Physical => damageTypes[(int)DamageType.physical];
-    public float Heat => damageTypes[(int)DamageType.heat];
-    public float Cold => damageTypes[(int)DamageType.cold];
-    public float Radiation => damageTypes[(int)DamageType.radiation];
-    public float Acid => damageTypes[(int)DamageType.acid];
-    public float Lightning => damageTypes[(int)DamageType.lightning];
-    public float Nanites => damageTypes[(int)DamageType.nanites];
-    public float Antimatter => damageTypes[(int)DamageType.antimatter];
 }
 
 [System.Serializable]
@@ -482,8 +448,9 @@ public class DamageStats
             return nanites.Value;
         else if (type == DamageType.antimatter)
             return antimatter.Value;
-        else
+        else if (type == DamageType.basic)
             return basic.Value;
+        return 0;
     }
 
     public void ModifyDamage(DamageType type, string modifierName, StatChangeOperation operation, float value)
@@ -493,7 +460,7 @@ public class DamageStats
         else if (type == DamageType.heat)
             heat.AddModifier(modifierName, value, operation);
         else if (type == DamageType.cold)
-            heat.AddModifier(modifierName, value, operation);
+            cold.AddModifier(modifierName, value, operation);
         else if (type == DamageType.radiation)
             radiation.AddModifier(modifierName, value, operation);
         else if (type == DamageType.acid)
@@ -504,7 +471,7 @@ public class DamageStats
             nanites.AddModifier(modifierName, value, operation);
         else if (type == DamageType.antimatter)
             antimatter.AddModifier(modifierName, value, operation);
-        else
+        else if (type == DamageType.basic)
             basic.AddModifier(modifierName, value, operation);
     }
 }
