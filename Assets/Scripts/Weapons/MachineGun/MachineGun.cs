@@ -50,7 +50,7 @@ public class MachineGun : Weapon
             case "spread":
                 randomSpreadAngle.AddModifier(modifierName, value, operation);
                 return;
-            case "bulletSpeed":
+            case "bullet speed":
                 bulletSpeed.AddModifier(modifierName, value, operation);
                 return;
         }

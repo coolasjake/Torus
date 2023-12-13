@@ -63,6 +63,7 @@ public class StaticRefs : MonoBehaviour
         public GameObject fireEffectPrefab;
         public GameObject nanitesEffectPrefab;
         public GameObject acidEffectPrefab;
+        public GameObject antimatterEffectPrefab;
         public GameObject tempEffectPrefab;
         public Color coldColour = Color.blue;
         public Color hotColour = Color.red;
@@ -70,6 +71,7 @@ public class StaticRefs : MonoBehaviour
         public GameObject acidExplosionPrefab;
         public LightningObj lightningPrefab;
         public GameObject lightningExplosionPrefab;
+        public GameObject antimatterExplosionPrefab;
     }
 
     public static void SpawnExplosion(float scale, Vector2 pos)
@@ -98,6 +100,15 @@ public class StaticRefs : MonoBehaviour
         if (singleton.effectSettings.lightningExplosionPrefab != null)
         {
             GameObject explosion = Instantiate(singleton.effectSettings.lightningExplosionPrefab, pos, Quaternion.identity, singleton.transform);
+            explosion.transform.localScale = new Vector3(scale, scale, scale);
+        }
+    }
+
+    public static void SpawnAntimatterExplosion(float scale, Vector2 pos)
+    {
+        if (singleton.effectSettings.antimatterExplosionPrefab != null)
+        {
+            GameObject explosion = Instantiate(singleton.effectSettings.antimatterExplosionPrefab, pos, Quaternion.identity, singleton.transform);
             explosion.transform.localScale = new Vector3(scale, scale, scale);
         }
     }
@@ -145,6 +156,13 @@ public class StaticRefs : MonoBehaviour
     public static GameObject SpawnAcidEffect(Enemy enemy)
     {
         GameObject effect = Instantiate(singleton.effectSettings.acidEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
+        effect.transform.localScale = new Vector3(enemy.Size, enemy.Size, enemy.Size);
+        return effect;
+    }
+
+    public static GameObject SpawnAntimatterEffect(Enemy enemy)
+    {
+        GameObject effect = Instantiate(singleton.effectSettings.antimatterEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
         effect.transform.localScale = new Vector3(enemy.Size, enemy.Size, enemy.Size);
         return effect;
     }
@@ -306,7 +324,6 @@ public static class DamageInteractions
     public static bool Includes(this DamageTypeFlags flag, DamageType damageType)
     {
         DamageTypeFlags flagOfType = (DamageTypeFlags)(1 << (int)damageType - 1);
-        Debug.Log(damageType + " in flag = " + flag.HasFlag(flagOfType));
         if (flag.HasFlag(flagOfType))
             return true;
         return false;

@@ -60,7 +60,7 @@ public class BigLaser : Weapon
     {
         switch (statName.ToLower())
         {
-            case "laserThickness":
+            case "laser thickness":
                 laserThickness.AddModifier(modifierName, value, operation);
                 return;
         }

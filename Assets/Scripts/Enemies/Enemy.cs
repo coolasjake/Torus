@@ -17,6 +17,7 @@ public class Enemy : TorusMotion
     private GameObject _fireEffect;
     private GameObject _acidEffect;
     private GameObject _nanitesEffect;
+    private GameObject _antimatterEffect;
 
     private HealthBar healthBar;
 
@@ -64,7 +65,9 @@ public class Enemy : TorusMotion
 
     [HideInInspector]
     public bool lightningStruck = false;
-    //private bool _lastLightningStruck = 0f;
+    //private float _lastLightningStruck = 0f;
+    [HideInInspector]
+    public bool physicalHit = false;
 
     [HideInInspector]
     public int armourDebuffs = 0;
@@ -86,32 +89,37 @@ public class Enemy : TorusMotion
                 else
                     HideFrozenEffect();
                 _frozen = value;
-                if (_onFire && _frozen)
+                if (OnFire && _frozen)
                     DamageEvents.IceFire?.Invoke(this);
             }
         }
     }
-    private bool _onFire = false;
+    private float _onFireUntil = -1;
     public bool OnFire
     {
-        get { return _onFire; }
-        set
+        get { return _onFireUntil > Time.time; }
+    }
+    public void SetOnFire(float duration)
+    {
+        duration = Mathf.Max(duration, Time.fixedDeltaTime);
+        duration = Mathf.Max(duration, _onFireUntil - Time.time);
+        _onFireUntil = Time.time + duration;
+        if (temperature < data.restingTemp)
+            RemoveFire();
+        else
         {
-            if (value != _onFire)
-            {
-                if (temperature < data.restingTemp)
-                    return;
-                if (value == true)
-                    ShowFireEffect();
-                else
-                    HideFireEffect();
-                _onFire = value;
-                if (_onFire && _frozen)
-                    DamageEvents.IceFire?.Invoke(this);
-                if (OnFire && acid > 0)
-                    DamageEvents.AcidFireExplosion?.Invoke(this);
-            }
+            ShowFireEffect();
+
+            if (OnFire && _frozen)
+                DamageEvents.IceFire?.Invoke(this);
+            if (OnFire && acid > 0)
+                DamageEvents.AcidFireExplosion?.Invoke(this);
         }
+    }
+    public void RemoveFire()
+    {
+        _onFireUntil = -1;
+        HideFireEffect();
     }
 
     /// <summary> Stack of radiation on this enemy. Radiation deals infrequent DOT and doesn't diminish, but can be completely resisted. </summary>
@@ -211,11 +219,13 @@ public class Enemy : TorusMotion
 
     private void DOTEffects()
     {
+        AntimatterCheck();
         NanitesDOT();
         TempDOT();
         AcidDOT();
         RadDOT();
         lightningStruck = false;
+        physicalHit = false;
 
         UpdateTempEffect();
 
@@ -228,6 +238,21 @@ public class Enemy : TorusMotion
                 Debug.LogError("Enemy killed before being hit by weapon.");
                 Destroy();
             }
+        }
+    }
+
+    private void AntimatterCheck()
+    {
+        if (antimatter > 0)
+        {
+            ShowAntimatterEffect();
+
+            if (physicalHit || acid > 0 || nanites > 0)
+                DamageEvents.DefaultAntimatterExplosion(this);
+        }
+        else
+        {
+            HideNanitesEffect();
         }
     }
 
@@ -263,8 +288,8 @@ public class Enemy : TorusMotion
         //Remove frozen/fire if temp is on the wrong side of resting
         if (temperature >= data.restingTemp)
             Frozen = false;
-        else if (temperature <= data.restingTemp)
-            OnFire = false;
+        else if (temperature <= data.restingTemp || OnFire == false)
+            RemoveFire();
 
         if (OnFire)
             temperature += 10f * StaticRefs.TempTickRate;
@@ -427,6 +452,20 @@ public class Enemy : TorusMotion
 
     private void HideRadiationEffect()
     {
+    }
+
+    private void ShowAntimatterEffect()
+    {
+        if (_antimatterEffect == null)
+            _antimatterEffect = StaticRefs.SpawnAntimatterEffect(this);
+        else
+            _antimatterEffect.SetActive(true);
+    }
+
+    private void HideAntimatterEffect()
+    {
+        if (_antimatterEffect != null)
+            _antimatterEffect.SetActive(false);
     }
 
     public int PointsCost => data.Points(myClass);

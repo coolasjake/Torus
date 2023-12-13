@@ -10,14 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b24d2c40d1402841b8d2e98b1177a0b, type: 3}
-  m_Name: Acid Coating
+  m_Name: Sparking Bullets
   m_EditorClassIdentifier: Assembly-CSharp::Ability
+  damageType: 3
   level: 1
   maxLevel: 20
-  description: Weapon inflicts acid damage.
+  description: Bullets have a +20% chance of setting enemies on fire.
   effects:
-  - name: Acid Power
+  - name: Ignite Chance
     priority: 0
     isPower: 0
     operation: 0
-    change: 1
+    change: 0.2
+  preReqAbilities: []
+  incompatibleAbilities: []

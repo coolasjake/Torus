@@ -10,12 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b24d2c40d1402841b8d2e98b1177a0b, type: 3}
-  m_Name: Radioactive Bullets
+  m_Name: Heat
   m_EditorClassIdentifier: Assembly-CSharp::Ability
-  description: Weapon inflicts radiation damage.
+  damageType: 3
+  allowedWeapons: 0
+  requireType: 0
+  minWave: 1
+  maxWave: 20
+  maxRepeats: 0
+  rarity: 0
+  description: Weapon inflicts heat damage.
   effects:
-  - name: Radiation Power
+  - name: Heat Power
     priority: 0
     isPower: 0
-    operation: 0
-    change: 1
+    operation: 2
+    change: 100
+  preReqAbilities: []
+  incompatibleAbilities: []

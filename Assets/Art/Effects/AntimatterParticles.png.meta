@@ -1,31 +1,7 @@
 fileFormatVersion: 2
-guid: a12b3d3bfd32551479a66b26515c932d
+guid: 568cc01c88e571d49abaf1aa73f39105
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 1995530090982130045
-    second: Explosion.ss_0
-  - first:
-      213: -1345811969382687353
-    second: Explosion.ss_1
-  - first:
-      213: -2372884865039255524
-    second: Explosion.ss_2
-  - first:
-      213: -1027697366627900311
-    second: Explosion.ss_3
-  - first:
-      213: 3210579256958114488
-    second: Explosion.ss_4
-  - first:
-      213: -5567570136900017075
-    second: Explosion.ss_5
-  - first:
-      213: 5289304072410709209
-    second: Explosion.ss_6
-  - first:
-      213: -3892446205877809489
-    second: Explosion.ss_7
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -65,12 +41,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 500
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -281,27 +257,6 @@ TextureImporter:
       bones: []
       spriteID: 9dc3119a702676940800000000000000
       internalID: 5289304072410709209
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Explosion.ss_7
-      rect:
-        serializedVersion: 2
-        x: 1344
-        y: 0
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fae065f7cc04bf9c0800000000000000
-      internalID: -3892446205877809489
       vertices: []
       indices: 
       edges: []

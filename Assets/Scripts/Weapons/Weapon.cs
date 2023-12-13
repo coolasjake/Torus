@@ -35,6 +35,7 @@ public abstract class Weapon : TorusMotion
     public ModifiableFloat acidDamagePerSecond = new ModifiableFloat(5f, 0f, 20f);
 
     public ModifiableFloat igniteChance = new ModifiableFloat(0f, 0f, 1f);
+    public ModifiableFloat fireDuration = new ModifiableFloat(3f, 0f, float.PositiveInfinity);
     public ModifiableFloat armourPierce = new ModifiableFloat(0f, 0f, 10f);
 
     protected float _lastShot = 0f;
@@ -178,6 +179,9 @@ public abstract class Weapon : TorusMotion
             case "ignite chance":
                 igniteChance.AddModifier(modifierName, value, operation);
                 return;
+            case "fire duration":
+                fireDuration.AddModifier(modifierName, value, operation);
+                return;
             case "lightning range":
                 lightningRange.AddModifier(modifierName, value, operation);
                 return;
@@ -240,7 +244,7 @@ public abstract class Weapon : TorusMotion
 
         if (Random.value < igniteChance.Value)
         {
-            enemy.OnFire = true;
+            enemy.SetOnFire(fireDuration.Value);
         }
     }
 
@@ -407,12 +411,7 @@ public abstract class Weapon : TorusMotion
             if (damageType == DamageType.none)
                 continue;
             if (existingDamageTypes.Includes(damageType) == false)
-            {
                 damageStats.ModifyDamage(damageType, Type().ToString(), StatChangeOperation.Percentage, -100f);
-                print(damageType.ToString() + " now has a value of " + damageStats.GetDamage(damageType));
-            }
-            else
-                print(damageType.ToString() + " value remains at " + damageStats.GetDamage(damageType));
         }
     }
 }

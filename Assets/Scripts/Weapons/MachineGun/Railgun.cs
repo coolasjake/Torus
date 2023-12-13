@@ -73,7 +73,7 @@ public class Railgun : Weapon
     {
         switch (statName.ToLower())
         {
-            case "bulletSpeed":
+            case "bullet speed":
                 bulletSpeed.AddModifier(modifierName, value, operation);
                 return;
         }

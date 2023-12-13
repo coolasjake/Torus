@@ -6,11 +6,19 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Ability", menuName = "ScriptableObjects/Ability", order = 1)]
 public class Ability : ScriptableObject
 {
-    public int level = 1;
-    public int maxLevel = 20;
+    public DamageType damageType = DamageType.none;
+    public WeaponType allowedWeapons;
+    public bool requireType = true;
+    public int minWave = 1;
+    public int maxWave = 20;
+    [Min(0)]
+    public int maxRepeats = 0;
+    public Rarity rarity = Rarity.Common;
     [TextArea(3, 8)]
     public string description;
     public List<AbilityEffect> effects;
+    public List<string> preReqAbilities = new List<string>();
+    public List<string> incompatibleAbilities = new List<string>();
 }
 
 [System.Serializable]
@@ -40,4 +48,11 @@ public enum StatChangeOperation
     Multiply,
     Percentage,
     Set
+}
+
+public enum Rarity
+{
+    Common,
+    Rare,
+    Legendary
 }
