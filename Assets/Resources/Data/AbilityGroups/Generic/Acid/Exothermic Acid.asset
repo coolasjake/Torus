@@ -13,8 +13,12 @@ MonoBehaviour:
   m_Name: Exothermic Acid
   m_EditorClassIdentifier: Assembly-CSharp::Ability
   damageType: 7
-  level: 1
-  maxLevel: 20
+  allowedWeapons: -1
+  requireType: 1
+  minWave: 1
+  maxWave: 20
+  maxRepeats: 0
+  rarity: 0
   description: Acid fires apply 2x as much heat.
   effects:
   - name: ExothermicAcid

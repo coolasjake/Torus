@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Nanites
   m_EditorClassIdentifier: Assembly-CSharp::Ability
   damageType: 8
-  allowedWeapons: 0
+  allowedWeapons: -1
   requireType: 0
   minWave: 1
   maxWave: 20

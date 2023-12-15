@@ -13,8 +13,12 @@ MonoBehaviour:
   m_Name: Thicker Acid 1
   m_EditorClassIdentifier: Assembly-CSharp::Ability
   damageType: 7
-  level: 1
-  maxLevel: 20
+  allowedWeapons: -1
+  requireType: 1
+  minWave: 1
+  maxWave: 20
+  maxRepeats: 0
+  rarity: 0
   description: Acid stays on your attacks and the enemy better (apply 2x as much
     acid to enemies).
   effects:
