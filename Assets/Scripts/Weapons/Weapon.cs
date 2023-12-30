@@ -15,12 +15,12 @@ public abstract class Weapon : TorusMotion
 
     public int playerIndex = 0;
     public bool doDirectionSwapping = false;
-    public GameObject inputPrefab;
     private WeaponInput weaponInput;
 
     [Header("Weapon Options")]
     public ModifiableFloat moveSpeed = new ModifiableFloat(90f);
     public ModifiableFloat aimingMult = new ModifiableFloat(0.5f, 0f, 1f);
+    public float dampening = 0f;
 
     public ModifiableFloat attacksPerSecond = new ModifiableFloat(1f, 0.0001f, 60f);
     protected float FireRate => 1f / attacksPerSecond.Value;
@@ -127,9 +127,7 @@ public abstract class Weapon : TorusMotion
 
     protected void CreateInputObject()
     {
-        WeaponInput newInput = PlayerInput.Instantiate(inputPrefab, controlScheme: "Keyboard_" + playerIndex, pairWithDevice: Keyboard.current).GetComponent<WeaponInput>();
-        newInput.transform.SetParent(transform);
-        weaponInput = newInput;
+        weaponInput = StaticRefs.SpawnInputPrefab(transform, playerIndex, "Keyboard_" + playerIndex);
     }
 
     protected abstract void Setup();
@@ -230,6 +228,7 @@ public abstract class Weapon : TorusMotion
             physicalDamage *= 2f;
         physicalDamage *= enemy.ResistanceMult(DamageType.physical);
         enemy.ReduceHealthBy(physicalDamage, this);
+        enemy.physicalHit = true;
     }
 
     protected void NormalHeatDamage(Enemy enemy)
@@ -334,6 +333,7 @@ public abstract class Weapon : TorusMotion
         acidStack *= enemy.ResistanceMult(DamageType.acid);
         enemy.acid += acidStack;
         enemy.SetAcidDPS(acidDamagePerSecond.Value);
+        enemy.physicalHit = true;
     }
 
     protected void NormalNanitesDamage(Enemy enemy)
@@ -344,6 +344,7 @@ public abstract class Weapon : TorusMotion
         float nanitesDamage = DamageAfterArmour(enemy.Armour, DamageType.nanites);
         nanitesDamage *= enemy.ResistanceMult(DamageType.nanites);
         enemy.nanites += nanitesDamage;
+        enemy.physicalHit = true;
     }
 
     protected void NormalAntimatterDamage(Enemy enemy)

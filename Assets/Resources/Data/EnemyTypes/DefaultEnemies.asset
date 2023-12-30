@@ -25,6 +25,8 @@ MonoBehaviour:
     - 0
     - 0
     - 0
+    - 0
+    - 0
   maxSafeTemp: 100
   restingTemp: 35
   freezeTemp: -30

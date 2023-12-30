@@ -1,38 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class TorusTester : MonoBehaviour
 {
     public float gizmoHeight = 1f;
     public Color gizmoColour = Color.blue;
     public int gizmoSections = 360;
-    public TorusMotion target;
+    public TorusMotion targetA;
+    public TorusMotion targetB;
     public Vector2 speed = Vector2.one;
     public EnemySpawner spawner;
+
+    private WeaponInput input;
 
     // Update is called once per frame
     void Update()
     {
-        if (target == null)
-            return;
+        if (Keyboard.current.spaceKey.wasPressedThisFrame && targetA != null && targetB != null)
+            print(TorusMotion.SignedAngle(targetA.Angle, targetB.Angle));
 
-        if (Input.GetKey(KeyCode.D))
-        {
-            target.MoveAround(-Time.deltaTime * speed.x);
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            target.MoveAround(Time.deltaTime * speed.x);
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            target.Height += Time.deltaTime * speed.y;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            target.Height -= Time.deltaTime * speed.y;
-        }
+
+        if (targetA == null)
+            return;
     }
 
     void OnDrawGizmos()

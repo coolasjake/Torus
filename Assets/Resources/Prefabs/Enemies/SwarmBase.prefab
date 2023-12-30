@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8822168678729197947}
   - component: {fileID: 3776036573458928184}
   - component: {fileID: 2007945613}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SwarmBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,6 +53,8 @@ MonoBehaviour:
   animator: {fileID: 3776036573458928184}
   temperature: 0
   stunEndTime: 0
+  lightningStruck: 0
+  physicalHit: 0
   armourDebuffs: 0
   radiation: 0
   acid: 0

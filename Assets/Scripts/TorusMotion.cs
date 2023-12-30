@@ -127,4 +127,16 @@ public class TorusMotion : MonoBehaviour
         Vector2 scaledPoint = new Vector2(Mathf.Cos(Mathf.Deg2Rad * angle) * torusScale.x, Mathf.Sin(Mathf.Deg2Rad * angle) * torusScale.y);
         return Vector2.SignedAngle(Vector2.right, scaledPoint) - 90f;
     }
+
+    public static float SignedAngle(float angleA, float angleB)
+    {
+        float diff = angleB - angleA;
+        diff = diff % 360f;
+        if (diff > 180f)
+            return -360 + diff;
+        else if (diff < -180f)
+            return 360 + diff;
+        else
+            return diff;
+    }
 }

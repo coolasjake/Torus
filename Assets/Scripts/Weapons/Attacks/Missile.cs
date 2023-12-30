@@ -24,7 +24,7 @@ public class Missile : MonoBehaviour
         Enemy enemy = collision.GetComponent<Enemy>();
         if (enemy)
         {
-            missileLauncher.RodHit(this, enemy);
+            missileLauncher.MissileHit(this, enemy);
         }
     }
 }

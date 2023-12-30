@@ -12,6 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b24d2c40d1402841b8d2e98b1177a0b, type: 3}
   m_Name: Heatsink
   m_EditorClassIdentifier: Assembly-CSharp::Ability
+  damageType: 0
+  allowedWeapons: 0
+  requireType: 1
+  minWave: 1
+  maxWave: 20
+  maxRepeats: 0
+  rarity: 0
   description: 'Add a heatsink to the weapon, allowing faster overclock.
 
     Warning:
@@ -27,3 +34,5 @@ MonoBehaviour:
     isPower: 0
     operation: 1
     change: -0.2
+  preReqAbilities: []
+  incompatibleAbilities: []

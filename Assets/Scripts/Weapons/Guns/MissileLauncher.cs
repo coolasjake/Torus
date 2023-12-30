@@ -45,14 +45,21 @@ public class MissileLauncher : Weapon
     {
         if (enemy.CheckDodge(missile.transform.position))
             return;
-        StaticRefs.SpawnExplosion(0.5f, missile.transform.position);
-        DefaultHit(enemy);
+        Explosion(missile.transform.position);
+        //DefaultHit(enemy);
+        Destroy(missile.gameObject);
     }
 
     private void Explosion(Vector2 origin)
     {
-        StaticRefs.SpawnExplosion(explosionSize.Value, origin);
-
+        StaticRefs.SpawnExplosion(explosionSize.Value * 5f, origin);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(origin, explosionSize.Value);
+        foreach (Collider2D collider in colliders)
+        {
+            Enemy enemy = collider.GetComponent<Enemy>();
+            if (enemy)
+                DefaultHit(enemy);
+        }
     }
 
     public override void AddModifier(string statName, string modifierName, StatChangeOperation operation, float value)

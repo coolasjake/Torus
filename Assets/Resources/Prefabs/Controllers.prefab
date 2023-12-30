@@ -114,6 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   torusScale: {x: 2.25, y: 1.3}
+  inputPrefab: {fileID: 2359475529569184120, guid: 6a8e896cde3aba748b505e515e80ade3, type: 3}
   attackMask:
     serializedVersion: 2
     m_Bits: 128
@@ -146,6 +147,7 @@ MonoBehaviour:
     fireEffectPrefab: {fileID: 2362476774211909589, guid: 96c163754e153944f8ed096e1bf42dc0, type: 3}
     nanitesEffectPrefab: {fileID: 2418681238365804432, guid: 19fff0b11c041e64b90771d6efeb0c7b, type: 3}
     acidEffectPrefab: {fileID: 6983119616652451749, guid: c80f59d2f7a635a44b033e1a1fec9a04, type: 3}
+    antimatterEffectPrefab: {fileID: 0}
     tempEffectPrefab: {fileID: 4090255103206762803, guid: 62b416e88801303498a42bb98602c994, type: 3}
     coldColour: {r: 0, g: 0, b: 1, a: 1}
     hotColour: {r: 1, g: 0, b: 0, a: 1}
@@ -153,6 +155,7 @@ MonoBehaviour:
     acidExplosionPrefab: {fileID: 2986729771775196781, guid: 7be001f397101ed42b2f7fe248469861, type: 3}
     lightningPrefab: {fileID: 8301029585495753416, guid: 03f90e1d3f46fd54883e9a4e6e8580df, type: 3}
     lightningExplosionPrefab: {fileID: 1446598337663847966, guid: cec0f3961eb436d44aa93e8d033ca393, type: 3}
+    antimatterExplosionPrefab: {fileID: 2197475484593596105, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
   baseEnemySpeed: 0.01
   dodgeDist: 50
   weaponDirectionSwapBuffer: 45

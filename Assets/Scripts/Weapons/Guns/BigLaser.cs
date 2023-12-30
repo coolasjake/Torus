@@ -27,9 +27,9 @@ public class BigLaser : Weapon
         {
             Vector2 laserCenter = transform.position + transform.position.normalized * ((laserLength / 2f) + laserStart);
             Vector2 laserScale = new Vector2(laserThickness.Value, laserLength);
-            testAttack.position = laserCenter;
-            testAttack.localScale = laserScale;
-            testAttack.rotation = TorusMotion.RotFromAngle(Angle);
+            //testAttack.position = laserCenter;
+            //testAttack.localScale = laserScale;
+            //testAttack.rotation = TorusMotion.RotFromAngle(Angle);
             laserRenderer.transform.localScale = new Vector3(laserThickness.Value, 1);
             Collider2D[] colliders = Physics2D.OverlapBoxAll(laserCenter, laserScale, TorusMotion.RealAngleFromAngle(Angle));
 

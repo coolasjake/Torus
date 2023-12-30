@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9009755150189006556}
   - component: {fileID: 6561980635606752520}
   - component: {fileID: 931261055}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FastBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,6 +53,8 @@ MonoBehaviour:
   animator: {fileID: 6561980635606752520}
   temperature: 0
   stunEndTime: 0
+  lightningStruck: 0
+  physicalHit: 0
   armourDebuffs: 0
   radiation: 0
   acid: 0

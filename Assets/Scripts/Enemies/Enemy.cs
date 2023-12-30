@@ -39,14 +39,14 @@ public class Enemy : TorusMotion
         healthBar.DOT(_health / MaxHealth);
     }
 
-    /// <summary> Reduce the health of the enemy after applying tank ability and rounding up to 1. </summary>
+    /// <summary> Reduce the health of the enemy after applying tank ability and (needs testing) rounding up to 1. </summary>
     private void Damage(float damage)
     {
         if (damage <= 0)
             return;
         if (myClass == EnemyClass.tank)
             damage -= AbilityPower;
-        damage = Mathf.Max(damage, 1);
+        //damage = Mathf.Max(damage, 1);
         _health -= damage;
     }
 
@@ -288,7 +288,7 @@ public class Enemy : TorusMotion
         //Remove frozen/fire if temp is on the wrong side of resting
         if (temperature >= data.restingTemp)
             Frozen = false;
-        else if (temperature <= data.restingTemp || OnFire == false)
+        if (temperature <= data.restingTemp || OnFire == false)
             RemoveFire();
 
         if (OnFire)
@@ -415,7 +415,8 @@ public class Enemy : TorusMotion
 
     private void HideFireEffect()
     {
-        _fireEffect.SetActive(false);
+        if (_fireEffect != null)
+            _fireEffect.SetActive(false);
     }
 
     private void ShowAcidEffect()

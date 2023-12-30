@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3ee6e4866897e34285b16a9fcd9ea1f, type: 3}
   m_Name: Aim Laser
   m_EditorClassIdentifier: 
-  targetType: 2
+  allowedWeapons: 0
+  groupTypeRequirement: 0
   preReqAbilities: []
   incompatibleAbilities: []
   abilities:

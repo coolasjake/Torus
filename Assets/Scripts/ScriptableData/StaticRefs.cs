@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.InputSystem;
 
 public class StaticRefs : MonoBehaviour
 {
@@ -9,6 +10,16 @@ public class StaticRefs : MonoBehaviour
 
     [SerializeField]
     private Vector2 torusScale = Vector2.one;
+
+    [SerializeField]
+    private GameObject inputPrefab;
+
+    public static WeaponInput SpawnInputPrefab(Transform parent, int index, string scheme)
+    {
+        WeaponInput newInput = PlayerInput.Instantiate(singleton.inputPrefab, playerIndex: index, controlScheme: scheme, pairWithDevice: Keyboard.current).GetComponent<WeaponInput>();
+        newInput.transform.SetParent(parent);
+        return newInput;
+    }
 
     [SerializeField]
     private LayerMask attackMask;
@@ -301,7 +312,7 @@ public enum DamageType
     radiation = 6,  //add radiation to target, target takes slow damage over time, often completely resisted
     acid = 7,       //add acid to target, target takes quick damage over time, value reduces each time
     nanites = 8,    //add nanites to target, target takes damage over time that goes down when their health gets lower and does nothing when below 10%.
-    antimatter = 9  //add antimatter to target, target explodes dealing basic damage to self and nearby enemies when hit by physical, acid or nanites.
+    antimatter = 9, //add antimatter to target, target explodes dealing basic damage to self and nearby enemies when hit by physical, acid or nanites.
 }
 
 [System.Flags]
