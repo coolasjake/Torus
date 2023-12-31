@@ -3602,42 +3602,42 @@ MonoBehaviour:
       max: Infinity
       _value: 0
     physical:
-      defaultValue: 0
+      defaultValue: 5
       min: 0
       max: Infinity
       _value: 0
     heat:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
       _value: 0
     cold:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
       _value: 0
     radiation:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
       _value: 0
     acid:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
       _value: 0
     lightning:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
       _value: 0
     nanites:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
       _value: 0
     antimatter:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
       _value: 0
@@ -3680,7 +3680,7 @@ MonoBehaviour:
   attackPrefab: {fileID: 6683694765789104448, guid: a4dfcf855d58f644fadf5cd806b1f322, type: 3}
   firingPoint: {fileID: 274947084}
   boomerangSpeed:
-    defaultValue: 5
+    defaultValue: 2
     min: 0.01
     max: 1000
     _value: 10

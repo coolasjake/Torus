@@ -9,17 +9,22 @@ public class BoomerangChainsaw : TorusMotion
 
     [HideInInspector]
     public Vector2 torusVelocity = Vector2.zero;
-    [HideInInspector]
-    public bool returning = false;
+    public float radius = 1f;
 
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    void FixedUpdate()
     {
-        Enemy enemy = collision.GetComponent<Enemy>();
-        if (enemy)
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, radius * transform.localScale.x);
+        foreach (Collider2D col in colliders)
         {
-            boomerangLauncher.BoomerangHit(this, enemy);
+            Enemy enemy = col.GetComponent<Enemy>();
+            if (enemy)
+                boomerangLauncher.BoomerangHit(this, enemy);
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(transform.position, radius * transform.localScale.x);
     }
 }
 

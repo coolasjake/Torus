@@ -20,7 +20,9 @@ public abstract class Weapon : TorusMotion
     [Header("Weapon Options")]
     public ModifiableFloat moveSpeed = new ModifiableFloat(90f);
     public ModifiableFloat aimingMult = new ModifiableFloat(0.5f, 0f, 1f);
+    [Min(0f)]
     public float dampening = 0f;
+    private float _velocity = 0;
 
     public ModifiableFloat attacksPerSecond = new ModifiableFloat(1f, 0.0001f, 60f);
     protected float FireRate => 1f / attacksPerSecond.Value;
@@ -108,14 +110,15 @@ public abstract class Weapon : TorusMotion
         float input = weaponInput.Movement.x;
         if (leftIsClockwise)
             input = -input;
+
+        float dampeningForce = (1f / (dampening + 1f));
         if (input > 0)
-        {
-            MoveAround(-_actualMoveSpeed * Time.fixedDeltaTime);
-        }
-        if (input < 0)
-        {
-            MoveAround(_actualMoveSpeed * Time.fixedDeltaTime);
-        }
+            _velocity = Mathf.Lerp(_velocity, -_actualMoveSpeed, dampeningForce);
+        else if (input < 0)
+            _velocity = Mathf.Lerp(_velocity, _actualMoveSpeed, dampeningForce);
+        else
+            _velocity = Mathf.Lerp(_velocity, 0f, dampeningForce);
+        MoveAround(_velocity * Time.fixedDeltaTime);
 
         WeaponFixedUpdate();
     }

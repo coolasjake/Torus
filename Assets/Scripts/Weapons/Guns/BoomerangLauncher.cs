@@ -12,8 +12,12 @@ public class BoomerangLauncher : Weapon
     }
 
     [Header("BoomerangLauncher Stats")]
+    public bool holdForSlow = false;
+    [Min(1f)]
+    public float slowFactor = 2f;
     public ModifiableFloat boomerangSpeed = new ModifiableFloat(10f, 0.01f, 1000f);
     public float boomerangMaxRange = 5f;
+    public ModifiableFloat boomerangSize = new ModifiableFloat(0.5f, 0.1f, 5f);
 
     [Header("BoomerangLauncher Refs")]
     private BoomerangChainsaw boomerangPrefab;
@@ -23,14 +27,13 @@ public class BoomerangLauncher : Weapon
 
     protected override bool Fire()
     {
-        if (boomerangObjs.Count <= 0)
+        if (boomerangObjs.Count <= 0 && Time.time > _lastShot + FireRate)
         {
             BoomerangChainsaw newBoomerang = Instantiate(boomerangPrefab, firingPoint.position, firingPoint.rotation);
-            Vector2 dir = firingPoint.up;
             newBoomerang.torusVelocity = new Vector2(0, boomerangSpeed.Value);
-            //newBoomerang.GetComponent<Rigidbody2D>().velocity = dir * boomerangSpeed.Value;
+            newBoomerang.boomerangLauncher = this;
+            newBoomerang.transform.localScale = new Vector3(boomerangSize.Value, boomerangSize.Value, boomerangSize.Value);
             boomerangObjs.Add(newBoomerang);
-            _lastShot = Time.time;
         }
         return true;
     }
@@ -40,13 +43,22 @@ public class BoomerangLauncher : Weapon
         foreach (BoomerangChainsaw boomerang in boomerangObjs)
         {
             Vector2 bPos = boomerang.AngleAndHeight;
-            float downAcc = (boomerangSpeed.Value / boomerangMaxRange) * 0.5f;
-            //if (_firing)
-            //    downAcc = downAcc * 0.5f;
+            bPos.x = Angle;
+            float downAcc = (boomerangSpeed.Value * boomerangSpeed.Value) / boomerangMaxRange;
             float angle = TorusMotion.SignedAngle(boomerang.Angle, Angle);
-            boomerang.torusVelocity.x = angle * Mathf.Abs(angle);
-            boomerang.torusVelocity.y -= downAcc * Time.deltaTime;
-            boomerang.AngleAndHeight = bPos + boomerang.torusVelocity * Time.deltaTime;
+            //boomerang.torusVelocity.x = angle * Mathf.Abs(angle);
+            if (_firing ^ holdForSlow)
+            {
+                boomerang.torusVelocity.y -= downAcc * Time.deltaTime;
+                bPos += boomerang.torusVelocity * Time.deltaTime;
+            }
+            else
+            {
+                boomerang.torusVelocity.y -= downAcc * Time.deltaTime / slowFactor;
+                bPos += boomerang.torusVelocity * Time.deltaTime / slowFactor;
+            }
+
+            boomerang.AngleAndHeight = bPos;
         }
         for (int i = 0; i < boomerangObjs.Count; ++i)
         {
@@ -55,6 +67,7 @@ public class BoomerangLauncher : Weapon
                 Destroy(boomerangObjs[i].gameObject);
                 boomerangObjs.RemoveAt(i);
                 --i;
+                _lastShot = Time.time;
             }
         }
     }

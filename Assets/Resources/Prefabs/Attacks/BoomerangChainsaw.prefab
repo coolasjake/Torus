@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6683694765789104453}
   - component: {fileID: 6683694765789104455}
   - component: {fileID: 3790535732918984947}
-  - component: {fileID: 37375780576388149}
   m_Layer: 6
   m_Name: BoomerangChainsaw
   m_TagString: Untagged
@@ -27,7 +26,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6683694765789104448}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.423, y: -0.036, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -120,20 +119,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boomerangLauncher: {fileID: 0}
   torusVelocity: {x: 0, y: 0}
-  returning: 0
---- !u!58 &37375780576388149
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6683694765789104448}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.35
+  radius: 0.35
