@@ -206,8 +206,8 @@ public abstract class Weapon : TorusMotion
         NormalLightningChain(enemy);
 
         enemy.lastHitBy = this;
-        if (enemy.Health <= 0)
-            KillEnemy(enemy);
+        //if (enemy.Health <= 0)
+        //    KillEnemy(enemy);
     }
 
     protected void NormalBasicDamage(Enemy enemy)
@@ -269,9 +269,10 @@ public abstract class Weapon : TorusMotion
         lightningDamageEvent?.Invoke(enemy);
         enemy.lightningStruck = true;
         //Split to nearby enemies
+        Enemy chainTarget = null;
         for (int i = 0; i < lightningSplits.Value; ++i)
         {
-            Enemy chainTarget = ChooseLightningChain(enemy);
+            chainTarget = ChooseLightningChain(enemy);
             if (chainTarget == null)
                 break;
             lightningDamageEvent?.Invoke(chainTarget);
@@ -284,6 +285,8 @@ public abstract class Weapon : TorusMotion
                 lightningDamageEvent?.Invoke(chainTarget);
             }
         }
+        if (chainTarget == null)
+            StaticRefs.SpawnLightningExplosion(enemy.Size, enemy.transform.position);
     }
 
     protected Enemy ChooseLightningChain(Enemy startingEnemy)

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2197475484593596107}
   - component: {fileID: 2197475484593596106}
   - component: {fileID: 2197475484593596148}
+  - component: {fileID: 5466367041440219502}
   m_Layer: 0
   m_Name: AntimatterExplosion
   m_TagString: Untagged
@@ -72,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 1195906583
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: -556871236476935750, guid: 9fb67c553e6b17e429584a59b172513d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9266c4d52bb340d44afd61ce403dc4a2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -102,3 +103,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5466367041440219502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2197475484593596105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1362dd00bedc16741878a370ff4330f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerWeapon: {fileID: 0}
+  animator: {fileID: 2197475484593596148}
+  targetSize: 0
+  growSpeed: 2
+  minSize: 0.3
+  sizeMultiplier: 2
+  testAntimatter: 0

@@ -468,8 +468,11 @@ public class ModifiableFloat
     private float min = float.NegativeInfinity;
     [SerializeField]
     private float max = float.PositiveInfinity;
+    [SerializeField]
     private float addition = 0;
+    [SerializeField]
     private float multiplier = 1;
+    [SerializeField]
     private float percentage = 100;
     [SerializeField]
     private float _value = 0;
@@ -532,6 +535,13 @@ public class ModifiableFloat
         percentage = 100;
         foreach (NamedFloat mod in percentageModifiers)
             percentage += mod.value;
+
+        _value = Mathf.Clamp(defaultValue * multiplier * (percentage * 0.01f) + addition, min, max);
+    }
+
+    public static float GenerateModifiedValue(float defaultValue, float multiplier, float percentage, float addition, float min, float max)
+    {
+        return Mathf.Clamp(defaultValue * multiplier * (percentage * 0.01f) + addition, min, max);
     }
 }
 [System.Serializable]

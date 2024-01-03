@@ -12,11 +12,11 @@ public class AbilityUI : MonoBehaviour
     public Image levelIcon;
     public Button button;
 
-    public void ShowAbility(Ability data, int level)
+    public void ShowAbility(Ability data)
     {
         nameText.text = data.name;
         descriptionText.text = data.description;
-        levelIcon.sprite = StaticRefs.UpgradeLvlIcon(level);
+        levelIcon.sprite = StaticRefs.DamageTypeIcon(data.damageType);
         //Rarity code here <---
         gameObject.SetActive(true);
     }
@@ -24,8 +24,6 @@ public class AbilityUI : MonoBehaviour
     {
         nameText.text = "N/A";
         descriptionText.text = "";
-        levelIcon.sprite = StaticRefs.UpgradeLvlIcon(0);
-        //Rarity code here <---
         gameObject.SetActive(false);
     }
 }

@@ -8,7 +8,7 @@ public class FreezeRay : Weapon
 {
     public override WeaponType Type()
     {
-        return WeaponType.Railgun;
+        return WeaponType.FreezeRay;
     }
 
     [Header("FreezeRay Stats")]

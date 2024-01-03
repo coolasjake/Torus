@@ -5,7 +5,9 @@ using UnityEngine.Events;
 
 public class Enemy : TorusMotion
 {
-    public EnemyClass myClass;
+    [SerializeField]
+    private EnemyClass _myClass;
+    public EnemyClass Class => _myClass;
     [HideInInspector]
     public EnemyData data;
 
@@ -39,14 +41,14 @@ public class Enemy : TorusMotion
         healthBar.DOT(_health / MaxHealth);
     }
 
-    /// <summary> Reduce the health of the enemy after applying tank ability and (needs testing) rounding up to 1. </summary>
+    /// <summary> Reduce the health of the enemy after applying tank ability. </summary>
     private void Damage(float damage)
     {
         if (damage <= 0)
             return;
-        if (myClass == EnemyClass.tank)
+        if (Class == EnemyClass.tank)
             damage -= AbilityPower;
-        //damage = Mathf.Max(damage, 1);
+        damage = Mathf.Max(damage, 0);
         _health -= damage;
     }
 
@@ -150,6 +152,7 @@ public class Enemy : TorusMotion
     [HideInInspector]
     public float antimatter = 0;
 
+
     [HideInInspector]
     public Weapon lastHitBy;
 
@@ -189,7 +192,7 @@ public class Enemy : TorusMotion
 
         float modifier = 1f;
 
-        if (myClass == EnemyClass.fast && Height < StaticRefs.BoostStartingHeight)
+        if (Class == EnemyClass.fast && Height < StaticRefs.BoostStartingHeight)
             modifier += AbilityPower;
 
         //Apply cold and frozen modifiers
@@ -205,7 +208,7 @@ public class Enemy : TorusMotion
 
     public bool CheckDodge(Vector2 hitPos)
     {
-        if (myClass == EnemyClass.dodge && Time.time > _lastDodge + AbilityPower)
+        if (Class == EnemyClass.dodge && Time.time > _lastDodge + AbilityPower)
         {
             float movement = StaticRefs.DodgeDist;
             if (TorusMotion.AngleFromPos(hitPos) > Angle)
@@ -248,11 +251,11 @@ public class Enemy : TorusMotion
             ShowAntimatterEffect();
 
             if (physicalHit || acid > 0 || nanites > 0)
-                DamageEvents.DefaultAntimatterExplosion(this);
+                DamageEvents.AntimatterExplosion(this);
         }
         else
         {
-            HideNanitesEffect();
+            HideAntimatterEffect();
         }
     }
 
@@ -469,13 +472,13 @@ public class Enemy : TorusMotion
             _antimatterEffect.SetActive(false);
     }
 
-    public int PointsCost => data.Points(myClass);
-    public float MaxHealth => data.Health(myClass);
-    public int Armour => data.Armour(myClass) - armourDebuffs;
-    public float ClassSpeed => data.Speed(myClass);
-    public float XPReward => data.Points(myClass);
-    public float Size => data.Size(myClass);
-    public float AbilityPower => data.Ability(myClass);
+    public int PointsCost => data.Points(Class);
+    public float MaxHealth => data.Health(Class);
+    public int Armour => data.Armour(Class) - armourDebuffs;
+    public float ClassSpeed => data.Speed(Class);
+    public float XPReward => data.Points(Class);
+    public float Size => data.Size(Class);
+    public float AbilityPower => data.Ability(Class);
     public float ResistanceMult(DamageType type) => (1f - data.resistances.GetDamage(type));
 
     public void SetData(EnemyData enemyData)
@@ -485,9 +488,9 @@ public class Enemy : TorusMotion
         _health = MaxHealth;
         temperature = data.restingTemp;
 
-        spriteRenderer.sprite = data.ClassSprite(myClass);
+        spriteRenderer.sprite = data.ClassSprite(Class);
 
-        animator.runtimeAnimatorController = data.ClassAnimations(myClass);
+        animator.runtimeAnimatorController = data.ClassAnimations(Class);
 
         Initialize();
     }

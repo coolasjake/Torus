@@ -19,7 +19,8 @@ MonoBehaviour:
   maxWave: 20
   maxRepeats: 0
   rarity: 0
-  description: Weapon inflicts radiation damage.
+  description: The weapon applies nanites, which damage enemies but do not destroy
+    them.
   effects:
   - name: Nanites Power
     priority: 0

@@ -8,7 +8,7 @@ public class Flamethrower : Weapon
 {
     public override WeaponType Type()
     {
-        return WeaponType.MachineGun;
+        return WeaponType.FlameThrower;
     }
 
     [Header("Machinegun Stats")]

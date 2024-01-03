@@ -393,7 +393,7 @@ public class EnemySpawner : MonoBehaviour
             _spacingDir = Vector2.zero;
             for (int i = 0; i < _enemyDists.Length; ++i)
                 _enemyDists[i] = float.PositiveInfinity;
-            _enemySize = enemySpacing[(int)enemy.myClass];
+            _enemySize = enemySpacing[(int)enemy.Class];
 
             //Loop through all other enemies
             foreach (Enemy otherEnemy in enemies)
@@ -408,10 +408,10 @@ public class EnemySpawner : MonoBehaviour
                 float dist = Vector2.SqrMagnitude(_diff);
 
                 //Calculate spacing force
-                if (otherEnemy.myClass == EnemyClass.tank || enemy.myClass != EnemyClass.tank)
+                if (otherEnemy.Class == EnemyClass.tank || enemy.Class != EnemyClass.tank)
                 {
                     //Add spacing
-                    float maxSpacingDist = _enemySize + enemySpacing[(int)otherEnemy.myClass];
+                    float maxSpacingDist = _enemySize + enemySpacing[(int)otherEnemy.Class];
                     if (dist < maxSpacingDist * maxSpacingDist)
                     {
                         Vector2 spacing = _diff / (dist / maxSpacingDist);
@@ -455,7 +455,7 @@ public class EnemySpawner : MonoBehaviour
     {
         foreach (Enemy enemy in enemies)
         {
-            if (enemy.Height <= 1 + (enemySpacing[(int)enemy.myClass] * 0.5f))
+            if (enemy.Height <= 1 + (enemySpacing[(int)enemy.Class] * 0.5f))
             {
                 BattleController.DamageStation((int)enemy.Size);
                 break;
@@ -469,7 +469,7 @@ public class EnemySpawner : MonoBehaviour
         for (int i = 0; i < Mathf.Min(enemies.Count); ++i)
         {
             Gizmos.color = Color.red.ChangeHue((i * 256f) / enemies.Count);
-            Gizmos.DrawWireSphere(enemies[i].transform.position, enemySpacing[(int)enemies[i].myClass]);
+            Gizmos.DrawWireSphere(enemies[i].transform.position, enemySpacing[(int)enemies[i].Class]);
         }
     }
     #endregion

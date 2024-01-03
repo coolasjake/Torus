@@ -21,7 +21,7 @@ MonoBehaviour:
   rarity: 0
   description: Weapon inflicts lightning damage that jumps to nearby enemies.
   effects:
-  - name: Radiation Power
+  - name: Lightning Power
     priority: 0
     isPower: 0
     operation: 2

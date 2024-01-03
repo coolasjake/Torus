@@ -19,7 +19,8 @@ MonoBehaviour:
   maxWave: 20
   maxRepeats: 0
   rarity: 0
-  description: Weapon inflicts radiation damage.
+  description: The weapon applies antimatter, which explodes when hit by matter based
+    damage.
   effects:
   - name: Antimatter Power
     priority: 0

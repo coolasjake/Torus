@@ -62,6 +62,8 @@ public class StaticRefs : MonoBehaviour
         public HealthBar healthBarPrefab;
 
         public List<Sprite> healthArmourBorders = new List<Sprite>();
+        [EnumNamedArray(typeof(DamageType))]
+        public Sprite[] damageTypeIcons = new Sprite[System.Enum.GetNames(typeof(DamageType)).Length];
         public List<Sprite> upgradeLvlIcons = new List<Sprite>();
     }
 
@@ -82,7 +84,7 @@ public class StaticRefs : MonoBehaviour
         public GameObject acidExplosionPrefab;
         public LightningObj lightningPrefab;
         public GameObject lightningExplosionPrefab;
-        public GameObject antimatterExplosionPrefab;
+        public AntimatterExplosion antimatterExplosionPrefab;
     }
 
     public static void SpawnExplosion(float scale, Vector2 pos)
@@ -96,7 +98,6 @@ public class StaticRefs : MonoBehaviour
 
     public static void SpawnAcidExplosion(float scale, Vector2 pos)
     {
-        Debug.Log("Here");
         if (singleton.effectSettings.acidExplosionPrefab != null)
         {
             //scale = scale * 0.5f;
@@ -115,13 +116,18 @@ public class StaticRefs : MonoBehaviour
         }
     }
 
-    public static void SpawnAntimatterExplosion(float scale, Vector2 pos)
+    public static AntimatterExplosion SpawnAntimatterExplosion(Vector2 pos, Enemy enemy)
     {
         if (singleton.effectSettings.antimatterExplosionPrefab != null)
         {
-            GameObject explosion = Instantiate(singleton.effectSettings.antimatterExplosionPrefab, pos, Quaternion.identity, singleton.transform);
-            explosion.transform.localScale = new Vector3(scale, scale, scale);
+            AntimatterExplosion explosion = Instantiate(singleton.effectSettings.antimatterExplosionPrefab, pos, Quaternion.identity, singleton.transform);
+            explosion.transform.localScale = Vector3.zero;
+            explosion.StartingAntimatter = enemy.antimatter;
+            explosion.triggerWeapon = enemy.lastHitBy;
+            enemy.antimatter = 0;
+            return explosion;
         }
+        return null;
     }
 
     public static Sprite ArmourBorder(int level)
@@ -134,6 +140,12 @@ public class StaticRefs : MonoBehaviour
     {
         level = Mathf.Clamp(level, 0, singleton.UIRefs.upgradeLvlIcons.Count - 1);
         return singleton.UIRefs.upgradeLvlIcons[level];
+    }
+
+    public static Sprite DamageTypeIcon(DamageType damageType)
+    {
+        int typeAsInt = Mathf.Clamp((int)damageType, 0, singleton.UIRefs.damageTypeIcons.Length - 1);
+        return singleton.UIRefs.damageTypeIcons[typeAsInt];
     }
 
     public static HealthBar SpawnHealthBar(int armourLvl)
@@ -328,15 +340,4 @@ public enum DamageTypeFlags
     acid = 1 << 6,
     nanites = 1 << 7,
     antimatter = 1 << 8
-}
-
-public static class DamageInteractions
-{
-    public static bool Includes(this DamageTypeFlags flag, DamageType damageType)
-    {
-        DamageTypeFlags flagOfType = (DamageTypeFlags)(1 << (int)damageType - 1);
-        if (flag.HasFlag(flagOfType))
-            return true;
-        return false;
-    }
 }

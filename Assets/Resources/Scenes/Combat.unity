@@ -290,98 +290,155 @@ MonoBehaviour:
     defaultValue: 90
     min: -Infinity
     max: Infinity
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   aimingMult:
     defaultValue: 0.2
     min: 0
     max: 1
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
-  dampening: 0
+  dampening: 5
   attacksPerSecond:
     defaultValue: 20
     min: 0.0001
     max: 60
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   damageStats:
     basic:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     physical:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     heat:
       defaultValue: 5
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     cold:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     radiation:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     acid:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     lightning:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     nanites:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     antimatter:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
   lightningRange:
     defaultValue: 5
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   lightningChains:
     defaultValue: 1
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   lightningSplits:
     defaultValue: 1
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   acidDamagePerSecond:
     defaultValue: 5
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   igniteChance:
     defaultValue: 0
     min: 0
     max: 1
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   fireDuration:
     defaultValue: 3
     min: 0
     max: Infinity
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 3
   armourPierce:
     defaultValue: 0
     min: 0
     max: 10
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   weaponRenderer: {fileID: 63070256}
   attackPrefab: {fileID: 3762576957301760384, guid: 7988fd1e42e9f0046834635f1001e190, type: 3}
@@ -392,6 +449,9 @@ MonoBehaviour:
     defaultValue: 0.2
     min: 0
     max: 100
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   laserRenderer: {fileID: 1535292208}
   testAttack: {fileID: 311441506}
@@ -1162,6 +1222,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3762576957301760414, guid: 7988fd1e42e9f0046834635f1001e190, type: 3}
   m_PrefabInstance: {fileID: 1528208237}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &545196238
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2197475484593596105, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
+      propertyPath: m_Name
+      value: AntimatterExplosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197475484593596107, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
+      propertyPath: m_RootOrder
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197475484593596107, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.1290007
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197475484593596107, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.8858182
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197475484593596107, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197475484593596107, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197475484593596107, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197475484593596107, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197475484593596107, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197475484593596107, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197475484593596107, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2197475484593596107, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
 --- !u!1 &548207667
 GameObject:
   m_ObjectHideFlags: 0
@@ -1254,16 +1371,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8677e3ffc1ef5f84488c55acf1eb6265, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetWeapon: {fileID: 1891033584}
+  targetWeapon: {fileID: 0}
+  index: 0
   abilityDataFolder: Data/AbilityGroups
   title: {fileID: 1217850294}
   buttons:
   - {fileID: 928874878}
   - {fileID: 2052989815}
   - {fileID: 1542349281}
-  possibleAbilityGroups: []
-  validGroupPool: []
-  chosenGroups: []
+  possibleAbilities: []
+  availableAbilities: []
+  chosenAbilities: []
 --- !u!1 &554817057
 GameObject:
   m_ObjectHideFlags: 0
@@ -1295,105 +1413,162 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   incompatibleDamageTypes: 74
-  existingDamageTypes: 4
+  existingDamageTypes: 256
   playerIndex: 1
   doDirectionSwapping: 0
   moveSpeed:
     defaultValue: 90
     min: -Infinity
     max: Infinity
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 90
   aimingMult:
     defaultValue: 0.5
     min: 0
     max: 1
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0.5
-  dampening: 0
+  dampening: 5
   attacksPerSecond:
     defaultValue: 15
     min: 0.0001
     max: 60
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 1
   damageStats:
     basic:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     physical:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     heat:
       defaultValue: 3
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     cold:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     radiation:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     acid:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     lightning:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     nanites:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     antimatter:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
   lightningRange:
     defaultValue: 5
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 5
   lightningChains:
     defaultValue: 1
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 1
   lightningSplits:
     defaultValue: 1
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 1
   acidDamagePerSecond:
     defaultValue: 5
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 5
   igniteChance:
     defaultValue: 1
     min: 0
     max: 1
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   fireDuration:
     defaultValue: 3
     min: 0
     max: Infinity
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 3
   armourPierce:
     defaultValue: 0
     min: 0
     max: 10
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   weaponRenderer: {fileID: 554817059}
   attackPrefab: {fileID: 3555521863533551018, guid: 516edd7f88f58574eb16d5e2f09ae6ba, type: 3}
@@ -1402,6 +1577,9 @@ MonoBehaviour:
     defaultValue: 20
     min: 0
     max: 90
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 10
   flamesSpeed: 3
   flameDuration: 1
@@ -2334,98 +2512,155 @@ MonoBehaviour:
     defaultValue: 90
     min: -Infinity
     max: Infinity
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   aimingMult:
     defaultValue: 0
     min: 0
     max: 1
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
-  dampening: 0
+  dampening: 5
   attacksPerSecond:
     defaultValue: 0.35
     min: 0.0001
     max: 60
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   damageStats:
     basic:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     physical:
       defaultValue: 200
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     heat:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     cold:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     radiation:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     acid:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     lightning:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     nanites:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     antimatter:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
   lightningRange:
     defaultValue: 2
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   lightningChains:
     defaultValue: 0
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   lightningSplits:
     defaultValue: 1
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   acidDamagePerSecond:
     defaultValue: 5
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   igniteChance:
     defaultValue: 0
     min: 0
     max: 1
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   fireDuration:
     defaultValue: 3
     min: 0
     max: Infinity
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 3
   armourPierce:
     defaultValue: 0
     min: 0
     max: 10
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   weaponRenderer: {fileID: 1312168639}
   attackPrefab: {fileID: 9123346512063545302, guid: bd71f6722dd550049a2bd2c13172be43, type: 3}
@@ -2434,11 +2669,17 @@ MonoBehaviour:
     defaultValue: 20
     min: 0.01
     max: 1000
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   pierces:
     defaultValue: 1
     min: 1
     max: 100
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   aimingLaser: {fileID: 2101471614}
 --- !u!212 &1312168639
@@ -3038,16 +3279,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8677e3ffc1ef5f84488c55acf1eb6265, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetWeapon: {fileID: 1312168638}
+  targetWeapon: {fileID: 0}
+  index: 1
   abilityDataFolder: Data/AbilityGroups
   title: {fileID: 369956121}
   buttons:
   - {fileID: 296145541}
   - {fileID: 1123601177}
   - {fileID: 1766117361}
-  possibleAbilityGroups: []
-  validGroupPool: []
-  chosenGroups: []
+  possibleAbilities: []
+  availableAbilities: []
+  chosenAbilities: []
 --- !u!114 &1443561733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3562,7 +3804,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1616921368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3575,7 +3817,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4879ee41ef4614fb50cdc3e8d95b27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  incompatibleDamageTypes: 0
+  incompatibleDamageTypes: 256
   existingDamageTypes: 2
   playerIndex: 0
   doDirectionSwapping: 0
@@ -3583,108 +3825,178 @@ MonoBehaviour:
     defaultValue: 180
     min: -Infinity
     max: Infinity
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 90
   aimingMult:
     defaultValue: 1
     min: 0
     max: 1
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0.5
-  dampening: 0
+  dampening: 20
   attacksPerSecond:
     defaultValue: 1
     min: 0.0001
     max: 60
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 1
   damageStats:
     basic:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     physical:
       defaultValue: 5
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     heat:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     cold:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     radiation:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     acid:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     lightning:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     nanites:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     antimatter:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
   lightningRange:
     defaultValue: 5
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 5
   lightningChains:
     defaultValue: 1
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 1
   lightningSplits:
     defaultValue: 1
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 1
   acidDamagePerSecond:
     defaultValue: 5
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 5
   igniteChance:
     defaultValue: 0
     min: 0
     max: 1
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   fireDuration:
     defaultValue: 3
     min: 0
     max: Infinity
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 3
   armourPierce:
     defaultValue: 0
     min: 0
     max: 10
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   weaponRenderer: {fileID: 1616921369}
   attackPrefab: {fileID: 6683694765789104448, guid: a4dfcf855d58f644fadf5cd806b1f322, type: 3}
   firingPoint: {fileID: 274947084}
+  holdForSlow: 1
+  slowFactor: 4
   boomerangSpeed:
-    defaultValue: 2
+    defaultValue: 8
     min: 0.01
     max: 1000
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 10
   boomerangMaxRange: 5
+  boomerangSize:
+    defaultValue: 0.5
+    min: 0.1
+    max: 5
+    addition: 0
+    multiplier: 1
+    percentage: 100
+    _value: 0.5
 --- !u!212 &1616921369
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3790,98 +4102,155 @@ MonoBehaviour:
     defaultValue: 90
     min: -Infinity
     max: Infinity
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   aimingMult:
     defaultValue: 0.2
     min: 0
     max: 1
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
-  dampening: 0
+  dampening: 5
   attacksPerSecond:
     defaultValue: 20
     min: 0.0001
     max: 60
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   damageStats:
     basic:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     physical:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     heat:
       defaultValue: 5
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     cold:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     radiation:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     acid:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     lightning:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     nanites:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     antimatter:
       defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
   lightningRange:
     defaultValue: 5
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   lightningChains:
     defaultValue: 1
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   lightningSplits:
     defaultValue: 1
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   acidDamagePerSecond:
     defaultValue: 5
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   igniteChance:
     defaultValue: 0
     min: 0
     max: 1
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   fireDuration:
     defaultValue: 3
     min: 0
     max: Infinity
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 3
   armourPierce:
     defaultValue: 0
     min: 0
     max: 10
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   weaponRenderer: {fileID: 1628921159}
   attackPrefab: {fileID: 3762576957301760384, guid: 7988fd1e42e9f0046834635f1001e190, type: 3}
@@ -3892,6 +4261,9 @@ MonoBehaviour:
     defaultValue: 0.2
     min: 0
     max: 100
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   laserRenderer: {fileID: 532202774}
   testAttack: {fileID: 311441506}
@@ -4001,98 +4373,155 @@ MonoBehaviour:
     defaultValue: 90
     min: -Infinity
     max: Infinity
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 90
   aimingMult:
     defaultValue: 0.5
     min: 0
     max: 1
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0.5
-  dampening: 0
+  dampening: 5
   attacksPerSecond:
     defaultValue: 0.5
     min: 0.0001
     max: 60
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 1
   damageStats:
     basic:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     physical:
       defaultValue: 30
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     heat:
       defaultValue: 20
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     cold:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     radiation:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     acid:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     lightning:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     nanites:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     antimatter:
       defaultValue: 0
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
   lightningRange:
     defaultValue: 5
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 5
   lightningChains:
     defaultValue: 1
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 1
   lightningSplits:
     defaultValue: 1
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 1
   acidDamagePerSecond:
     defaultValue: 5
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 5
   igniteChance:
     defaultValue: 0
     min: 0
     max: 1
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   fireDuration:
     defaultValue: 3
     min: 0
     max: Infinity
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 3
   armourPierce:
     defaultValue: 0
     min: 0
     max: 10
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   weaponRenderer: {fileID: 1657685848}
   attackPrefab: {fileID: 8518275168281427132, guid: 0c793e05617bb494cb05d0ca831e29e5, type: 3}
@@ -4101,11 +4530,17 @@ MonoBehaviour:
     defaultValue: 7
     min: 0.01
     max: 1000
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 10
   explosionSize:
     defaultValue: 1.5
     min: 0
     max: 100
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 1
 --- !u!212 &1657685848
 SpriteRenderer:
@@ -4846,7 +5281,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1891033584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4859,106 +5294,163 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc28249c4cbae549aa812696f3f17d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  incompatibleDamageTypes: 0
-  existingDamageTypes: 0
-  playerIndex: 1
+  incompatibleDamageTypes: 256
+  existingDamageTypes: 2
+  playerIndex: 0
   doDirectionSwapping: 0
   moveSpeed:
     defaultValue: 100
     min: -Infinity
     max: Infinity
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   aimingMult:
     defaultValue: 0.5
     min: 0
     max: 1
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
-  dampening: 0
+  dampening: 5
   attacksPerSecond:
     defaultValue: 10
     min: 0.0001
     max: 60
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   damageStats:
     basic:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     physical:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     heat:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     cold:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     radiation:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     acid:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     lightning:
-      defaultValue: 16.6
+      defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     nanites:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
     antimatter:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
+      addition: 0
+      multiplier: 1
+      percentage: 100
       _value: 0
   lightningRange:
     defaultValue: 5
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   lightningChains:
     defaultValue: 0
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   lightningSplits:
     defaultValue: 5
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   acidDamagePerSecond:
     defaultValue: 20
     min: 0
     max: 20
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   igniteChance:
     defaultValue: 0
     min: 0
     max: 1
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   fireDuration:
     defaultValue: 3
     min: 0
     max: Infinity
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 3
   armourPierce:
     defaultValue: 0
     min: 0
     max: 10
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   weaponRenderer: {fileID: 1891033586}
   attackPrefab: {fileID: 8518275168281427132, guid: 170b78ca6b35e794c87e7144dc8dec0d, type: 3}
@@ -4967,11 +5459,17 @@ MonoBehaviour:
     defaultValue: 5
     min: 0
     max: 45
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
   bulletSpeed:
     defaultValue: 10
     min: 0.01
     max: 1000
+    addition: 0
+    multiplier: 1
+    percentage: 100
     _value: 0
 --- !u!212 &1891033586
 SpriteRenderer:
@@ -5032,7 +5530,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1891033583}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.26, y: 0, z: 0}
+  m_LocalPosition: {x: 1.95, y: 0, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children:
   - {fileID: 249289962}
@@ -5629,11 +6127,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd71f6722dd550049a2bd2c13172be43, type: 3}
---- !u!1 &1950458003768298230 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8790155604835710735, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-  m_PrefabInstance: {fileID: 7128508589329186297}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3364543604646910479 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6683694765789104452, guid: a4dfcf855d58f644fadf5cd806b1f322, type: 3}
@@ -5961,6 +6454,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 475108935}
     m_Modifications:
+    - target: {fileID: 5102851163617004104, guid: ed215da6fd960fd4e8ede122d96c9f00, type: 3}
+      propertyPath: _myClass
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5102851163617004106, guid: ed215da6fd960fd4e8ede122d96c9f00, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -6184,6 +6681,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6843059617215851669, guid: a8f3614dec2d31a47ae0b79777f95b5a, type: 3}
+      propertyPath: _myClass
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6843059617215851670, guid: a8f3614dec2d31a47ae0b79777f95b5a, type: 3}
       propertyPath: m_Name
       value: TankBase
@@ -6205,10 +6706,6 @@ PrefabInstance:
       propertyPath: UIRefs.healthBarCanvas
       value: 
       objectReference: {fileID: 1428570012}
-    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
-      propertyPath: effectSettings.antimatterEffectPrefab
-      value: 
-      objectReference: {fileID: 1950458003768298230}
     - target: {fileID: 6896147028492663557, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
       propertyPath: m_RootOrder
       value: 11
@@ -6287,90 +6784,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1681347565}
     m_Modifications:
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: InitialModule.startSpeed.scalar
-      value: 0.02
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: InitialModule.startLifetime.scalar
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: InitialModule.startLifetime.minScalar
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.ctime0
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.ctime1
-      value: 30840
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.ctime2
-      value: 35273
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.ctime3
-      value: 49922
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.b
-      value: 0.071428575
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.g
-      value: 0.071428575
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.r
-      value: 0.071428575
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key2.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key2.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key2.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key3.b
-      value: 0.7019608
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key3.g
-      value: 0.44705886
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key3.r
-      value: 0.13725491
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.m_Mode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428277039649231855, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.m_NumColorKeys
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 8790155604835710733, guid: 81f6af15bb136114ea8177998c837afe, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -6688,6 +7101,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 475108935}
     m_Modifications:
+    - target: {fileID: 8594121849087106520, guid: 5c69a2594dc8fb04d9f049f1ad4adf89, type: 3}
+      propertyPath: _myClass
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8594121849087106521, guid: 5c69a2594dc8fb04d9f049f1ad4adf89, type: 3}
       propertyPath: m_Name
       value: DodgeBase

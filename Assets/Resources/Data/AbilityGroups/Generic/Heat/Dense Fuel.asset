@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Dense Fuel
   m_EditorClassIdentifier: Assembly-CSharp::Ability
   damageType: 3
-  allowedWeapons: 0
+  allowedWeapons: 243
   requireType: 1
   minWave: 1
   maxWave: 20

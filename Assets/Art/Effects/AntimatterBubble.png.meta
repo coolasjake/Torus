@@ -1,37 +1,7 @@
 fileFormatVersion: 2
-guid: 47a43c7387e1ec4408527c780c8998aa
+guid: 9266c4d52bb340d44afd61ce403dc4a2
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 4113849457687764835
-    second: DamageTypeIcons.ss_0
-  - first:
-      213: 3214805707358976743
-    second: DamageTypeIcons.ss_1
-  - first:
-      213: -7249779669193061514
-    second: DamageTypeIcons.ss_2
-  - first:
-      213: -5708795559673269323
-    second: DamageTypeIcons.ss_3
-  - first:
-      213: -7910846880700710768
-    second: DamageTypeIcons.ss_4
-  - first:
-      213: -4354666513494695204
-    second: DamageTypeIcons.ss_5
-  - first:
-      213: -2523840554076638074
-    second: DamageTypeIcons.ss_6
-  - first:
-      213: 6351640292451569842
-    second: DamageTypeIcons.ss_7
-  - first:
-      213: -8731093596301082293
-    second: DamageTypeIcons.ss_8
-  - first:
-      213: 5179441631107587956
-    second: DamageTypeIcons.ss_9
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -71,7 +41,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 0
   alignment: 0
@@ -145,13 +115,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: DamageTypeIcons.ss_0
+      name: Explosion.ss_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
-        height: 16
+        width: 192
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -159,20 +129,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 36f99e02944571930800000000000000
-      internalID: 4113849457687764835
+      spriteID: d71c7938b0c81bb10800000000000000
+      internalID: 1995530090982130045
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DamageTypeIcons.ss_1
+      name: Explosion.ss_1
       rect:
         serializedVersion: 2
-        x: 16
+        x: 192
         y: 0
-        width: 16
-        height: 16
+        width: 192
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -180,20 +150,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7eab70112c84d9c20800000000000000
-      internalID: 3214805707358976743
+      spriteID: 78dd97ee427b25de0800000000000000
+      internalID: -1345811969382687353
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DamageTypeIcons.ss_2
+      name: Explosion.ss_2
       rect:
         serializedVersion: 2
-        x: 32
+        x: 384
         y: 0
-        width: 16
-        height: 16
+        width: 192
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -201,20 +171,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 67b06e54dcb936b90800000000000000
-      internalID: -7249779669193061514
+      spriteID: c183f6e89c1d11fd0800000000000000
+      internalID: -2372884865039255524
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DamageTypeIcons.ss_3
+      name: Explosion.ss_3
       rect:
         serializedVersion: 2
-        x: 48
+        x: 576
         y: 0
-        width: 16
-        height: 16
+        width: 192
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -222,20 +192,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5b3f85a5fa846c0b0800000000000000
-      internalID: -5708795559673269323
+      spriteID: 9642a85a0b2ecb1f0800000000000000
+      internalID: -1027697366627900311
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DamageTypeIcons.ss_4
+      name: Explosion.ss_4
       rect:
         serializedVersion: 2
-        x: 64
+        x: 768
         y: 0
-        width: 16
-        height: 16
+        width: 192
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -243,20 +213,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 090c35beca6073290800000000000000
-      internalID: -7910846880700710768
+      spriteID: 8bad936e2d44e8c20800000000000000
+      internalID: 3210579256958114488
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DamageTypeIcons.ss_5
+      name: Explosion.ss_5
       rect:
         serializedVersion: 2
-        x: 80
+        x: 960
         y: 0
-        width: 16
-        height: 16
+        width: 192
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -264,20 +234,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cd22cd3c0ed1193c0800000000000000
-      internalID: -4354666513494695204
+      spriteID: d44600075740cb2b0800000000000000
+      internalID: -5567570136900017075
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DamageTypeIcons.ss_6
+      name: Explosion.ss_6
       rect:
         serializedVersion: 2
-        x: 96
+        x: 1152
         y: 0
-        width: 16
-        height: 16
+        width: 192
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -285,71 +255,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6847980536489fcd0800000000000000
-      internalID: -2523840554076638074
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: DamageTypeIcons.ss_7
-      rect:
-        serializedVersion: 2
-        x: 112
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2b052ac813f852850800000000000000
-      internalID: 6351640292451569842
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: DamageTypeIcons.ss_8
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b4149cb22ace4d680800000000000000
-      internalID: -8731093596301082293
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: DamageTypeIcons.ss_9
-      rect:
-        serializedVersion: 2
-        x: 144
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 47f990db8b211e740800000000000000
-      internalID: 5179441631107587956
+      spriteID: 9dc3119a702676940800000000000000
+      internalID: 5289304072410709209
       vertices: []
       indices: 
       edges: []

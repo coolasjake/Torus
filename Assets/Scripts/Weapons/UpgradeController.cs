@@ -6,6 +6,7 @@ using TMPro;
 public class UpgradeController : MonoBehaviour
 {
     public Weapon targetWeapon;
+    public int index = 0;
     public string abilityDataFolder = "/AbilityData";
 
     public TMP_Text title;
@@ -14,17 +15,15 @@ public class UpgradeController : MonoBehaviour
 
     //Groups lists are shown in inspector for debugging only
     [SerializeField]
-    private List<AbilityGroup> possibleAbilityGroups = new List<AbilityGroup>();
+    private List<Ability> possibleAbilities = new List<Ability>();
     [SerializeField]
-    private List<AbilityGroup> validGroupPool = new List<AbilityGroup>();
+    private List<Ability> availableAbilities = new List<Ability>();
     [SerializeField]
-    private List<AbilityGroup> chosenGroups = new List<AbilityGroup>();
+    private List<Ability> chosenAbilities = new List<Ability>();
 
-    void Awake()
-    {
-        title.text = targetWeapon.Type().ToString() + " Upgrades";
-        GetAbilityGroups();
-    }
+    private List<Ability> appliedAbilities = new List<Ability>();
+
+    private bool _initialized = false;
 
     public void Hide()
     {
@@ -36,35 +35,53 @@ public class UpgradeController : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    private void GetAbilityGroups()
+    private void GetAbilities()
     {
-        AbilityGroupData[] allGroupData = Resources.LoadAll<AbilityGroupData>(abilityDataFolder);
-        object[] test = Resources.LoadAll(abilityDataFolder);
+        Ability[] allGroupData = Resources.LoadAll<Ability>(abilityDataFolder);
         if (allGroupData.Length == 0)
             Debug.LogError("No abilities found at path: " + abilityDataFolder);
-        foreach (AbilityGroupData groupData in allGroupData)
+        foreach (Ability ability in allGroupData)
         {
-            if ((groupData.allowedWeapons & targetWeapon.Type()) == targetWeapon.Type())
+            //If the ability is for this weapon, and doesn't have an incompatible type, it belongs in either the possible or available list
+            if (ability.allowedWeapons.Includes(targetWeapon.Type()) && targetWeapon.incompatibleDamageTypes.Includes(ability.damageType) == false)
             {
-                possibleAbilityGroups.Add(new AbilityGroup(groupData));
-            }
-        }
-
-        for (int i = 0; i < possibleAbilityGroups.Count; ++i)
-        {
-            if (possibleAbilityGroups[i].data.preReqAbilities.Count == 0)
-            {
-                validGroupPool.Add(possibleAbilityGroups[i]);
-                possibleAbilityGroups.RemoveAt(i--);
+                //Add to available abilities if it has no prerequisites, and is either of a damage type that the weapon has or is allowed to unlock its damage type
+                if (ability.preReqAbilities.Count == 0 && (targetWeapon.existingDamageTypes.Includes(ability.damageType) || ability.requireType == false))
+                    availableAbilities.Add(ability);
+                else
+                    possibleAbilities.Add(ability);
             }
         }
     }
 
     public void StartUpgrading()
     {
+        if (_initialized == false)
+            Initialize();
+
         Show();
         GiveTestPoints();
         ChooseOptions();
+    }
+
+    private void Initialize()
+    {
+        if (targetWeapon == null)
+        {
+            Weapon[] weapons = FindObjectsOfType<Weapon>();
+            foreach (Weapon weapon in weapons)
+            {
+                if (weapon.gameObject.activeInHierarchy && weapon.playerIndex == index)
+                {
+                    targetWeapon = weapon;
+                    break;
+                }
+            }
+        }
+
+        title.text = targetWeapon.Type().ToString() + " Upgrades";
+        GetAbilities();
+        _initialized = true;
     }
 
     private void GiveTestPoints()
@@ -74,33 +91,27 @@ public class UpgradeController : MonoBehaviour
 
     private void ChooseOptions()
     {
-        foreach (AbilityGroup group in chosenGroups)
+        foreach (Ability ability in chosenAbilities)
         {
-            validGroupPool.Add(group);
+            availableAbilities.Add(ability);
         }
 
-        chosenGroups.Clear();
+        chosenAbilities.Clear();
 
         foreach (AbilityUI button in buttons)
         {
-            if (validGroupPool.Count == 0)
+            if (availableAbilities.Count == 0)
             {
                 button.BecomeBlank();
                 continue;
             }
 
-
-            int randIndex = Random.Range(0, validGroupPool.Count);
-            AbilityGroup randomGroup = validGroupPool[randIndex];
-            if (randomGroup.nextAbility == 0)
-            {
-                randIndex = Random.Range(0, validGroupPool.Count);
-                randomGroup = validGroupPool[randIndex];
-            }
-            button.ShowAbility(randomGroup.data.abilities[randomGroup.nextAbility], randomGroup.nextAbility);
+            int randIndex = Random.Range(0, availableAbilities.Count);
+            Ability randomAbility = availableAbilities[randIndex];
+            button.ShowAbility(randomAbility);
             button.gameObject.SetActive(true);
-            chosenGroups.Add(randomGroup);
-            validGroupPool.RemoveAt(randIndex);
+            chosenAbilities.Add(randomAbility);
+            availableAbilities.RemoveAt(randIndex);
         }
 
         CheckHasPoints();
@@ -126,68 +137,97 @@ public class UpgradeController : MonoBehaviour
     public void SelectButton(int buttonIndex)
     {
         //Get group
-        AbilityGroup chosenGroup = chosenGroups[buttonIndex];
+        Ability chosenAbility = chosenAbilities[buttonIndex];
 
         //Remove an upgrade point from the weapon
         if (targetWeapon.UseUpgradePoint() == false)
             return;
 
-        //Apply effects of next ability in group to weapon
-        Ability nextAbility = chosenGroup.data.abilities[chosenGroup.nextAbility];
-        foreach (AbilityEffect effect in nextAbility.effects)
-        {
-            effect.Apply(targetWeapon, nextAbility.name);
-        }
-
-        string abilityName = chosenGroup.data.abilities[chosenGroup.nextAbility].name;
-
-        //Add groups that require this ability to the pool
-        for (int i = 0; i < possibleAbilityGroups.Count; ++i)
-        {
-            if (possibleAbilityGroups[i].data.preReqAbilities.Contains(abilityName))
-            {
-                validGroupPool.Add(possibleAbilityGroups[i]);
-                possibleAbilityGroups.RemoveAt(i--);
-            }
-        }
-
-        //Increment the ability index, and remove this group if it was the last ability in it
-        if (++chosenGroup.nextAbility >= chosenGroup.data.abilities.Count)
-        {
-            chosenGroups.RemoveAt(buttonIndex);
-        }
-
         //Add remaining chosen groups (groups that were a button option) back to the pool
-        foreach (AbilityGroup group in chosenGroups)
+        chosenAbilities.RemoveAt(buttonIndex);
+        foreach (Ability ability in chosenAbilities)
         {
-            validGroupPool.Add(group);
+            availableAbilities.Add(ability);
         }
-        chosenGroups.Clear();
+        chosenAbilities.Clear();
 
-        //Remove groups that are incompatible with this ability from the pool
-        for (int i = 0; i < validGroupPool.Count; ++i)
-        {
-            if (validGroupPool[i].data.incompatibleAbilities.Contains(abilityName))
-                validGroupPool.RemoveAt(i--);
-        }
+        ApplyAbility(chosenAbility);
 
         ChooseOptions();
     }
 
-    [System.Serializable]
-    public class AbilityGroup
+    public void ApplyAbility(Ability chosenAbility)
     {
-        public AbilityGroup(AbilityGroupData Data)
+        //Apply effects of next ability in group to weapon
+        foreach (AbilityEffect effect in chosenAbility.effects)
         {
-            data = Data;
-            name = data.name;
-            nextAbility = 0;
+            effect.Apply(targetWeapon, chosenAbility.name);
         }
 
-        public string name = "";
+        //Add ability to the list of applied abilities (for checking exlusions / prereqs / repeats)
+        appliedAbilities.Add(chosenAbility);
 
-        public AbilityGroupData data;
-        public int nextAbility = 0;
-        public List<int> usedAbilityIndexes = new List<int>();
+        if (chosenAbility.requireType == false)
+        {
+            //Add to existing damage types flag
+            targetWeapon.existingDamageTypes = targetWeapon.existingDamageTypes.PlusType(chosenAbility.damageType);
+
+            //Add incompatible types to incompatible types flag
+            foreach (DamageType type in System.Enum.GetValues(typeof(DamageType)))
+            {
+                if (StaticRefs.DamageTypesAreCompatible(type, chosenAbility.damageType) == false)
+                {
+                    targetWeapon.incompatibleDamageTypes = targetWeapon.incompatibleDamageTypes.PlusType(type);
+                }
+            }
+
+            //Remove abilities that are now impossible due to damage type
+            for (int i = 0; i < possibleAbilities.Count; ++i)
+            {
+                if (targetWeapon.incompatibleDamageTypes.Includes(possibleAbilities[i].damageType))
+                    possibleAbilities.RemoveAt(i--);
+            }
+            for (int i = 0; i < availableAbilities.Count; ++i)
+            {
+                if (targetWeapon.incompatibleDamageTypes.Includes(availableAbilities[i].damageType))
+                    availableAbilities.RemoveAt(i--);
+            }
+        }
+
+        //Remove groups that are incompatible with this ability from the available pool
+        for (int i = 0; i < availableAbilities.Count; ++i)
+        {
+            if (availableAbilities[i].incompatibleAbilities.Contains(chosenAbility.name))
+                availableAbilities.RemoveAt(i--);
+        }
+
+        //Add groups that are now valid to the available pool, and remove incompatible abilites
+        for (int i = 0; i < possibleAbilities.Count; ++i)
+        {
+            if (possibleAbilities[i].incompatibleAbilities.Contains(chosenAbility.name))
+            {
+                possibleAbilities.RemoveAt(i--);
+                continue;
+            }
+
+            //If a possible ability now has all prerequisites and the weapon has it's type unlocked (or it doesn't require the type to be unlocked), add it to the available list
+            if (possibleAbilities[i].requireType == false || targetWeapon.existingDamageTypes.Includes(possibleAbilities[i].damageType))
+            {
+                bool allPrerequisitesUnlocked = true;
+                foreach (string preReqName in possibleAbilities[i].preReqAbilities)
+                {
+                    if (appliedAbilities.Find(X => X.name == preReqName) == false)
+                    {
+                        allPrerequisitesUnlocked = false;
+                        break;
+                    }
+                    if (allPrerequisitesUnlocked)
+                    {
+                        availableAbilities.Add(possibleAbilities[i]);
+                        possibleAbilities.RemoveAt(i--);
+                    }
+                }
+            }
+        }
     }
 }

@@ -8,7 +8,7 @@ public class BoomerangLauncher : Weapon
 {
     public override WeaponType Type()
     {
-        return WeaponType.Railgun;
+        return WeaponType.BoomerangChainsaw;
     }
 
     [Header("BoomerangLauncher Stats")]
