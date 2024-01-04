@@ -26,8 +26,6 @@ public class AbilityEffect
 {
     [Tooltip("Name of the stat or power being effected.")]
     public string name = "";
-    [Tooltip("Larger numbers will be applied later, and override effects of lower numbers")]
-    public int priority = 0;
     public bool isPower = false;
     public StatChangeOperation operation = StatChangeOperation.Multiply;
     public float change = 1f;

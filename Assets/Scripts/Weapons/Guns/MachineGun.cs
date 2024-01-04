@@ -19,19 +19,47 @@ public class MachineGun : Weapon
     //private float fireRateDebit = 0;
 
     private Bullet bulletPrefab;
+    public MG_Fireball fireballPrefab;
+    public ModifiableFloat fireballSplash = new ModifiableFloat(0.5f, 0.01f, 3f);
 
     protected override bool Fire()
     {
         if (Time.time > _lastShot + FireRate)
+        {
+            if (powers[(int)MachineGunPowers.ExtraShot] > 0)
+                ShootProjectile(0);
+
+            if (powers[(int)MachineGunPowers.DoubleShot] > 0)
+            {
+                ShootProjectile(-30f);
+                ShootProjectile(30f);
+            }
+            else
+                ShootProjectile(0);
+            _lastShot = Time.time;
+        }
+        return true;
+    }
+
+    private void ShootProjectile(float angle)
+    {
+        if (powers[(int)MachineGunPowers.Fireballs] > 0)
+        {
+            MG_Fireball fireball = Instantiate(fireballPrefab, firingPoint.position, firingPoint.rotation);
+            Vector2 dir = firingPoint.up;
+            dir = dir.Rotate(angle + Random.Range(-randomSpreadAngle.Value, randomSpreadAngle.Value));
+            fireball.GetComponent<Rigidbody2D>().velocity = dir * bulletSpeed.Value;
+            fireball.machinegun = this;
+            fireball.radius = fireballSplash.Value;
+        }
+        else
         {
             Bullet newBullet = Instantiate(bulletPrefab, firingPoint.position, firingPoint.rotation);
             Vector2 dir = firingPoint.up;
             dir = dir.Rotate(Random.Range(-randomSpreadAngle.Value, randomSpreadAngle.Value));
             newBullet.GetComponent<Rigidbody2D>().velocity = dir * bulletSpeed.Value;
             newBullet.machinegun = this;
-            _lastShot = Time.time;
         }
-        return true;
     }
 
     public void BulletHit(Bullet bullet, Enemy enemy)
@@ -67,6 +95,11 @@ public class MachineGun : Weapon
         }
         else
             Debug.Log("Couldn't find power with name: " + powerName);
+
+        if (power == MachineGunPowers.Fireballs)
+        {
+
+        }
     }
 
     protected override void Setup()
@@ -80,10 +113,10 @@ public class MachineGun : Weapon
         DoubleShot,
         ExtraShot,
         SecondGun,
-        ArmourPierce,
-        EnemiesExplode,
-        ArmourStrip,
+        //ArmourPierce,
+        //EnemiesExplode,
+        //ArmourStrip,
         Fireballs,
-        InstantFreeze,
+        //InstantFreeze,
     }
 }
