@@ -325,7 +325,7 @@ public class Enemy : TorusMotion
     private void AcidDOT()
     {
         if (OnFire && acid > 0)
-            DamageEvents.AcidFireExplosion?.Invoke(this);
+            DamageEvents.AcidFireExplosion(this);
 
         if (acid > 0)
         {
