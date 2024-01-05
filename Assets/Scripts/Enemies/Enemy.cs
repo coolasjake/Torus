@@ -92,7 +92,7 @@ public class Enemy : TorusMotion
                     HideFrozenEffect();
                 _frozen = value;
                 if (OnFire && _frozen)
-                    DamageEvents.IceFire?.Invoke(this);
+                    DamageEvents.FreezeWhileOnFire(this);
             }
         }
     }
@@ -113,9 +113,9 @@ public class Enemy : TorusMotion
             ShowFireEffect();
 
             if (OnFire && _frozen)
-                DamageEvents.IceFire?.Invoke(this);
+                DamageEvents.IgniteWhileFrozen(this);
             if (OnFire && acid > 0)
-                DamageEvents.AcidFireExplosion?.Invoke(this);
+                DamageEvents.AcidFireExplosion(this);
         }
     }
     public void RemoveFire()
@@ -251,7 +251,7 @@ public class Enemy : TorusMotion
             ShowAntimatterEffect();
 
             if (physicalHit || acid > 0 || nanites > 0)
-                DamageEvents.AntimatterExplosion(this);
+                StaticRefs.SpawnAntimatterExplosion(transform.position, this);
         }
         else
         {

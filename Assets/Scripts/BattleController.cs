@@ -17,6 +17,8 @@ public class BattleController : MonoBehaviour
     public List<UpgradeController> upgradeControllers = new List<UpgradeController>();
     public EnemySpawner enemySpawner;
 
+    public bool getAbilityOnStart = false;
+
     void Start()
     {
         if (singleton != null)
@@ -27,7 +29,10 @@ public class BattleController : MonoBehaviour
 
         ShowStationDamage();
 
-        StartCombat();
+        if (getAbilityOnStart)
+            EndWave();
+        else
+            StartCombat();
     }
 
     public static void BecomeReady(UpgradeController player)

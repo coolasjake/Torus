@@ -1030,6 +1030,7 @@ Transform:
   - {fileID: 1545491557}
   - {fileID: 7059491000917389812}
   - {fileID: 3364543604646910479}
+  - {fileID: 1385598040}
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1227,7 +1228,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 475108935}
     m_Modifications:
     - target: {fileID: 2197475484593596105, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
       propertyPath: m_Name
@@ -1235,11 +1236,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2197475484593596107, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 2197475484593596107, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.1290007
+      value: -12.329
       objectReference: {fileID: 0}
     - target: {fileID: 2197475484593596107, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1373,7 +1374,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetWeapon: {fileID: 0}
   index: 0
-  abilityDataFolder: Data/AbilityGroups
+  abilityDataFolder: Data/Abilities
   title: {fileID: 1217850294}
   buttons:
   - {fileID: 928874878}
@@ -1412,7 +1413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 274ddc85ba3be794a9fc0607b67001c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  incompatibleDamageTypes: 74
+  incompatibleDamageTypes: 0
   existingDamageTypes: 256
   playerIndex: 1
   doDirectionSwapping: 0
@@ -2831,6 +2832,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1385598040 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2197475484593596107, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
+  m_PrefabInstance: {fileID: 545196238}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1387043170
 GameObject:
   m_ObjectHideFlags: 0
@@ -3281,7 +3287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetWeapon: {fileID: 0}
   index: 1
-  abilityDataFolder: Data/AbilityGroups
+  abilityDataFolder: Data/Abilities
   title: {fileID: 369956121}
   buttons:
   - {fileID: 296145541}
@@ -5471,6 +5477,15 @@ MonoBehaviour:
     multiplier: 1
     percentage: 100
     _value: 0
+  fireballPrefab: {fileID: 0}
+  fireballSplash:
+    defaultValue: 0.5
+    min: 0.01
+    max: 3
+    addition: 0
+    multiplier: 1
+    percentage: 100
+    _value: 0.5
 --- !u!212 &1891033586
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6762,6 +6777,10 @@ PrefabInstance:
       propertyPath: spaceStation
       value: 
       objectReference: {fileID: 1442570269}
+    - target: {fileID: 6896147028492663563, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: getAbilityOnStart
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6896147028492663563, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
       propertyPath: upgradeControllers.Array.data[0]
       value: 

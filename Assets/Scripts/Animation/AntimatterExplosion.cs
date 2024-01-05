@@ -6,7 +6,7 @@ public class AntimatterExplosion : MonoBehaviour
 {
     public Weapon triggerWeapon;
     public Animator animator;
-    public float targetSize = 0;
+    public float targetSize = 1f;
     public float growSpeed = 2f;
 
     public float minSize = 0.3f;
@@ -16,15 +16,8 @@ public class AntimatterExplosion : MonoBehaviour
     public float testAntimatter = 10f;
 
     private float size = 0f;
-    private float totalAntimatter = 0f;
-    public float StartingAntimatter
-    {
-        set
-        {
-            targetSize = CalculateSize(value);
-            totalAntimatter = value;
-        }
-    }
+    [HideInInspector]
+    public float totalAntimatter = 0f;
 
     private bool animatingExplosion = false;
 
@@ -33,6 +26,9 @@ public class AntimatterExplosion : MonoBehaviour
     {
         if (animatingExplosion)
             return;
+
+        if (targetSize <= 0)
+            targetSize = CalculateSize(totalAntimatter);
 
         if (size >= targetSize)
         {
@@ -47,12 +43,9 @@ public class AntimatterExplosion : MonoBehaviour
             if (enemy)
             {
                 if (animatingExplosion)
-                    enemy.ReduceHealthBy(enemy.Class == EnemyClass.tank ? totalAntimatter * 0.5f : totalAntimatter, triggerWeapon);
+                    this.DealAntimatterDamageTo(enemy);
                 else if (enemy.antimatter > 0)
-                {
-                    totalAntimatter += enemy.antimatter;
-                    enemy.antimatter = 0;
-                }
+                    this.CollectAntimatterFrom(enemy);
             }
         }
 
