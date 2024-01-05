@@ -45,18 +45,18 @@ public class MachineGun : Weapon
     {
         if (powers[(int)MachineGunPowers.Fireballs] > 0)
         {
-            MG_Fireball fireball = Instantiate(fireballPrefab, firingPoint.position, firingPoint.rotation);
             Vector2 dir = firingPoint.up;
             dir = dir.Rotate(angle + Random.Range(-randomSpreadAngle.Value, randomSpreadAngle.Value));
+            MG_Fireball fireball = Instantiate(fireballPrefab, firingPoint.position, Quaternion.LookRotation(Vector3.forward, dir));
             fireball.GetComponent<Rigidbody2D>().velocity = dir * bulletSpeed.Value;
             fireball.machinegun = this;
             fireball.radius = fireballSplash.Value;
         }
         else
         {
-            Bullet newBullet = Instantiate(bulletPrefab, firingPoint.position, firingPoint.rotation);
             Vector2 dir = firingPoint.up;
-            dir = dir.Rotate(Random.Range(-randomSpreadAngle.Value, randomSpreadAngle.Value));
+            dir = dir.Rotate(angle + Random.Range(-randomSpreadAngle.Value, randomSpreadAngle.Value));
+            Bullet newBullet = Instantiate(bulletPrefab, firingPoint.position, Quaternion.LookRotation(Vector3.forward, dir));
             newBullet.GetComponent<Rigidbody2D>().velocity = dir * bulletSpeed.Value;
             newBullet.machinegun = this;
         }
