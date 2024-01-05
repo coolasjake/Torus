@@ -90,7 +90,6 @@ public class MissileLauncher : Weapon
     {
         missilePrefab = attackPrefab.GetComponent<Missile>();
         powers = new int[Enum.GetNames(typeof(MissileLauncherPowers)).Length];
-        SetupDamageTypes();
     }
 
     private enum MissileLauncherPowers

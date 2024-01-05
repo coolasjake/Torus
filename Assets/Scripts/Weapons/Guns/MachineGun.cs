@@ -106,7 +106,6 @@ public class MachineGun : Weapon
     {
         bulletPrefab = attackPrefab.GetComponent<Bullet>();
         powers = new int[Enum.GetNames(typeof(MachineGunPowers)).Length];
-        SetupDamageTypes();
     }
 
     private enum MachineGunPowers {

@@ -41,21 +41,6 @@ public class UpgradeController : MonoBehaviour
         if (allGroupData.Length == 0)
             Debug.LogError("No abilities found at path: " + abilityDataFolder);
 
-        //Calculate incompatible types based on existing types on weapon (mostly useful for lazy testers)
-        foreach (DamageType existingType in System.Enum.GetValues(typeof(DamageType)))
-        {
-            if (targetWeapon.existingDamageTypes.Includes(existingType))
-            {
-                foreach (DamageType otherType in System.Enum.GetValues(typeof(DamageType)))
-                {
-                    if (StaticRefs.DamageTypesAreCompatible(existingType, otherType) == false)
-                    {
-                        targetWeapon.incompatibleDamageTypes = targetWeapon.incompatibleDamageTypes.PlusType(otherType);
-                    }
-                }
-            }
-        }
-
         foreach (Ability ability in allGroupData)
         {
             //If the ability is for this weapon, and doesn't have an incompatible type, it belongs in either the possible or available list
@@ -95,9 +80,25 @@ public class UpgradeController : MonoBehaviour
             }
         }
 
+        SetupDamageTypes();
+
         title.text = targetWeapon.Type().ToString() + " Upgrades";
         GetAbilities();
         _initialized = true;
+    }
+
+    private void SetupDamageTypes()
+    {
+        foreach (DamageType damageType in System.Enum.GetValues(typeof(DamageType)))
+        {
+            if (damageType == DamageType.none || damageType == DamageType.basic)
+                continue;
+
+            targetWeapon.damageStats.ModifyDamage(damageType, "Starting Value", StatChangeOperation.Percentage, -100f);
+
+            if (targetWeapon.existingDamageTypes.Includes(damageType))
+                ApplyAbility(StaticRefs.DefaultAbility(damageType));
+        }
     }
 
     private void GiveTestPoints()
@@ -125,6 +126,16 @@ public class UpgradeController : MonoBehaviour
             int randIndex = Random.Range(0, availableAbilities.Count);
             Ability randomAbility = availableAbilities[randIndex];
             button.ShowAbility(randomAbility);
+            if (randomAbility.maxRepeats > 0)
+            {
+                int count = 0;
+                foreach (Ability ability in appliedAbilities)
+                {
+                    if (ability.name == randomAbility.name)
+                        count += 1;
+                }
+                button.nameText.text = button.nameText.text + (count + 1);
+            }
             button.gameObject.SetActive(true);
             chosenAbilities.Add(randomAbility);
             availableAbilities.RemoveAt(randIndex);
@@ -159,8 +170,8 @@ public class UpgradeController : MonoBehaviour
         if (targetWeapon.UseUpgradePoint() == false)
             return;
 
-        //Add remaining chosen groups (groups that were a button option) back to the pool
-        chosenAbilities.RemoveAt(buttonIndex);
+        //Add remaining chosen abilities (abilities that were a button option) back to the pool
+        //chosenAbilities.RemoveAt(buttonIndex);
         foreach (Ability ability in chosenAbilities)
         {
             availableAbilities.Add(ability);
@@ -183,7 +194,28 @@ public class UpgradeController : MonoBehaviour
         //Add ability to the list of applied abilities (for checking exlusions / prereqs / repeats)
         appliedAbilities.Add(chosenAbility);
 
-        if (chosenAbility.requireType == false)
+        //If the ability has been repeated less than its max repeats, add it back to the pool, otherwise remove it
+        if (chosenAbility.maxRepeats > 0)
+        {
+            int count = 0;
+            foreach (Ability ability in appliedAbilities)
+            {
+                if (ability.name == chosenAbility.name)
+                    count += 1;
+            }
+            if (count > chosenAbility.maxRepeats)
+            {
+                availableAbilities.Remove(chosenAbility);
+                possibleAbilities.Remove(chosenAbility);
+            }
+        }
+        else
+        {
+            availableAbilities.Remove(chosenAbility);
+            possibleAbilities.Remove(chosenAbility);
+        }
+
+        if (chosenAbility.requireType == false && chosenAbility.damageType != DamageType.none)
         {
             //Add to existing damage types flag
             targetWeapon.existingDamageTypes = targetWeapon.existingDamageTypes.PlusType(chosenAbility.damageType);

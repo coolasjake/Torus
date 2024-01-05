@@ -27,9 +27,8 @@ public class Enemy : TorusMotion
     public float Health => _health;
 
     /// <summary> Reduce the health of the enemy after applying tank ability and rounding up to 1, then show changes on the healthbar. </summary>
-    public void ReduceHealthBy(float damage, Weapon hitBy)
+    public void ReduceHealthBy(float damage)
     {
-        lastHitBy = hitBy;
         Damage(damage);
         healthBar.Hit(_health / MaxHealth);
     }
@@ -69,7 +68,7 @@ public class Enemy : TorusMotion
     public bool lightningStruck = false;
     //private float _lastLightningStruck = 0f;
     [HideInInspector]
-    public bool physicalHit = false;
+    public bool triggerAntimatter = false;
 
     [HideInInspector]
     public int armourDebuffs = 0;
@@ -105,11 +104,9 @@ public class Enemy : TorusMotion
     {
         duration = Mathf.Max(duration, Time.fixedDeltaTime);
         duration = Mathf.Max(duration, _onFireUntil - Time.time);
-        _onFireUntil = Time.time + duration;
-        if (temperature < data.restingTemp)
-            RemoveFire();
-        else
+        if (temperature > data.restingTemp)
         {
+            _onFireUntil = Time.time + duration;
             ShowFireEffect();
 
             if (OnFire && _frozen)
@@ -120,7 +117,7 @@ public class Enemy : TorusMotion
     }
     public void RemoveFire()
     {
-        _onFireUntil = -1;
+        _onFireUntil = Mathf.Min(_onFireUntil, Time.time);
         HideFireEffect();
     }
 
@@ -137,7 +134,7 @@ public class Enemy : TorusMotion
     }
     /// <summary> Tick damage of the most powerful acid effect applied. </summary>
     [HideInInspector]
-    public float acidDPS = 1;
+    public float acidDPS = 1f;
     private float _lastAcidTick = 0;
     private float _lastTempTick = 0;
     private float _lastNanitesTick = 0;
@@ -228,7 +225,7 @@ public class Enemy : TorusMotion
         AcidDOT();
         RadDOT();
         lightningStruck = false;
-        physicalHit = false;
+        triggerAntimatter = false;
 
         UpdateTempEffect();
 
@@ -250,7 +247,7 @@ public class Enemy : TorusMotion
         {
             ShowAntimatterEffect();
 
-            if (physicalHit || acid > 0 || nanites > 0)
+            if (triggerAntimatter || acid > 0 || nanites > 0)
                 StaticRefs.SpawnAntimatterExplosion(transform.position, this);
         }
         else
@@ -265,14 +262,11 @@ public class Enemy : TorusMotion
         {
             ShowNanitesEffect();
 
-            float damageCutoff = MaxHealth * StaticRefs.NanitesCutoff;
-            if (_health <= damageCutoff || StaticRefs.DoNanitesTick(_lastNanitesTick, _frozen) == false)
-                return;
-
-            _lastNanitesTick = Time.time;
-
-            //Note: DOT effects are effected by resistances when applied, not when dealing damage
-            DOTDamage(Mathf.Min(nanites * (_health / MaxHealth) * StaticRefs.NanitesTickRate, _health - damageCutoff));
+            if (StaticRefs.DoNanitesTick(_lastNanitesTick, _frozen))
+            {
+                _lastNanitesTick = Time.time;
+                DamageEvents.Nanites.DamageTick(this);
+            }
         }
         else
         {
@@ -295,7 +289,7 @@ public class Enemy : TorusMotion
             RemoveFire();
 
         if (OnFire)
-            temperature += 10f * StaticRefs.TempTickRate;
+            DamageEvents.Heat.FireDamage(this);
 
         //Note: DOT effects are effected by resistances when applied, not when dealing damage
         if (data.damageFromHot && temperature > data.maxSafeTemp)
@@ -349,6 +343,7 @@ public class Enemy : TorusMotion
         else
         {
             _lastAcidTick = Time.time;
+            acidDPS = 1;
             HideAcidEffect();
         }
     }
@@ -385,13 +380,23 @@ public class Enemy : TorusMotion
 
     private void UpdateTempEffect()
     {
-        if (temperature >= data.restingTemp)
+        float normTemp = NormalisedTemp;
+        if (normTemp >= 0)
+            _tempEffectSR.color = StaticRefs.HotColour(normTemp);
+        else
+            _tempEffectSR.color = StaticRefs.ColdColour(-normTemp);
+    }
+
+    /// <summary> Temperature of the enemy normalised so that -1 = frozen, 0 = resting, 1 = heat damage (can go above/below 1/-1). </summary>
+    public float NormalisedTemp
+    {
+        get
         {
-            _tempEffectSR.color = StaticRefs.HotColour((temperature - data.restingTemp) / data.maxSafeTemp);
-        }
-        else if (temperature < data.restingTemp)
-        {
-            _tempEffectSR.color = StaticRefs.ColdColour(((temperature - data.restingTemp) / data.freezeTemp));
+            if (temperature >= data.restingTemp)
+            {
+                return (temperature - data.restingTemp) / data.maxSafeTemp;
+            }
+            return -(temperature - data.restingTemp) / data.freezeTemp;
         }
     }
 

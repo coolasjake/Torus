@@ -92,7 +92,6 @@ public class Flamethrower : Weapon
     {
         flamePrefab = attackPrefab.GetComponent<Flame>();
         powers = new int[Enum.GetNames(typeof(MachineGunPowers)).Length];
-        SetupDamageTypes();
     }
 
     private enum MachineGunPowers {

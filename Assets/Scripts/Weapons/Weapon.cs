@@ -141,100 +141,69 @@ public abstract class Weapon : TorusMotion
 
     protected virtual void WeaponFixedUpdate() { }
 
-    protected virtual void AssignDefaultEvents()
-    {
-        lightningDamageEvent += NormalLightningDamage;
-    }
-
-    public virtual void AddModifier(string statName, string modifierName, StatChangeOperation operation, float value)
-    {
-        statName = statName.ToLower();
-        if (statName.Contains(" power"))
-        {
-            string simplifiedName = statName.Replace(" power", "");
-            DamageType damageType;
-            if (Enum.TryParse(simplifiedName, out damageType))
-            {
-                damageStats.ModifyDamage(damageType, modifierName, operation, value);
-                return;
-            }
-        }
-
-        switch (statName)
-        {
-            case "move speed":
-                moveSpeed.AddModifier(modifierName, value, operation);
-                return;
-            case "aiming mult":
-                aimingMult.AddModifier(modifierName, value, operation);
-                return;
-            case "fire rate":
-                attacksPerSecond.AddModifier(modifierName, value, operation);
-                return;
-            case "acid damage":
-                acidDamagePerSecond.AddModifier(modifierName, value, operation);
-                return;
-            case "armour pierce":
-                armourPierce.AddModifier(modifierName, value, operation);
-                return;
-            case "ignite chance":
-                igniteChance.AddModifier(modifierName, value, operation);
-                return;
-            case "fire duration":
-                fireDuration.AddModifier(modifierName, value, operation);
-                return;
-            case "lightning range":
-                lightningRange.AddModifier(modifierName, value, operation);
-                return;
-        }
-
-        Debug.Log("Couldn't find stat with name: " + statName);
-    }
-
-    public abstract void UnlockPower(string powerName, int level);
-
     public void DefaultHit(Enemy enemy)
     {
-        NormalBasicDamage(enemy);
-        NormalAntimatterDamage(enemy);
-        NormalAcidDamage(enemy);
-        NormalNanitesDamage(enemy);
-        NormalRadiationDamage(enemy);
-        NormalPhysicalDamage(enemy);
-        NormalHeatDamage(enemy);
-        NormalColdDamage(enemy);
-        NormalLightningChain(enemy);
-
-        enemy.lastHitBy = this;
-        //if (enemy.Health <= 0)
-        //    KillEnemy(enemy);
+        BasicHit?.Invoke(enemy);
+        AntimatterHit?.Invoke(enemy);
+        NanitesHit?.Invoke(enemy);
+        AcidHit?.Invoke(enemy);
+        RadiationHit?.Invoke(enemy);
+        PhysicalHit?.Invoke(enemy);
+        HeatHit?.Invoke(enemy);
+        ColdHit?.Invoke(enemy);
+        LightningHit?.Invoke(enemy);
     }
 
-    protected void NormalBasicDamage(Enemy enemy)
+    protected EnemyHit BasicHit;
+    protected EnemyHit PhysicalHit;
+    protected EnemyHit HeatHit;
+    protected EnemyHit ColdHit;
+    protected EnemyHit LightningHit;
+    protected EnemyHit RadiationHit;
+    protected EnemyHit AcidHit;
+    protected EnemyHit NanitesHit;
+    protected EnemyHit AntimatterHit;
+
+    /*
+    protected delegate float EffectCalc(DamageType damageType, Enemy enemy);
+    protected EffectCalc ArmourMultiplier;
+    protected float ArmourDamageMultiplier(DamageType type, Enemy enemy)
+    {
+        if (type == DamageType.basic)
+            return 1f;
+
+        //Reduce damage by 5% per armour level
+        float multiplier;
+        if (type == DamageType.physical)
+            multiplier = 1f - (Mathf.Clamp(enemy.Armour - armourPierce.Value, 0, 10) * 0.09f);
+        else
+            multiplier = 1f - (Mathf.Clamp(enemy.Armour - armourPierce.Value, 0, 10) * 0.05f);
+        return multiplier;
+    }
+    */
+
+    protected void NormalBasicHit(Enemy enemy)
     {
         if (damageStats.basic.Value == 0)
             return;
         //Basic Damage
-        enemy.ReduceHealthBy(damageStats.basic.Value, this);
+        enemy.lastHitBy = this;
+        enemy.ReduceHealthBy(damageStats.basic.Value);
     }
 
-    protected void NormalPhysicalDamage(Enemy enemy)
+    protected void NormalPhysicalHit(Enemy enemy)
     {
         if (damageStats.physical.Value == 0)
             return;
 
         //Physical Damage
         float physicalDamage = DamageAfterArmour(enemy.Armour, DamageType.physical);
-        if (enemy.acid > 0)
-            physicalDamage -= 1f;
-        if (enemy.Frozen)
-            physicalDamage *= 2f;
         physicalDamage *= enemy.ResistanceMult(DamageType.physical);
-        enemy.ReduceHealthBy(physicalDamage, this);
-        enemy.physicalHit = true;
+        enemy.lastHitBy = this;
+        DamageEvents.Physical.DamageEnemy(physicalDamage, enemy);
     }
 
-    protected void NormalHeatDamage(Enemy enemy)
+    protected void NormalHeatHit(Enemy enemy)
     {
         if (damageStats.heat.Value == 0 && igniteChance.Value == 0)
             return;
@@ -242,7 +211,8 @@ public abstract class Weapon : TorusMotion
         //Heat Damage
         float heatDamage = DamageAfterArmour(enemy.Armour, DamageType.heat);
         heatDamage *= enemy.ResistanceMult(DamageType.heat);
-        enemy.ChangeTemp(heatDamage);
+        enemy.lastHitBy = this;
+        DamageEvents.Heat.HeatEnemy(heatDamage, enemy);
 
         if (Random.value < igniteChance.Value)
         {
@@ -250,7 +220,7 @@ public abstract class Weapon : TorusMotion
         }
     }
 
-    protected void NormalColdDamage(Enemy enemy)
+    protected void NormalColdHit(Enemy enemy)
     {
         if (damageStats.cold.Value == 0)
             return;
@@ -258,10 +228,11 @@ public abstract class Weapon : TorusMotion
         //Heat Damage
         float coldDamage = DamageAfterArmour(enemy.Armour, DamageType.cold);
         coldDamage *= enemy.ResistanceMult(DamageType.cold);
-        enemy.ChangeTemp(-coldDamage);
+        enemy.lastHitBy = this;
+        DamageEvents.Cold.ChillEnemy(coldDamage, enemy);
     }
 
-    protected void NormalLightningChain(Enemy enemy)
+    protected void NormalLightningHit(Enemy enemy)
     {
         if (damageStats.lightning.Value == 0)
             return;
@@ -311,56 +282,54 @@ public abstract class Weapon : TorusMotion
     {
         float lightningDamage = DamageAfterArmour(enemy.Armour, DamageType.lightning);
         lightningDamage *= enemy.ResistanceMult(DamageType.lightning);
-        if (enemy.acid > 0)
-            lightningDamage *= 2f;
-        if (enemy.nanites > 0)
-            lightningDamage += DamageEvents.NanitesLightningBonus(enemy);
-        enemy.ReduceHealthBy(lightningDamage, this);
+        enemy.lastHitBy = this;
+        DamageEvents.Lightning.StrikeEnemy(lightningDamage, enemy);
     }
 
     protected EnemyHit lightningDamageEvent;
 
-    protected void NormalRadiationDamage(Enemy enemy)
+    protected void NormalRadiationHit(Enemy enemy)
     {
         if (damageStats.radiation.Value == 0)
             return;
 
         float radiationDamage = DamageAfterArmour(enemy.Armour, DamageType.radiation);
         radiationDamage *= enemy.ResistanceMult(DamageType.radiation);
-        enemy.radiation += radiationDamage;
+        enemy.lastHitBy = this;
+        DamageEvents.Radiation.IrradiateEnemy(radiationDamage, enemy);
     }
 
-    protected void NormalAcidDamage(Enemy enemy)
+    protected void NormalAcidHit(Enemy enemy)
     {
         if (damageStats.acid.Value == 0)
             return;
 
         float acidStack = DamageAfterArmour(enemy.Armour, DamageType.acid);
         acidStack *= enemy.ResistanceMult(DamageType.acid);
-        enemy.acid += acidStack;
-        enemy.SetAcidDPS(acidDamagePerSecond.Value);
-        enemy.physicalHit = true;
+        enemy.lastHitBy = this;
+        DamageEvents.Acid.SplashEnemy(acidStack, acidDamagePerSecond.Value, enemy);
     }
 
-    protected void NormalNanitesDamage(Enemy enemy)
+    protected void NormalNanitesHit(Enemy enemy)
     {
         if (damageStats.nanites.Value == 0)
             return;
 
         float nanitesDamage = DamageAfterArmour(enemy.Armour, DamageType.nanites);
         nanitesDamage *= enemy.ResistanceMult(DamageType.nanites);
-        enemy.nanites += nanitesDamage;
-        enemy.physicalHit = true;
+        enemy.lastHitBy = this;
+        DamageEvents.Nanites.SwarmEnemy(nanitesDamage, enemy);
     }
 
-    protected void NormalAntimatterDamage(Enemy enemy)
+    protected void NormalAntimatterHit(Enemy enemy)
     {
         if (damageStats.antimatter.Value == 0)
             return;
 
         float antimatterDamage = DamageAfterArmour(enemy.Armour, DamageType.antimatter);
         antimatterDamage *= enemy.ResistanceMult(DamageType.antimatter);
-        enemy.antimatter += antimatterDamage;
+        enemy.lastHitBy = this;
+        DamageEvents.Antimatter.CoatEnemy(antimatterDamage, enemy);
     }
 
     protected float DamageAfterArmour(int armourLevel, DamageType type)
@@ -411,16 +380,100 @@ public abstract class Weapon : TorusMotion
         return false;
     }
 
-    protected void SetupDamageTypes()
+    protected virtual void AssignDefaultEvents()
     {
-        foreach (DamageType damageType in Enum.GetValues(typeof(DamageType)))
-        {
-            if (damageType == DamageType.none)
-                continue;
-            if (existingDamageTypes.Includes(damageType) == false)
-                damageStats.ModifyDamage(damageType, Type().ToString(), StatChangeOperation.Percentage, -100f);
-        }
+        BasicHit = NormalBasicHit;
+        PhysicalHit = NormalPhysicalHit;
+        HeatHit = NormalHeatHit;
+        ColdHit = NormalColdHit;
+        LightningHit = NormalLightningHit;
+        RadiationHit = NormalRadiationHit;
+        AcidHit = NormalAcidHit;
+        NanitesHit = NormalNanitesHit;
+        AntimatterHit = NormalAntimatterHit;
+
+
+        lightningDamageEvent += NormalLightningDamage;
     }
+
+    public virtual void AddModifier(string statName, string modifierName, StatChangeOperation operation, float value)
+    {
+        statName = statName.ToLower();
+        if (statName.Contains(" power"))
+        {
+            string simplifiedName = statName.Replace(" power", "");
+            DamageType damageType;
+            if (Enum.TryParse(simplifiedName, out damageType))
+            {
+                damageStats.ModifyDamage(damageType, modifierName, operation, value);
+                return;
+            }
+        }
+
+        switch (statName)
+        {
+            case "move speed":
+                moveSpeed.AddModifier(modifierName, value, operation);
+                return;
+            case "aiming mult":
+                aimingMult.AddModifier(modifierName, value, operation);
+                return;
+            case "fire rate":
+                attacksPerSecond.AddModifier(modifierName, value, operation);
+                return;
+            case "armour pierce":
+                armourPierce.AddModifier(modifierName, value, operation);
+                return;
+            //Heat upgrades
+            case "ignite chance":
+                igniteChance.AddModifier(modifierName, value, operation);
+                return;
+            case "fire duration":
+                fireDuration.AddModifier(modifierName, value, operation);
+                return;
+            case "hotter fire":
+                DamageEvents.HeatStats.hotterFire += 1;
+                return;
+            //Lightning upgrades
+            case "lightning range":
+                lightningRange.AddModifier(modifierName, value, operation);
+                return;
+            case "lightning chains":
+                lightningChains.AddModifier(modifierName, value, operation);
+                return;
+            case "lightning splits":
+                lightningSplits.AddModifier(modifierName, value, operation);
+                return;
+            //Acid upgrades
+            case "acid damage":
+                acidDamagePerSecond.AddModifier(modifierName, value, operation);
+                return;
+            case "conductive acid":
+                DamageEvents.AcidStats.conductiveAcid = true;
+                return;
+            //Cold upgrades
+            case "early freeze":
+                DamageEvents.ColdStats.earlyFreeze += 1;
+                return;
+            case "tempered ice":
+                DamageEvents.ColdStats.temperedIce = true;
+                return;
+            case "crystal refraction":
+                DamageEvents.ColdStats.refraction += 1;
+                return;
+            case "violent shattering":
+                DamageEvents.ColdStats.refraction += 1;
+                return;
+            //Nanites upgrades
+            case "self replication":
+                DamageEvents.NanitesStats.selfReplication += 1;
+                return;
+        }
+
+        Debug.Log("Couldn't find stat with name: " + statName);
+    }
+
+    public abstract void UnlockPower(string powerName, int level);
 }
 
 [System.Serializable]

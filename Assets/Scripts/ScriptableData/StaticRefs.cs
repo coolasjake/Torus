@@ -24,18 +24,6 @@ public class StaticRefs : MonoBehaviour
     [SerializeField]
     private LayerMask attackMask;
     public static LayerMask AttackMask => singleton.attackMask;
-    [EnumNamedArray(typeof(DamageType))]
-    public DamageTypeFlags[] typeCompatibilities = new DamageTypeFlags[System.Enum.GetNames(typeof(DamageType)).Length];
-
-    /// <summary> Check if type A is allowed with type B (order will matter if type compatabilities are not symetrical). </summary>
-    public static bool DamageTypesAreCompatible(DamageType typeA, DamageType typeB)
-    {
-        return singleton.typeCompatibilities[(int)typeB].Includes(typeA);
-    }
-
-    [SerializeField]
-    private float boostStartingHeight = 6f;
-    public static float BoostStartingHeight => singleton.boostStartingHeight;
 
     [SerializeField]
     private GameObject stationExplosionPrefab;
@@ -48,7 +36,6 @@ public class StaticRefs : MonoBehaviour
             explosion.transform.localScale = new Vector3(maxSize, maxSize, maxSize);
         }
     }
-
 
     [Header("UI and Effects")]
 
@@ -225,6 +212,11 @@ public class StaticRefs : MonoBehaviour
     public static float BaseSpeed => singleton.baseEnemySpeed;
     public static float DodgeDist => singleton.dodgeDist;
 
+    /// <summary> The height that fast enemies start boosting (using their ability to move faster) at. </summary>
+    [SerializeField]
+    private float boostStartingHeight = 6f;
+    public static float BoostStartingHeight => singleton.boostStartingHeight;
+
     [Header("Controls Settings")]
     [SerializeField]
     [Min(-90f)]
@@ -240,6 +232,12 @@ public class StaticRefs : MonoBehaviour
     [System.Serializable]
     public class InspectorClass_DamageSettings
     {
+        [EnumNamedArray(typeof(DamageType))]
+        public DamageTypeFlags[] typeCompatibilities = new DamageTypeFlags[System.Enum.GetNames(typeof(DamageType)).Length];
+
+        [EnumNamedArray(typeof(DamageType))]
+        public Ability[] defaultAbilitiesForTypes = new Ability[System.Enum.GetNames(typeof(DamageType)).Length];
+
         [Min(0)]
         [Tooltip("Controls how often acid deals damage.")]
         public float timeBetweenAcidTicks = 0.2f;
@@ -258,6 +256,19 @@ public class StaticRefs : MonoBehaviour
         [Min(0)]
         [Tooltip("Value of radiation at which double damage and other effects trigger.")]
         public float criticalMassThreshold = 100f;
+    }
+
+    /// <summary> Check if type A is allowed with type B (order will matter if type compatabilities are not symetrical). </summary>
+    public static bool DamageTypesAreCompatible(DamageType typeA, DamageType typeB)
+    {
+        return singleton.damageSettings.typeCompatibilities[(int)typeB].Includes(typeA);
+    }
+
+    /// <summary> Check if type A is allowed with type B (order will matter if type compatabilities are not symetrical). </summary>
+    public static Ability DefaultAbility(DamageType damageType)
+    {
+        int typeAsInt = Mathf.Clamp((int)damageType, 0, singleton.damageSettings.defaultAbilitiesForTypes.Length - 1);
+        return singleton.damageSettings.defaultAbilitiesForTypes[typeAsInt];
     }
 
     public static bool DoAcidTick(float lastTick)

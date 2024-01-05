@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "Ability", menuName = "ScriptableObjects/Ability", order = 1)]
 public class Ability : ScriptableObject
@@ -26,14 +26,14 @@ public class AbilityEffect
 {
     [Tooltip("Name of the stat or power being effected.")]
     public string name = "";
-    public bool isPower = false;
+    public bool isWeaponPower = false;
     public StatChangeOperation operation = StatChangeOperation.Multiply;
     public float change = 1f;
 
     public void Apply(Weapon weapon, string abilityName)
     {
         Debug.Log("Applying " + name);
-        if (isPower)
+        if (isWeaponPower)
             weapon.UnlockPower(name, (int)change);
         else
             weapon.AddModifier(name, abilityName, operation, change);

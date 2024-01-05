@@ -70,7 +70,7 @@ public class FreezeRay : Weapon
 
     public override void UnlockPower(string powerName, int level)
     {
-        BigLaserPowers power;
+        FreezeRayPowers power;
         if (Enum.TryParse(powerName, out power))
         {
             powers[(int)power] = level;
@@ -87,10 +87,10 @@ public class FreezeRay : Weapon
             GameObject laser = Instantiate(attackPrefab, transform);
             rayRenderer = laser.GetComponent<SpriteRenderer>();
         }
-        SetupDamageTypes();
+        powers = new int[Enum.GetNames(typeof(FreezeRayPowers)).Length];
     }
 
-    private enum BigLaserPowers
+    private enum FreezeRayPowers
     {
         AimLaser,
         HardeningRadiation,

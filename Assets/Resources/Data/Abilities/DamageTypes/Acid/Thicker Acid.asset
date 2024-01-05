@@ -10,13 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b24d2c40d1402841b8d2e98b1177a0b, type: 3}
-  m_Name: Curing Radiation
+  m_Name: Thicker Acid
   m_EditorClassIdentifier: Assembly-CSharp::Ability
-  description: Radiation effects of this weapon are stronger and will harden glue,
-    boosting physical damage and slowing the enemy more.
+  damageType: 7
+  allowedWeapons: -1
+  requireType: 1
+  minWave: 1
+  maxWave: 20
+  maxRepeats: 0
+  rarity: 0
+  description: Acid stays on your attacks and the enemy better (apply 2x as much
+    acid to enemies).
   effects:
-  - name: CuringRadiation
-    priority: 0
-    isPower: 1
-    operation: 2
-    change: 1
+  - name: Acid Power
+    isWeaponPower: 0
+    operation: 1
+    change: 2
+  preReqAbilities: []
+  incompatibleAbilities: []

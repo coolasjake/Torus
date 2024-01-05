@@ -108,7 +108,6 @@ public class BoomerangLauncher : Weapon
     {
         boomerangPrefab = attackPrefab.GetComponent<BoomerangChainsaw>();
         powers = new int[Enum.GetNames(typeof(BoomerangLauncherPowers)).Length];
-        SetupDamageTypes();
     }
 
     private enum BoomerangLauncherPowers

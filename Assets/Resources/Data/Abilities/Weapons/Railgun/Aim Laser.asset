@@ -12,10 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b24d2c40d1402841b8d2e98b1177a0b, type: 3}
   m_Name: Aim Laser
   m_EditorClassIdentifier: Assembly-CSharp::Ability
+  damageType: 0
+  allowedWeapons: 2
+  requireType: 0
+  minWave: 1
+  maxWave: 20
+  maxRepeats: 0
+  rarity: 0
   description: Unlocks a laser to help you aim.
   effects:
   - name: AimLaser
-    priority: 0
-    isPower: 1
-    operation: 2
+    isWeaponPower: 1
+    operation: 3
     change: 1
+  preReqAbilities: []
+  incompatibleAbilities: []

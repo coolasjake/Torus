@@ -120,5 +120,6 @@ MonoBehaviour:
   targetSize: 0
   growSpeed: 2
   minSize: 0.3
-  sizeMultiplier: 2
+  sizeMultiplier: 3
   testAntimatter: 0
+  totalAntimatter: 0

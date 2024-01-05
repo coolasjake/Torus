@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b24d2c40d1402841b8d2e98b1177a0b, type: 3}
-  m_Name: Sparking Bullets
-  m_EditorClassIdentifier: Assembly-CSharp::Ability
-  damageType: 3
-  allowedWeapons: 1
+  m_Name: Crystal Refraction
+  m_EditorClassIdentifier: 
+  damageType: 4
+  allowedWeapons: -1
   requireType: 1
   minWave: 1
   maxWave: 20
   maxRepeats: 0
   rarity: 0
-  description: Bullets have a +20% chance of setting enemies on fire.
+  description: Enemies have a chance of freezing early when hit.
   effects:
-  - name: Ignite Chance
+  - name: Crystal Refraction
     isWeaponPower: 0
     operation: 0
-    change: 0.2
+    change: 1
   preReqAbilities: []
   incompatibleAbilities: []

@@ -22,9 +22,8 @@ MonoBehaviour:
   description: Acid conducts lightning better (Acid makes lightning deal 4x damage
     instead of 2x).
   effects:
-  - name: ConductiveAcid
-    priority: 0
-    isPower: 1
+  - name: Conductive Acid
+    isWeaponPower: 1
     operation: 3
     change: 1
   preReqAbilities: []

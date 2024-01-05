@@ -1278,6 +1278,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5466367041440219502, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
+      propertyPath: growSpeed
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5466367041440219502, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
+      propertyPath: sizeMultiplier
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
 --- !u!1 &548207667
@@ -6721,6 +6729,82 @@ PrefabInstance:
       propertyPath: UIRefs.healthBarCanvas
       value: 
       objectReference: {fileID: 1428570012}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.typeCompatibilities.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.typeCompatibilities.Array.data[0]
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.typeCompatibilities.Array.data[1]
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.typeCompatibilities.Array.data[2]
+      value: 247
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.typeCompatibilities.Array.data[3]
+      value: 439
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.typeCompatibilities.Array.data[4]
+      value: 473
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.typeCompatibilities.Array.data[5]
+      value: 311
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.typeCompatibilities.Array.data[6]
+      value: 375
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.typeCompatibilities.Array.data[7]
+      value: 107
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.typeCompatibilities.Array.data[8]
+      value: 143
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.typeCompatibilities.Array.data[9]
+      value: 317
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.defaultAbilitiesForTypes.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 2769ab22c11f4f64a9544950c521d3e5, type: 2}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.defaultAbilitiesForTypes.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 229d9c8d333ed394aa834f71741bf77d, type: 2}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.defaultAbilitiesForTypes.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: e50fb568b336726448c71eae48da9257, type: 2}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.defaultAbilitiesForTypes.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: 62540c3910bcc114bb2940ff8bf63afe, type: 2}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.defaultAbilitiesForTypes.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: 06b9973e77c780a44966742ba04dd227, type: 2}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.defaultAbilitiesForTypes.Array.data[7]
+      value: 
+      objectReference: {fileID: 11400000, guid: f9f5b2ebcf44c844bb72667a2abb6cc9, type: 2}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.defaultAbilitiesForTypes.Array.data[8]
+      value: 
+      objectReference: {fileID: 11400000, guid: f6255bbb95f4bcc49b7f065529f0ea34, type: 2}
+    - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: damageSettings.defaultAbilitiesForTypes.Array.data[9]
+      value: 
+      objectReference: {fileID: 11400000, guid: 9ad89707ad7f09a49ae8d71dcf4cff72, type: 2}
     - target: {fileID: 6896147028492663557, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
       propertyPath: m_RootOrder
       value: 11
