@@ -40,6 +40,22 @@ public class UpgradeController : MonoBehaviour
         Ability[] allGroupData = Resources.LoadAll<Ability>(abilityDataFolder);
         if (allGroupData.Length == 0)
             Debug.LogError("No abilities found at path: " + abilityDataFolder);
+
+        //Calculate incompatible types based on existing types on weapon (mostly useful for lazy testers)
+        foreach (DamageType existingType in System.Enum.GetValues(typeof(DamageType)))
+        {
+            if (targetWeapon.existingDamageTypes.Includes(existingType))
+            {
+                foreach (DamageType otherType in System.Enum.GetValues(typeof(DamageType)))
+                {
+                    if (StaticRefs.DamageTypesAreCompatible(existingType, otherType) == false)
+                    {
+                        targetWeapon.incompatibleDamageTypes = targetWeapon.incompatibleDamageTypes.PlusType(otherType);
+                    }
+                }
+            }
+        }
+
         foreach (Ability ability in allGroupData)
         {
             //If the ability is for this weapon, and doesn't have an incompatible type, it belongs in either the possible or available list
