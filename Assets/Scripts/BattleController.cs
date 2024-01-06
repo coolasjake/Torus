@@ -28,6 +28,8 @@ public class BattleController : MonoBehaviour
         _readyPlayers = new bool[upgradeControllers.Count];
 
         ShowStationDamage();
+        foreach (UpgradeController upgrader in singleton.upgradeControllers)
+            upgrader.Initialize();
 
         if (getAbilityOnStart)
             EndWave();

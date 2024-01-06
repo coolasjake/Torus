@@ -146,7 +146,7 @@ public static class DamageEvents
 
         public static void DamageTick(Enemy enemy)
         {
-            if (NanitesStats.selfReplication > 0)
+            if (NanitesStats.selfReplication > 0 && enemy.nanites < 50 * enemy.Size)
                 enemy.nanites += 10 * NanitesStats.selfReplication;
 
             float damageCutoff = enemy.MaxHealth * StaticRefs.NanitesCutoff;

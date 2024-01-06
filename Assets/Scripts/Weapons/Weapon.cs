@@ -339,7 +339,10 @@ public abstract class Weapon : TorusMotion
 
         float damage = damageStats.GetDamage(type);
         //Reduce damage by 5% per armour level
-        damage -= damage * Mathf.Clamp(armourLevel - armourPierce.Value, 0, 10) * 0.05f;
+        if (type == DamageType.physical)
+            damage -= damage * Mathf.Clamp(armourLevel - armourPierce.Value, 0, 10) * 0.09f;
+        else
+            damage -= damage * Mathf.Clamp(armourLevel - armourPierce.Value, 0, 10) * 0.05f;
         return damage;
     }
 

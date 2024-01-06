@@ -1452,7 +1452,7 @@ MonoBehaviour:
     _value: 1
   damageStats:
     basic:
-      defaultValue: 1
+      defaultValue: 0
       min: 0
       max: Infinity
       addition: 0
@@ -5339,7 +5339,7 @@ MonoBehaviour:
     _value: 0
   damageStats:
     basic:
-      defaultValue: 1
+      defaultValue: 0
       min: 0
       max: Infinity
       addition: 0
@@ -6863,7 +6863,7 @@ PrefabInstance:
       objectReference: {fileID: 1442570269}
     - target: {fileID: 6896147028492663563, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
       propertyPath: getAbilityOnStart
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6896147028492663563, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
       propertyPath: upgradeControllers.Array.data[0]

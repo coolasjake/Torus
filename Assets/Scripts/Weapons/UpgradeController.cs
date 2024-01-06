@@ -57,16 +57,18 @@ public class UpgradeController : MonoBehaviour
 
     public void StartUpgrading()
     {
-        if (_initialized == false)
-            Initialize();
+        Initialize();
 
         Show();
         GiveTestPoints();
         ChooseOptions();
     }
 
-    private void Initialize()
+    public void Initialize()
     {
+        if (_initialized)
+            return;
+
         if (targetWeapon == null)
         {
             Weapon[] weapons = FindObjectsOfType<Weapon>();
@@ -84,7 +86,6 @@ public class UpgradeController : MonoBehaviour
 
         title.text = targetWeapon.Type().ToString() + " Upgrades";
         GetAbilities();
-        _initialized = true;
     }
 
     private void SetupDamageTypes()
