@@ -38,6 +38,7 @@ public class EnemyData : ScriptableObject
     public bool damageFromCold = false;
 
     //Static Values
+    [Range(0f, 1f)]
     public float maxSlow = 0.8f;
     public float maxColdSlow = 0.2f;
     public float frozenSlow = 0.2f;

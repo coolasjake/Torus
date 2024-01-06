@@ -201,7 +201,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &63070256
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -283,7 +283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   incompatibleDamageTypes: 202
-  existingDamageTypes: 260
+  existingDamageTypes: 4
   playerIndex: 0
   doDirectionSwapping: 0
   moveSpeed:
@@ -313,7 +313,7 @@ MonoBehaviour:
     _value: 0
   damageStats:
     basic:
-      defaultValue: 1
+      defaultValue: 0
       min: 0
       max: Infinity
       addition: 0
@@ -337,7 +337,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     cold:
-      defaultValue: 1
+      defaultValue: 5
       min: 0
       max: Infinity
       addition: 0
@@ -345,7 +345,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     radiation:
-      defaultValue: 1
+      defaultValue: 5
       min: 0
       max: Infinity
       addition: 0
@@ -361,7 +361,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     lightning:
-      defaultValue: 1
+      defaultValue: 5
       min: 0
       max: Infinity
       addition: 0
@@ -424,7 +424,7 @@ MonoBehaviour:
     multiplier: 1
     percentage: 100
     _value: 0
-  fireDuration:
+  fireDurationMult:
     defaultValue: 3
     min: 0
     max: Infinity
@@ -1422,7 +1422,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   incompatibleDamageTypes: 0
-  existingDamageTypes: 256
+  existingDamageTypes: 4
   playerIndex: 1
   doDirectionSwapping: 0
   moveSpeed:
@@ -1524,7 +1524,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
   lightningRange:
-    defaultValue: 5
+    defaultValue: 1
     min: 0
     max: 20
     addition: 0
@@ -1532,7 +1532,7 @@ MonoBehaviour:
     percentage: 100
     _value: 5
   lightningChains:
-    defaultValue: 1
+    defaultValue: 0
     min: 0
     max: 20
     addition: 0
@@ -1563,7 +1563,7 @@ MonoBehaviour:
     multiplier: 1
     percentage: 100
     _value: 0
-  fireDuration:
+  fireDurationMult:
     defaultValue: 3
     min: 0
     max: Infinity
@@ -2560,7 +2560,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     heat:
-      defaultValue: 0
+      defaultValue: 50
       min: 0
       max: Infinity
       addition: 0
@@ -2568,7 +2568,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     cold:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
       addition: 0
@@ -2576,7 +2576,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     radiation:
-      defaultValue: 0
+      defaultValue: 50
       min: 0
       max: Infinity
       addition: 0
@@ -2584,7 +2584,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     acid:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
       addition: 0
@@ -2592,7 +2592,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     lightning:
-      defaultValue: 0
+      defaultValue: 10
       min: 0
       max: Infinity
       addition: 0
@@ -2600,7 +2600,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     nanites:
-      defaultValue: 0
+      defaultValue: 20
       min: 0
       max: Infinity
       addition: 0
@@ -2608,7 +2608,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     antimatter:
-      defaultValue: 0
+      defaultValue: 1
       min: 0
       max: Infinity
       addition: 0
@@ -2616,7 +2616,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
   lightningRange:
-    defaultValue: 2
+    defaultValue: 5
     min: 0
     max: 20
     addition: 0
@@ -2655,7 +2655,7 @@ MonoBehaviour:
     multiplier: 1
     percentage: 100
     _value: 0
-  fireDuration:
+  fireDurationMult:
     defaultValue: 3
     min: 0
     max: Infinity
@@ -3973,7 +3973,7 @@ MonoBehaviour:
     multiplier: 1
     percentage: 100
     _value: 0
-  fireDuration:
+  fireDurationMult:
     defaultValue: 3
     min: 0
     max: Infinity
@@ -4250,7 +4250,7 @@ MonoBehaviour:
     multiplier: 1
     percentage: 100
     _value: 0
-  fireDuration:
+  fireDurationMult:
     defaultValue: 3
     min: 0
     max: Infinity
@@ -4521,7 +4521,7 @@ MonoBehaviour:
     multiplier: 1
     percentage: 100
     _value: 0
-  fireDuration:
+  fireDurationMult:
     defaultValue: 3
     min: 0
     max: Infinity
@@ -5295,7 +5295,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1891033584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5411,7 +5411,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
   lightningRange:
-    defaultValue: 5
+    defaultValue: 3
     min: 0
     max: 20
     addition: 0
@@ -5427,7 +5427,7 @@ MonoBehaviour:
     percentage: 100
     _value: 0
   lightningSplits:
-    defaultValue: 5
+    defaultValue: 1
     min: 0
     max: 20
     addition: 0
@@ -5450,7 +5450,7 @@ MonoBehaviour:
     multiplier: 1
     percentage: 100
     _value: 0
-  fireDuration:
+  fireDurationMult:
     defaultValue: 3
     min: 0
     max: Infinity
@@ -6863,7 +6863,7 @@ PrefabInstance:
       objectReference: {fileID: 1442570269}
     - target: {fileID: 6896147028492663563, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
       propertyPath: getAbilityOnStart
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6896147028492663563, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
       propertyPath: upgradeControllers.Array.data[0]

@@ -47,7 +47,7 @@ public class UpgradeController : MonoBehaviour
             if (ability.allowedWeapons.Includes(targetWeapon.Type()) && targetWeapon.incompatibleDamageTypes.Includes(ability.damageType) == false)
             {
                 //Add to available abilities if it has no prerequisites, and is either of a damage type that the weapon has or is allowed to unlock its damage type
-                if (ability.preReqAbilities.Count == 0 && (targetWeapon.existingDamageTypes.Includes(ability.damageType) || ability.requireType == false))
+                if (ability.preReqAbilities.Count == 0 && (targetWeapon.existingDamageTypes.Includes(ability.damageType) || ability.requireType == false) && ability.minWave <= 1)
                     availableAbilities.Add(ability);
                 else
                     possibleAbilities.Add(ability);
@@ -115,6 +115,7 @@ public class UpgradeController : MonoBehaviour
         }
 
         chosenAbilities.Clear();
+        PrintAbilityOptions();
 
         foreach (AbilityUI button in buttons)
         {
@@ -143,6 +144,22 @@ public class UpgradeController : MonoBehaviour
         }
 
         CheckHasPoints();
+    }
+
+    private void PrintAbilityOptions()
+    {
+        string possible = "Possible Abilities for " + targetWeapon.name + ": ";
+        foreach (Ability ability in possibleAbilities)
+        {
+            possible += "\n" + ability.name;
+        }
+        print(possible);
+        string available = "Available Abilities for " + targetWeapon.name + ": ";
+        foreach (Ability ability in availableAbilities)
+        {
+            available += "\n" + ability.name;
+        }
+        print(available);
     }
 
     private void CheckHasPoints()
@@ -243,24 +260,19 @@ public class UpgradeController : MonoBehaviour
             }
         }
 
-        //Remove groups that are incompatible with this ability from the available pool
-        for (int i = 0; i < availableAbilities.Count; ++i)
-        {
-            if (availableAbilities[i].incompatibleAbilities.Contains(chosenAbility.name))
-                availableAbilities.RemoveAt(i--);
-        }
-
-        //Add groups that are now valid to the available pool, and remove incompatible abilites
+        //Add groups that are now valid to the available pool, and remove impossible abilites
         for (int i = 0; i < possibleAbilities.Count; ++i)
         {
-            if (possibleAbilities[i].incompatibleAbilities.Contains(chosenAbility.name))
+            basicAbilitiesAreNotRemoved
+            if (possibleAbilities[i].incompatibleAbilities.Contains(chosenAbility.name) || BattleController.WaveNumber > possibleAbilities[i].maxWave)
             {
                 possibleAbilities.RemoveAt(i--);
                 continue;
             }
 
             //If a possible ability now has all prerequisites and the weapon has it's type unlocked (or it doesn't require the type to be unlocked), add it to the available list
-            if (possibleAbilities[i].requireType == false || targetWeapon.existingDamageTypes.Includes(possibleAbilities[i].damageType))
+            if ((possibleAbilities[i].requireType == false || targetWeapon.existingDamageTypes.Includes(possibleAbilities[i].damageType))
+                && BattleController.WaveNumber >= possibleAbilities[i].minWave)
             {
                 bool allPrerequisitesUnlocked = true;
                 foreach (string preReqName in possibleAbilities[i].preReqAbilities)
@@ -277,6 +289,13 @@ public class UpgradeController : MonoBehaviour
                     }
                 }
             }
+        }
+
+        //Remove abilities that are incompatible with this ability from the available pool
+        for (int i = 0; i < availableAbilities.Count; ++i)
+        {
+            if (availableAbilities[i].incompatibleAbilities.Contains(chosenAbility.name))
+                availableAbilities.RemoveAt(i--);
         }
     }
 }

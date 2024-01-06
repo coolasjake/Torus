@@ -8,7 +8,7 @@ public class BigLaser : Weapon
 {
     public override WeaponType Type()
     {
-        return WeaponType.Railgun;
+        return WeaponType.Laser;
     }
 
     [Header("Laser Stats")]
@@ -20,6 +20,8 @@ public class BigLaser : Weapon
     [Header("Laser Refs")]
     public LineRenderer laserRenderer;
     public Transform testAttack;
+
+    private Enemy _firstHitEnemy = null;
 
     protected override bool Fire()
     {
@@ -33,11 +35,20 @@ public class BigLaser : Weapon
             laserRenderer.transform.localScale = new Vector3(laserThickness.Value, 1);
             Collider2D[] colliders = Physics2D.OverlapBoxAll(laserCenter, laserScale, TorusMotion.RealAngleFromAngle(Angle));
 
+            _firstHitEnemy = null;
+            float closestDist = float.PositiveInfinity;
             foreach (Collider2D collider in colliders)
             {
                 Enemy enemy = collider.GetComponent<Enemy>();
                 if (enemy)
+                {
                     LaserHit(enemy);
+                    if (enemy.Height < closestDist)
+                    {
+                        _firstHitEnemy = enemy;
+                        closestDist = enemy.Height;
+                    }
+                }
             }
             _lastShot = Time.time;
         }
@@ -54,6 +65,40 @@ public class BigLaser : Weapon
         if (enemy.CheckDodge(firingPoint.transform.position))
             return;
         DefaultHit(enemy);
+    }
+
+    protected void InfiniteLightningHit(Enemy enemy)
+    {
+        if (damageStats.lightning.Value == 0)
+            return;
+
+        if (enemy.LightningHit(this) == false && enemy != _firstHitEnemy)
+            return;
+        lightningDamageEvent?.Invoke(enemy);
+        //Split to nearby enemies
+        Enemy chainTarget = null;
+        for (int i = 0; i < lightningSplits.Value; ++i)
+        {
+            chainTarget = ChooseLightningChain(enemy);
+            if (chainTarget == null)
+                break;
+            int maxChains = Mathf.RoundToInt(lightningChains.Value);
+            if (DamageEvents.LightningStats.conductiveNanites && chainTarget.nanites > 0)
+                maxChains += 1;
+            lightningDamageEvent?.Invoke(chainTarget);
+            //Chain to enemies near split targets
+            for (int j = 0; j < maxChains; ++j)
+            {
+                chainTarget = ChooseLightningChain(chainTarget);
+                if (chainTarget == null)
+                    break;
+                if (DamageEvents.LightningStats.conductiveNanites && chainTarget.nanites > 0)
+                    maxChains += 1;
+                lightningDamageEvent?.Invoke(chainTarget);
+            }
+        }
+        if (chainTarget == null)
+            StaticRefs.SpawnLightningExplosion(enemy.Size, enemy.transform.position);
     }
 
     public override void AddModifier(string statName, string modifierName, StatChangeOperation operation, float value)
@@ -78,6 +123,13 @@ public class BigLaser : Weapon
         }
         else
             Debug.Log("Couldn't find power with name: " + powerName);
+
+        switch (power)
+        {
+            case BigLaserPowers.InfiniteLightning:
+                LightningHit = InfiniteLightningHit;
+                return;
+        }
     }
 
     protected override void Setup()
@@ -92,7 +144,6 @@ public class BigLaser : Weapon
 
     private enum BigLaserPowers
     {
-        AimLaser,
-        HardeningRadiation,
+        InfiniteLightning,
     }
 }

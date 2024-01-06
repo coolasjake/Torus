@@ -72,6 +72,7 @@ public class StaticRefs : MonoBehaviour
         public LightningObj lightningPrefab;
         public GameObject lightningExplosionPrefab;
         public AntimatterExplosion antimatterExplosionPrefab;
+        public NuclearExplosion nuclearExplosionPrefab;
     }
 
     public static void SpawnExplosion(float scale, Vector2 pos)
@@ -114,6 +115,14 @@ public class StaticRefs : MonoBehaviour
             return explosion;
         }
         return null;
+    }
+
+    public static void SpawnNuclearExplosion(Vector2 pos)
+    {
+        if (singleton.effectSettings.lightningExplosionPrefab != null)
+        {
+            NuclearExplosion explosion = Instantiate(singleton.effectSettings.nuclearExplosionPrefab, pos, Quaternion.identity, singleton.transform);
+        }
     }
 
     public static Sprite ArmourBorder(int level)
@@ -251,11 +260,17 @@ public class StaticRefs : MonoBehaviour
         [Tooltip("Controls how often temperature deals damage and falls back towards resting.")]
         public float timeBetweenTempTicks = 0.5f;
         [Min(0)]
+        [Tooltip("Default time that fire lasts after an enemy is ignited.")]
+        public float fireDuration = 3f;
+        [Min(0)]
         [Tooltip("Controls how often radiation deals damage, and how long before the first tick starts (unlike other DOTs).")]
         public float timeBetweenRadiationTicks = 2f;
         [Min(0)]
         [Tooltip("Value of radiation at which double damage and other effects trigger.")]
         public float criticalMassThreshold = 100f;
+        [Min(0)]
+        [Tooltip("Minimum time between lightning hits from the same weapon.")]
+        public float lightningGroundedDur = 0.5f;
     }
 
     /// <summary> Check if type A is allowed with type B (order will matter if type compatabilities are not symetrical). </summary>
@@ -289,11 +304,14 @@ public class StaticRefs : MonoBehaviour
     {
         return Time.time >= lastTick + singleton.damageSettings.timeBetweenTempTicks;
     }
+    public static float FireDur => singleton.damageSettings.fireDuration;
     public static float TempTickRate => singleton.damageSettings.timeBetweenTempTicks;
     public static bool DoRadiationTick(float lastTick)
     {
         return Time.time >= lastTick + singleton.damageSettings.timeBetweenRadiationTicks;
     }
+    public static float CriticalMass => singleton.damageSettings.criticalMassThreshold;
+    public static float GroundedDur => singleton.damageSettings.lightningGroundedDur;
 
     public static int debugCounter = 0;
 

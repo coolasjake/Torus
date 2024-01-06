@@ -26,14 +26,14 @@ public class Enemy : TorusMotion
     private float _health;
     public float Health => _health;
 
-    /// <summary> Reduce the health of the enemy after applying tank ability and rounding up to 1, then show changes on the healthbar. </summary>
+    /// <summary> Reduce the health of the enemy after applying tank ability and rounding up to 0, then show changes on the healthbar. </summary>
     public void ReduceHealthBy(float damage)
     {
         Damage(damage);
         healthBar.Hit(_health / MaxHealth);
     }
 
-    /// <summary> Reduce the health of the enemy after applying tank ability and rounding up to 1, then show changes on the healthbar. </summary>
+    /// <summary> Reduce the health of the enemy after applying tank ability and rounding up to 0, then show changes on the healthbar. </summary>
     public void DOTDamage(float damage)
     {
         Damage(damage);
@@ -45,10 +45,15 @@ public class Enemy : TorusMotion
     {
         if (damage <= 0)
             return;
-        if (Class == EnemyClass.tank)
-            damage -= AbilityPower;
+        damage = this.AfterAbilityReductions(damage);
         damage = Mathf.Max(damage, 0);
         _health -= damage;
+    }
+
+    public void SetHealth(float newHealth)
+    {
+        _health = newHealth;
+        healthBar.Hit(_health / MaxHealth);
     }
 
     [HideInInspector]
@@ -60,12 +65,26 @@ public class Enemy : TorusMotion
     }
 
     /// <summary> Time that the latest stun effect on this enemy will end. </summary>
-    [HideInInspector]
-    public float stunEndTime = 0f;
-    public bool Stunned => (stunEndTime > Time.time);
+    public bool Grounded => Time.time < _lastLightningHit + StaticRefs.GroundedDur;
+    private float _lastLightningHit = 0f;
+    private bool Stunned => _stunnedUntil > Time.time;
+    private float _stunnedUntil = 0;
+    private Weapon _lastStunnedBy = null;
+    public bool LightningHit(Weapon by)
+    {
+        if (by == _lastStunnedBy && Grounded)
+            return false;
 
-    [HideInInspector]
-    public bool lightningStruck = false;
+        _lastLightningHit = Time.time;
+        _lastStunnedBy = by;
+        return true;
+    }
+
+    public void Stun(float stunDur)
+    {
+        _stunnedUntil = Time.time + stunDur;
+    }
+
     //private float _lastLightningStruck = 0f;
     [HideInInspector]
     public bool triggerAntimatter = false;
@@ -104,13 +123,13 @@ public class Enemy : TorusMotion
     {
         duration = Mathf.Max(duration, Time.fixedDeltaTime);
         duration = Mathf.Max(duration, _onFireUntil - Time.time);
+        if (OnFire && _frozen)
+            DamageEvents.IgniteWhileFrozen(this);
         if (temperature > data.restingTemp)
         {
             _onFireUntil = Time.time + duration;
             ShowFireEffect();
 
-            if (OnFire && _frozen)
-                DamageEvents.IgniteWhileFrozen(this);
             if (OnFire && acid > 0)
                 DamageEvents.AcidFireExplosion(this);
         }
@@ -136,6 +155,13 @@ public class Enemy : TorusMotion
     [HideInInspector]
     public float acidDPS = 1f;
     private float _lastAcidTick = 0;
+    /// <summary> Permanent modifier to armour from fire upgrades. </summary>
+    [HideInInspector]
+    public int meltedArmour = 0;
+    /// <summary> Permanent modifier to armour from acid upgrades. </summary>
+    [HideInInspector]
+    public int dissolvedArmour = 0;
+
     private float _lastTempTick = 0;
     private float _lastNanitesTick = 0;
     private float _lastRadTick = 0;
@@ -200,12 +226,13 @@ public class Enemy : TorusMotion
 
         //Clamp modifier to not be less than the maximum slow value
         modifier = Mathf.Clamp(modifier, 1f - data.maxSlow, 3f);
+        modifier = DamageEvents.ApplySpecialSpeedModifiers(this, modifier);
         return ClassSpeed * modifier * Time.fixedDeltaTime * StaticRefs.BaseSpeed;
     }
 
     public bool CheckDodge(Vector2 hitPos)
     {
-        if (Class == EnemyClass.dodge && Time.time > _lastDodge + AbilityPower)
+        if (Class == EnemyClass.dodge && Time.time > _lastDodge + AbilityPower && Stunned == false && Frozen == false)
         {
             float movement = StaticRefs.DodgeDist;
             if (TorusMotion.AngleFromPos(hitPos) > Angle)
@@ -224,7 +251,6 @@ public class Enemy : TorusMotion
         TempDOT();
         AcidDOT();
         RadDOT();
-        lightningStruck = false;
         triggerAntimatter = false;
 
         UpdateTempEffect();
@@ -291,29 +317,10 @@ public class Enemy : TorusMotion
         if (OnFire)
             DamageEvents.Heat.FireDamage(this);
 
-        //Note: DOT effects are effected by resistances when applied, not when dealing damage
-        if (data.damageFromHot && temperature > data.maxSafeTemp)
-        {
-            float excess = temperature - data.maxSafeTemp;
-            DOTDamage(excess);
-            //Reduce temp by a fraction of the excess
-            //Note: should NOT be relative to tick rate, or damage will increase exponentially with rate instead of linearly
-            temperature = temperature.Lerp(data.restingTemp, excess * 0.5f);
-        }
-        else if (temperature < data.freezeTemp)
-        {
-            Frozen = true;
-            if (data.damageFromCold)
-            {
-                float excess = -(temperature - data.freezeTemp);
-                DOTDamage(excess);
-                //Reduce temp by a fraction of the excess
-                //Note: should NOT be relative to tick rate, or damage will increase exponentially with rate instead of linearly
-                temperature = temperature.Lerp(data.restingTemp, excess * 0.5f);
-            }
-        }
+        DamageEvents.Heat.DamageTick(this);
+        DamageEvents.Cold.DamageTick(this);
 
-        temperature = temperature.Lerp(data.restingTemp, data.baseTempChange * StaticRefs.TempTickRate);
+        DamageEvents.BaseTempChange(this);
     }
 
     private void AcidDOT()

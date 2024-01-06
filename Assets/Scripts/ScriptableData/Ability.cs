@@ -32,7 +32,6 @@ public class AbilityEffect
 
     public void Apply(Weapon weapon, string abilityName)
     {
-        Debug.Log("Applying " + name);
         if (isWeaponPower)
             weapon.UnlockPower(name, (int)change);
         else

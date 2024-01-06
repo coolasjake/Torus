@@ -4,11 +4,59 @@ using UnityEngine;
 
 public static class DamageEvents
 {
+    /// <summary> Reduce damage if this enemy is a tank or has some ability effecting it. </summary>
+    public static float AfterAbilityReductions(this Enemy enemy, float damage)
+    {
+        if (enemy.Class == EnemyClass.tank)
+            damage -= enemy.AbilityPower;
+
+        if (enemy.Frozen && ColdStats.frozenFortress)
+            damage *= 0.2f;
+
+        return damage;
+    }
+
+    public static float ArmourMult(DamageType type, Enemy enemy, int pierce)
+    {
+        if (type == DamageType.basic)
+            return 1f;
+
+        int effectiveArmour = Mathf.Clamp(enemy.Armour - enemy.meltedArmour - enemy.dissolvedArmour - pierce, 0, 10);
+
+        return 1f - effectiveArmour * (type == DamageType.physical ? 0.08f : 0.05f);
+    }
+
+    public static void BaseTempChange(Enemy enemy)
+    {
+        float tempChange = enemy.data.baseTempChange * StaticRefs.TempTickRate;
+        if (NanitesStats.systemSabotage)
+            tempChange *= 0.1f;
+        enemy.temperature = Mathf.MoveTowards(enemy.temperature, enemy.data.restingTemp, tempChange);
+    }
+
+    public static float ApplySpecialSpeedModifiers(Enemy enemy, float currentModifier)
+    {
+        float newModifier = currentModifier;
+        if (NanitesStats.systemSabotage)
+            newModifier *= 0.5f;
+        if (enemy.Frozen && ColdStats.frozenFortress)
+            newModifier = 0;
+        return newModifier;
+    }
+
     public static void AcidFireExplosion(Enemy enemy)
     {
-        enemy.temperature += Mathf.Min(enemy.acid * 5f, 100f);
+        float baseDamage = Mathf.Min(enemy.acid * 5f, 100f);
+        if (AcidStats.explosiveAcid)
+            baseDamage *= 2f;
+        enemy.temperature += baseDamage * enemy.ResistanceMult(DamageType.heat);
+        enemy.ReduceHealthBy(baseDamage * enemy.ResistanceMult(DamageType.physical));
         enemy.acid = 0;
         StaticRefs.SpawnAcidExplosion(enemy.Size, enemy.transform.position);
+        if (HeatStats.exothermicReaction)
+            Heat.IgniteEnemy(1f, enemy);
+        else
+            enemy.RemoveFire();
     }
 
     public static void IgniteWhileFrozen(Enemy enemy)
@@ -47,7 +95,7 @@ public static class DamageEvents
                 physicalDamage -= 1f;
             if (enemy.Frozen)
                 physicalDamage *= ColdStats.violentShatter ? 3f : 2f;
-            enemy.ReduceHealthBy(physicalDamage);
+            enemy.ReduceHealthBy(physicalDamage * enemy.ResistanceMult(DamageType.physical));
             enemy.triggerAntimatter = true;
         }
     }
@@ -56,10 +104,35 @@ public static class DamageEvents
     public class Heat
     {
         public int hotterFire = 0;
+        public bool exothermicReaction = false;
 
         public static void HeatEnemy(float heatDamage, Enemy enemy)
         {
-            enemy.ChangeTemp(heatDamage);
+            if (ColdStats.temperedIce && enemy.Frozen)
+            {
+                heatDamage *= enemy.ResistanceMult(DamageType.physical);
+                enemy.ReduceHealthBy(heatDamage);
+            }
+
+            enemy.ChangeTemp(heatDamage * enemy.ResistanceMult(DamageType.heat));
+        }
+
+        public static void DamageTick(Enemy enemy)
+        {
+            if (enemy.temperature > enemy.data.maxSafeTemp)
+            {
+                float excess = enemy.temperature - enemy.data.maxSafeTemp;
+                if (enemy.data.damageFromHot)
+                    enemy.DOTDamage(excess * (NanitesStats.hotBots * 0.5f + 1f));
+                //Reduce temp by a fraction of the excess
+                //Note: should NOT be relative to tick rate, or damage will increase exponentially with rate instead of linearly
+                enemy.temperature = Mathf.MoveTowards(enemy.temperature, enemy.data.restingTemp, excess * 0.5f);
+            }
+        }
+
+        public static void IgniteEnemy(float multiplier, Enemy enemy)
+        {
+            enemy.SetOnFire(StaticRefs.FireDur * multiplier);
         }
 
         public static void FireDamage(Enemy enemy)
@@ -75,41 +148,94 @@ public static class DamageEvents
         public int refraction = 0;
         public bool temperedIce = false;
         public bool violentShatter = false;
+        public bool iceJacking = false;
+        /// <summary> Freeze Ray ability: stop completely, but reduce damage by 80%. </summary>
+        public bool frozenFortress = false;
 
         public static void ChillEnemy(float coldDamage, Enemy enemy)
         {
-            enemy.ChangeTemp(-coldDamage);
+            enemy.ChangeTemp(-coldDamage * enemy.ResistanceMult(DamageType.cold));
             if (ColdStats.earlyFreeze > 0)
             {
                 for (int i = 0; i < ColdStats.earlyFreeze; ++i)
                 {
                     if (-Random.value > enemy.NormalisedTemp)
-                        enemy.Frozen = true;
+                        Cold.Freeze(enemy);
                 }
             }
+        }
+
+        public static void DamageTick(Enemy enemy)
+        {
+            if (enemy.temperature < enemy.data.freezeTemp)
+            {
+                Cold.Freeze(enemy);
+                if (enemy.data.damageFromCold)
+                {
+                    float excess = -(enemy.temperature - enemy.data.freezeTemp);
+                    enemy.DOTDamage(excess);
+                    //Reduce temp by a fraction of the excess
+                    //Note: should NOT be relative to tick rate, or damage will increase exponentially with rate instead of linearly
+                    enemy.temperature = Mathf.MoveTowards(enemy.temperature, enemy.data.restingTemp, excess * 0.5f);
+                }
+            }
+        }
+
+        public static void Freeze(Enemy enemy)
+        {
+            if (ColdStats.iceJacking)
+                enemy.SetHealth(Mathf.Min(enemy.MaxHealth * 0.8f, enemy.Health));
+
+            enemy.Frozen = true;
         }
     }
     public static Cold ColdStats = new Cold();
 
     public class Lightning
     {
+        public bool conductiveNanites = false;
+
         public static void StrikeEnemy(float lightningDamage, Enemy enemy)
         {
             if (enemy.acid > 0)
                 lightningDamage *= Acid.LightningMultiplier();
             if (enemy.nanites > 0)
                 lightningDamage += DamageEvents.Nanites.LightningBoost(enemy);
-            enemy.ReduceHealthBy(lightningDamage);
+            enemy.ReduceHealthBy(lightningDamage * enemy.ResistanceMult(DamageType.lightning));
         }
     }
     public static Lightning LightningStats = new Lightning();
 
     public class Radiation
     {
+        public bool nuclearReaction = false;
 
         public static void IrradiateEnemy(float radiationValue, Enemy enemy)
         {
-            enemy.radiation += radiationValue;
+            enemy.radiation += radiationValue * enemy.ResistanceMult(DamageType.radiation);
+        }
+
+        public static void DamageTick(Enemy enemy)
+        {
+            float radiation = enemy.radiation;
+
+            if (CheckCriticalMass(enemy))
+            {
+                if (RadiationStats.nuclearReaction)
+                {
+                    StaticRefs.SpawnNuclearExplosion(enemy.transform.position);
+                    enemy.radiation = 0;
+                    return;
+                }
+                radiation *= 2f;
+            }
+            
+            enemy.DOTDamage(radiation);
+        }
+
+        public static bool CheckCriticalMass(Enemy enemy)
+        {
+            return enemy.radiation >= StaticRefs.CriticalMass * ((10f - NanitesStats.tinyPhysicists) / 10f);
         }
     }
     public static Radiation RadiationStats = new Radiation();
@@ -117,10 +243,11 @@ public static class DamageEvents
     public class Acid
     {
         public bool conductiveAcid = false;
+        public bool explosiveAcid = false;
 
         public static void SplashEnemy(float acidValue, float acidDPS, Enemy enemy)
         {
-            enemy.acid += acidValue;
+            enemy.acid += acidValue * enemy.ResistanceMult(DamageType.acid);
             enemy.SetAcidDPS(acidDPS);
             enemy.triggerAntimatter = true;
         }
@@ -137,10 +264,14 @@ public static class DamageEvents
     public class Nanites
     {
         public int selfReplication = 0;
+        public bool heroicNanites = false;
+        public int tinyPhysicists = 0;
+        public int hotBots = 0;
+        public bool systemSabotage = false;
 
         public static void SwarmEnemy(float nanitesValue, Enemy enemy)
         {
-            enemy.nanites += nanitesValue;
+            enemy.nanites += nanitesValue * enemy.ResistanceMult(DamageType.radiation);
             enemy.triggerAntimatter = true;
         }
 
@@ -160,7 +291,10 @@ public static class DamageEvents
         public static float LightningBoost(Enemy enemy)
         {
             float bonusDamage = enemy.nanites;
-            enemy.nanites = 0;
+            if (NanitesStats.heroicNanites && enemy.nanites > 10)
+                enemy.nanites = enemy.nanites / 2f;
+            else
+                enemy.nanites = 0;
             StaticRefs.SpawnLightningExplosion(enemy.Size, enemy.transform.position);
             return bonusDamage;
         }
@@ -172,7 +306,7 @@ public static class DamageEvents
 
         public static void CoatEnemy(float antimatterValue, Enemy enemy)
         {
-            enemy.antimatter += antimatterValue;
+            enemy.antimatter += antimatterValue * enemy.ResistanceMult(DamageType.radiation);
         }
     }
     public static Antimatter AntimatterStats = new Antimatter();

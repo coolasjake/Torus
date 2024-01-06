@@ -15,7 +15,7 @@ MonoBehaviour:
   damageType: 9
   allowedWeapons: -1
   requireType: 0
-  minWave: 1
+  minWave: 7
   maxWave: 20
   maxRepeats: 0
   rarity: 0
@@ -23,8 +23,7 @@ MonoBehaviour:
     damage.
   effects:
   - name: Antimatter Power
-    priority: 0
-    isPower: 0
+    isWeaponPower: 0
     operation: 2
     change: 100
   preReqAbilities: []

@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b24d2c40d1402841b8d2e98b1177a0b, type: 3}
-  m_Name: Efficient Fuel
-  m_EditorClassIdentifier: Assembly-CSharp::Ability
-  damageType: 3
-  allowedWeapons: 247
+  m_Name: Infinite Lightning
+  m_EditorClassIdentifier: 
+  damageType: 5
+  allowedWeapons: 8
   requireType: 1
   minWave: 1
   maxWave: 20
   maxRepeats: 0
   rarity: 0
-  description: Fire lasts longer.
+  description: The first enemy hit by the laser has no delay between lightning strikes.
   effects:
-  - name: Fire Duration
-    isWeaponPower: 0
-    operation: 2
-    change: 50
+  - name: InfiniteLightning
+    isWeaponPower: 1
+    operation: 3
+    change: 1
   preReqAbilities: []
   incompatibleAbilities: []
