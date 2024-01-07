@@ -326,15 +326,19 @@ public static class DamageEvents
     public static bool Includes(this DamageTypeFlags flag, DamageType damageType)
     {
         DamageTypeFlags flagOfType = (DamageTypeFlags)(1 << (int)damageType - 1);
-        if (flag.HasFlag(flagOfType))
-            return true;
-        return false;
+        return flag.HasFlag(flagOfType);
     }
 
     public static DamageTypeFlags PlusType(this DamageTypeFlags flag, DamageType newType)
     {
         DamageTypeFlags flagOfType = (DamageTypeFlags)(1 << (int)newType - 1);
         return flag | flagOfType;
+    }
+
+    public static DamageTypeFlags WithoutType(this DamageTypeFlags flag, DamageType typeToRemove)
+    {
+        DamageTypeFlags flagOfType = (DamageTypeFlags)(1 << (int)typeToRemove - 1);
+        return flag & ~flagOfType;
     }
 
     public static bool Includes(this WeaponType field, WeaponType value)

@@ -13,9 +13,9 @@ public class UpgradeController : MonoBehaviour
 
     public List<AbilityUI> buttons = new List<AbilityUI>();
 
+    public static Ability[] allAbilities = null;
+
     //Ability lists are shown in inspector for debugging only
-    [SerializeField]
-    private List<Ability> possibleAbilities = new List<Ability>();
     [SerializeField]
     private List<Ability> availableAbilities = new List<Ability>();
     [SerializeField]
@@ -23,13 +23,6 @@ public class UpgradeController : MonoBehaviour
 
     private List<Ability> appliedAbilities = new List<Ability>();
     private List<Ability> impossibleAbilities = new List<Ability>();
-
-    private Ability StoreAsImpossible(Ability ability)
-    {
-        impossibleAbilities.Add(ability);
-        print(ability.name + " is now impossible.");
-        return ability;
-    }
 
     private bool _initialized = false;
 
@@ -43,32 +36,96 @@ public class UpgradeController : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    private void GetAbilities()
+    private void GetAvailableAbilities()
     {
-        Ability[] allAbilities = Resources.LoadAll<Ability>(abilityDataFolder);
+        //Load all abilities
+        if (allAbilities == null || allAbilities.Length == 0)
+            allAbilities = Resources.LoadAll<Ability>(abilityDataFolder);
         if (allAbilities.Length == 0)
             Debug.LogError("No abilities found at path: " + abilityDataFolder);
 
-        string abilities = "All Abilities (" + allAbilities.Length + "): ";
+        //Add valid abilities to available abilies list.
+        availableAbilities.Clear();
         foreach (Ability ability in allAbilities)
         {
-            abilities += "\n" + ability.name;
-        }
-        print(abilities);
+            bool isValid =
+                CanBeUnlockedOrRepeated(ability) &&
+                IsAllowedThisWave(ability) &&
+                IsValidType(ability) &&
+                HasRequirementsMet(ability) &&
+                IsNotIncompatible(ability);
 
-        foreach (Ability ability in allAbilities)
+            if (isValid)
+                availableAbilities.Add(ability);
+        }
+    }
+
+    /// <summary> True if the ability has not already been unlocked, and is below max number of repeats. </summary>
+    private bool CanBeUnlockedOrRepeated(Ability ability)
+    {
+        int count = 0;
+        foreach (Ability existingAbility in appliedAbilities)
         {
-            //If the ability is for this weapon, and doesn't have an incompatible type, it belongs in either the possible or available list
-            if (ability.allowedWeapons.Includes(targetWeapon.Type()) && targetWeapon.incompatibleDamageTypes.Includes(ability.damageType) == false)
+            if (ability.name == existingAbility.name)
+                count += 1;
+        }
+        return count < ability.maxRepeats + 1;
+    }
+
+    /// <summary> True if wave number is between the abilities min and max waves. </summary>
+    private bool IsAllowedThisWave(Ability ability)
+    {
+        return BattleController.WaveNumber >= ability.minWave && BattleController.WaveNumber <= ability.maxWave;
+    }
+
+    /// <summary> True if the ability doesn't require type and is not an incompatible damage type,
+    /// or does require type and is an existing damage type (existing trumps incompatible). </summary>
+    private bool IsValidType(Ability ability)
+    {
+        return (ability.requireType == false && targetWeapon.incompatibleDamageTypes.Includes(ability.damageType) == false)
+            || (ability.requireType == true && targetWeapon.existingDamageTypes.Includes(ability.damageType));
+    }
+
+    /// <summary> True if the prerequisites of the ability are met. </summary>
+    private bool HasRequirementsMet(Ability ability)
+    {
+        if (ability.preReqAbilities.Count > 0)
+        {
+            bool[] preReqs = new bool[ability.preReqAbilities.Count];
+            bool allMet = false;
+            foreach (Ability existingAbility in appliedAbilities)
             {
-                //Add to available abilities if it has no prerequisites, and is either of a damage type that the weapon has or is allowed to unlock its damage type
-                if (ability.preReqAbilities.Count == 0 && (targetWeapon.existingDamageTypes.Includes(ability.damageType) || ability.requireType == false) && ability.minWave <= 1)
-                    availableAbilities.Add(ability);
-                else
-                    possibleAbilities.Add(ability);
+                allMet = true;
+                for (int i = 0; i < ability.preReqAbilities.Count; ++i)
+                {
+                    if (preReqs[i] || existingAbility.name == ability.preReqAbilities[i])
+                        preReqs[i] = true;
+                    else
+                        allMet = false;
+                }
+                if (allMet)
+                    break;
+            }
+            return allMet;
+        }
+        return true;
+    }
+
+    /// <summary> True if no abilities that THIS ability is incompatible with have been applied (does not check existing abilities being compatible with this one). </summary>
+    private bool IsNotIncompatible(Ability ability)
+    {
+        if (ability.incompatibleAbilities.Count > 0)
+        {
+            foreach (Ability existingAbility in appliedAbilities)
+            {
+                for (int i = 0; i < ability.incompatibleAbilities.Count; ++i)
+                {
+                    if (existingAbility.name == ability.incompatibleAbilities[i])
+                        return false;
+                }
             }
         }
-        PrintAbilityOptions();
+        return true;
     }
 
     public void StartUpgrading()
@@ -101,10 +158,9 @@ public class UpgradeController : MonoBehaviour
         }
 
         title.text = targetWeapon.Type().ToString() + " Upgrades";
-        GetAbilities();
-
-        //Must be after get abilities or default type abilities will not be removed when applied to weapons
+        //Must be before get because setup adds the default ability of existing damage types to the applied list so they aren't offered
         SetupDamageTypes();
+        GetAvailableAbilities();
     }
 
     private void SetupDamageTypes()
@@ -132,8 +188,8 @@ public class UpgradeController : MonoBehaviour
         {
             availableAbilities.Add(ability);
         }
-
         chosenAbilities.Clear();
+
         PrintAbilityOptions();
 
         foreach (AbilityUI button in buttons)
@@ -167,12 +223,6 @@ public class UpgradeController : MonoBehaviour
 
     private void PrintAbilityOptions()
     {
-        string possible = "Possible Abilities for " + targetWeapon.name + " (" + possibleAbilities.Count + "): ";
-        foreach (Ability ability in possibleAbilities)
-        {
-            possible += "\n" + ability.name;
-        }
-        print(possible);
         string available = "Available Abilities for " + targetWeapon.name + " (" + availableAbilities.Count + "): ";
         foreach (Ability ability in availableAbilities)
         {
@@ -231,33 +281,13 @@ public class UpgradeController : MonoBehaviour
         //Add ability to the list of applied abilities (for checking exlusions / prereqs / repeats)
         appliedAbilities.Add(chosenAbility);
 
-        //If the ability has been repeated less than its max repeats, add it back to the pool, otherwise remove it
-        if (chosenAbility.maxRepeats > 0)
-        {
-            int count = 0;
-            foreach (Ability ability in appliedAbilities)
-            {
-                if (ability.name == chosenAbility.name)
-                    count += 1;
-            }
-            if (count > chosenAbility.maxRepeats)
-            {
-                availableAbilities.Remove(chosenAbility);
-                possibleAbilities.Remove(chosenAbility);
-            }
-        }
-        else
-        {
-            availableAbilities.Remove(chosenAbility);
-            possibleAbilities.Remove(chosenAbility);
-        }
-
+        //If the ability doesn't require its type to already be on the weapon, add its type to the weapon.
         if (chosenAbility.requireType == false && chosenAbility.damageType != DamageType.none)
         {
             //Add to existing damage types flag
             targetWeapon.existingDamageTypes = targetWeapon.existingDamageTypes.PlusType(chosenAbility.damageType);
 
-            //Add incompatible types to incompatible types flag
+            //Add types incompatible with this damage type to incompatible types flag
             foreach (DamageType type in System.Enum.GetValues(typeof(DamageType)))
             {
                 if (StaticRefs.DamageTypesAreCompatible(type, chosenAbility.damageType) == false)
@@ -265,59 +295,6 @@ public class UpgradeController : MonoBehaviour
                     targetWeapon.incompatibleDamageTypes = targetWeapon.incompatibleDamageTypes.PlusType(type);
                 }
             }
-
-            //Remove abilities that are now impossible due to damage type
-            for (int i = 0; i < possibleAbilities.Count; ++i)
-            {
-                if (targetWeapon.incompatibleDamageTypes.Includes(possibleAbilities[i].damageType))
-                    possibleAbilities.RemoveAt(i--);
-            }
-            for (int i = 0; i < availableAbilities.Count; ++i)
-            {
-                if (targetWeapon.incompatibleDamageTypes.Includes(availableAbilities[i].damageType))
-                    availableAbilities.RemoveAt(i--);
-            }
-        }
-
-        //Add abilities that are now valid to the available pool, and remove impossible abilites
-        for (int i = 0; i < possibleAbilities.Count; ++i)
-        {
-            if (possibleAbilities[i].incompatibleAbilities.Contains(chosenAbility.name) || BattleController.WaveNumber > possibleAbilities[i].maxWave)
-            {
-                possibleAbilities.RemoveAt(i--);
-                continue;
-            }
-
-            //If a possible ability now has all prerequisites and the weapon has it's type unlocked (or it doesn't require the type to be unlocked), add it to the available list
-            if ((possibleAbilities[i].requireType == false || targetWeapon.existingDamageTypes.Includes(possibleAbilities[i].damageType))
-                && BattleController.WaveNumber >= possibleAbilities[i].minWave)
-            {
-                bool allPrerequisitesUnlocked = true;
-                foreach (string preReqName in possibleAbilities[i].preReqAbilities)
-                {
-                    if (appliedAbilities.Find(X => X.name == preReqName) == false)
-                    {
-                        allPrerequisitesUnlocked = false;
-                        break;
-                    }
-                }
-                if (allPrerequisitesUnlocked)
-                {
-                    availableAbilities.Add(possibleAbilities[i]);
-                    possibleAbilities.RemoveAt(i--);
-                }
-                else
-                    print(possibleAbilities[i].name + "not possible because of pre-reqs.");
-            }
-            else
-                print(possibleAbilities[i].name + "not possible because of type (" + possibleAbilities[i].damageType + ") or wave number.");
-        }
-
-        //Remove abilities that are incompatible with this ability from the available pool
-        for (int i = 0; i < availableAbilities.Count; ++i)
-        {
-            if (availableAbilities[i].incompatibleAbilities.Contains(chosenAbility.name))
-                availableAbilities.RemoveAt(i--);
         }
     }
 }

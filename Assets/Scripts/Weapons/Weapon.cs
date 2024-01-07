@@ -386,6 +386,29 @@ public abstract class Weapon : TorusMotion
             }
         }
 
+        if (statName.Contains("allow type "))
+        {
+            string simplifiedName = statName.Replace("allow type ", "");
+            DamageType damageType;
+            if (Enum.TryParse(simplifiedName, out damageType))
+            {
+                existingDamageTypes = existingDamageTypes.PlusType(damageType);
+                return;
+            }
+        }
+
+        if (statName.Contains("disable type "))
+        {
+            string simplifiedName = statName.Replace("disable type ", "");
+            DamageType damageType;
+            if (Enum.TryParse(simplifiedName, out damageType))
+            {
+                existingDamageTypes = existingDamageTypes.WithoutType(damageType);
+                incompatibleDamageTypes = incompatibleDamageTypes.PlusType(damageType);
+                return;
+            }
+        }
+
         switch (statName)
         {
             case "move speed":

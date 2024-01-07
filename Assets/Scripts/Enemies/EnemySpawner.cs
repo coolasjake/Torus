@@ -48,7 +48,10 @@ public class EnemySpawner : MonoBehaviour
 
         //Randomly assign difficulty points to fleets of main/rare enemies
         fleetAngles.Clear();
-        ChooseAllFleets(missionData.missionPlan.waves[_waveNumber]);
+        if (_waveNumber >= missionData.missionPlan.waves.Count)
+            ChooseAllFleets(missionData.missionPlan.waves[missionData.missionPlan.waves.Count]);
+        else
+            ChooseAllFleets(missionData.missionPlan.waves[_waveNumber]);
 
         string waveDescription = "Wave " + _waveNumber + " (" + missionData.missionPlan.waves[_waveNumber].name + ") = ";
         foreach (EnemyFleet fleet in fleetsToSpawn)
@@ -318,8 +321,6 @@ public class EnemySpawner : MonoBehaviour
     private void EndWave()
     {
         _waveNumber += 1;
-        if (_waveNumber >= missionData.missionPlan.waves.Count)
-            _waveNumber = missionData.missionPlan.waves.Count - 1;
         BattleController.EndWave();
     }
 
