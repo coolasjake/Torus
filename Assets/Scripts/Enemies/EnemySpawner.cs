@@ -22,6 +22,7 @@ public class EnemySpawner : MonoBehaviour
     [EnumNamedArray(typeof(EnemyClass))]
     public FleetType[] defaultFleets = new FleetType[Enum.GetNames(typeof(EnemyClass)).Length];
 
+    public int WaveNumber => _waveNumber;
     private int _waveNumber = 0;
     private bool _startSpawning = false;
     private float _waveStartTime = 0;

@@ -13,7 +13,7 @@ public class UpgradeController : MonoBehaviour
 
     public List<AbilityUI> buttons = new List<AbilityUI>();
 
-    //Groups lists are shown in inspector for debugging only
+    //Ability lists are shown in inspector for debugging only
     [SerializeField]
     private List<Ability> possibleAbilities = new List<Ability>();
     [SerializeField]
@@ -22,6 +22,14 @@ public class UpgradeController : MonoBehaviour
     private List<Ability> chosenAbilities = new List<Ability>();
 
     private List<Ability> appliedAbilities = new List<Ability>();
+    private List<Ability> impossibleAbilities = new List<Ability>();
+
+    private Ability StoreAsImpossible(Ability ability)
+    {
+        impossibleAbilities.Add(ability);
+        print(ability.name + " is now impossible.");
+        return ability;
+    }
 
     private bool _initialized = false;
 
@@ -37,11 +45,18 @@ public class UpgradeController : MonoBehaviour
 
     private void GetAbilities()
     {
-        Ability[] allGroupData = Resources.LoadAll<Ability>(abilityDataFolder);
-        if (allGroupData.Length == 0)
+        Ability[] allAbilities = Resources.LoadAll<Ability>(abilityDataFolder);
+        if (allAbilities.Length == 0)
             Debug.LogError("No abilities found at path: " + abilityDataFolder);
 
-        foreach (Ability ability in allGroupData)
+        string abilities = "All Abilities (" + allAbilities.Length + "): ";
+        foreach (Ability ability in allAbilities)
+        {
+            abilities += "\n" + ability.name;
+        }
+        print(abilities);
+
+        foreach (Ability ability in allAbilities)
         {
             //If the ability is for this weapon, and doesn't have an incompatible type, it belongs in either the possible or available list
             if (ability.allowedWeapons.Includes(targetWeapon.Type()) && targetWeapon.incompatibleDamageTypes.Includes(ability.damageType) == false)
@@ -53,6 +68,7 @@ public class UpgradeController : MonoBehaviour
                     possibleAbilities.Add(ability);
             }
         }
+        PrintAbilityOptions();
     }
 
     public void StartUpgrading()
@@ -69,6 +85,8 @@ public class UpgradeController : MonoBehaviour
         if (_initialized)
             return;
 
+        _initialized = true;
+
         if (targetWeapon == null)
         {
             Weapon[] weapons = FindObjectsOfType<Weapon>();
@@ -82,10 +100,11 @@ public class UpgradeController : MonoBehaviour
             }
         }
 
-        SetupDamageTypes();
-
         title.text = targetWeapon.Type().ToString() + " Upgrades";
         GetAbilities();
+
+        //Must be after get abilities or default type abilities will not be removed when applied to weapons
+        SetupDamageTypes();
     }
 
     private void SetupDamageTypes()
@@ -148,13 +167,13 @@ public class UpgradeController : MonoBehaviour
 
     private void PrintAbilityOptions()
     {
-        string possible = "Possible Abilities for " + targetWeapon.name + ": ";
+        string possible = "Possible Abilities for " + targetWeapon.name + " (" + possibleAbilities.Count + "): ";
         foreach (Ability ability in possibleAbilities)
         {
             possible += "\n" + ability.name;
         }
         print(possible);
-        string available = "Available Abilities for " + targetWeapon.name + ": ";
+        string available = "Available Abilities for " + targetWeapon.name + " (" + availableAbilities.Count + "): ";
         foreach (Ability ability in availableAbilities)
         {
             available += "\n" + ability.name;
@@ -181,7 +200,7 @@ public class UpgradeController : MonoBehaviour
 
     public void SelectButton(int buttonIndex)
     {
-        //Get group
+        //Get Ability
         Ability chosenAbility = chosenAbilities[buttonIndex];
 
         //Remove an upgrade point from the weapon
@@ -203,7 +222,7 @@ public class UpgradeController : MonoBehaviour
 
     public void ApplyAbility(Ability chosenAbility)
     {
-        //Apply effects of next ability in group to weapon
+        //Apply effects of this ability to weapon
         foreach (AbilityEffect effect in chosenAbility.effects)
         {
             effect.Apply(targetWeapon, chosenAbility.name);
@@ -260,10 +279,9 @@ public class UpgradeController : MonoBehaviour
             }
         }
 
-        //Add groups that are now valid to the available pool, and remove impossible abilites
+        //Add abilities that are now valid to the available pool, and remove impossible abilites
         for (int i = 0; i < possibleAbilities.Count; ++i)
         {
-            basicAbilitiesAreNotRemoved
             if (possibleAbilities[i].incompatibleAbilities.Contains(chosenAbility.name) || BattleController.WaveNumber > possibleAbilities[i].maxWave)
             {
                 possibleAbilities.RemoveAt(i--);
@@ -282,13 +300,17 @@ public class UpgradeController : MonoBehaviour
                         allPrerequisitesUnlocked = false;
                         break;
                     }
-                    if (allPrerequisitesUnlocked)
-                    {
-                        availableAbilities.Add(possibleAbilities[i]);
-                        possibleAbilities.RemoveAt(i--);
-                    }
                 }
+                if (allPrerequisitesUnlocked)
+                {
+                    availableAbilities.Add(possibleAbilities[i]);
+                    possibleAbilities.RemoveAt(i--);
+                }
+                else
+                    print(possibleAbilities[i].name + "not possible because of pre-reqs.");
             }
+            else
+                print(possibleAbilities[i].name + "not possible because of type (" + possibleAbilities[i].damageType + ") or wave number.");
         }
 
         //Remove abilities that are incompatible with this ability from the available pool

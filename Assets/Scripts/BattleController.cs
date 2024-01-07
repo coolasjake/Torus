@@ -6,8 +6,7 @@ public class BattleController : MonoBehaviour
 {
     public static BattleController singleton;
 
-    public static int WaveNumber => singleton._waveNumber;
-    private int _waveNumber = 0;
+    public static int WaveNumber => singleton.enemySpawner.WaveNumber;
     public int stationHealth = 9;
     public SpriteRenderer spaceStation;
     public List<Sprite> stationHealthSprites = new List<Sprite>();
@@ -57,7 +56,6 @@ public class BattleController : MonoBehaviour
 
     public static void EndWave()
     {
-        singleton._waveNumber += 1;
         for (int i = 0; i < _readyPlayers.Length; ++i)
             _readyPlayers[i] = false;
         foreach (UpgradeController upgrader in singleton.upgradeControllers)
