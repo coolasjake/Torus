@@ -87,6 +87,9 @@ public class BoomerangLauncher : Weapon
             case "boomerang speed":
                 boomerangSpeed.AddModifier(modifierName, value, operation);
                 return;
+            case "boomerang size":
+                boomerangSize.AddModifier(modifierName, value, operation);
+                return;
         }
 
         base.AddModifier(statName, modifierName, operation, value);

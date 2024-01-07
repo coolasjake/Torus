@@ -10,37 +10,37 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b24d2c40d1402841b8d2e98b1177a0b, type: 3}
-  m_Name: HollowBullets
+  m_Name: Negative Beam
   m_EditorClassIdentifier: 
-  damageType: 0
-  allowedWeapons: 1
+  damageType: 5
+  allowedWeapons: 8
   requireType: 1
-  minWave: 1
-  maxWave: 20
+  minWave: 0
+  maxWave: 0
   maxRepeats: 0
   rarity: 0
-  description: Bullets deal 50% less physical damage, but double acid, nanites, radiation
-    and lightning damage.
+  description: The laser deals cold damage instead of heat damage, and cold upgrades
+    replace heat upgrades.
   effects:
-  - name: Physical Power
+  - name: Diable Type Heat
+    isWeaponPower: 0
+    operation: 3
+    change: 1
+  - name: Cold Power
     isWeaponPower: 0
     operation: 2
-    change: -50
-  - name: Acid Power
+    change: 100
+  - name: Heat Power
     isWeaponPower: 0
     operation: 1
-    change: 2
-  - name: Nanites Power
+    change: 0
+  - name: Enable Type Cold
     isWeaponPower: 0
-    operation: 1
-    change: 2
-  - name: Radiation Power
+    operation: 3
+    change: 1
+  - name: Enable Type Cold
     isWeaponPower: 0
-    operation: 1
-    change: 2
-  - name: Lightning Power
-    isWeaponPower: 0
-    operation: 1
-    change: 2
+    operation: 3
+    change: 1
   preReqAbilities: []
   incompatibleAbilities: []

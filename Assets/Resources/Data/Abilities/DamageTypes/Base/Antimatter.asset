@@ -15,7 +15,7 @@ MonoBehaviour:
   damageType: 9
   allowedWeapons: -1
   requireType: 0
-  minWave: 7
+  minWave: 1
   maxWave: 20
   maxRepeats: 0
   rarity: 0

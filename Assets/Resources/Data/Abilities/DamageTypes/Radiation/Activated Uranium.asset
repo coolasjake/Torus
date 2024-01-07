@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b24d2c40d1402841b8d2e98b1177a0b, type: 3}
   m_Name: Activated Uranium
   m_EditorClassIdentifier: Assembly-CSharp::Ability
-  damageType: 0
+  damageType: 6
   allowedWeapons: 0
-  requireType: 1
+  requireType: 0
   minWave: 1
   maxWave: 20
   maxRepeats: 0
@@ -22,8 +22,7 @@ MonoBehaviour:
   description: Radiation is 20% stronger.
   effects:
   - name: Radiation Power
-    priority: 0
-    isPower: 0
+    isWeaponPower: 0
     operation: 2
     change: 0.2
   preReqAbilities: []

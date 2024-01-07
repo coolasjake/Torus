@@ -22,8 +22,7 @@ MonoBehaviour:
   description: Weapon inflicts lightning damage that jumps to nearby enemies.
   effects:
   - name: Lightning Power
-    priority: 0
-    isPower: 0
+    isWeaponPower: 0
     operation: 2
     change: 100
   preReqAbilities: []

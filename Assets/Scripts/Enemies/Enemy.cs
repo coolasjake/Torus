@@ -64,10 +64,11 @@ public class Enemy : TorusMotion
         temperature += byValue / Size;
     }
 
-    /// <summary> Time that the latest stun effect on this enemy will end. </summary>
+    /// <summary> True if lightning attacks on this enemy are on cooldown. </summary>
     public bool Grounded => Time.time < _lastLightningHit + StaticRefs.GroundedDur;
     private float _lastLightningHit = 0f;
-    private bool Stunned => _stunnedUntil > Time.time;
+    /// <summary> True if the enemy is stunned. </summary>
+    public bool Stunned => _stunnedUntil > Time.time;
     private float _stunnedUntil = 0;
     private Weapon _lastStunnedBy = null;
     public bool LightningHit(Weapon by)
@@ -215,7 +216,7 @@ public class Enemy : TorusMotion
 
         float modifier = 1f;
 
-        if (Class == EnemyClass.fast && Height < StaticRefs.BoostStartingHeight)
+        if (Class == EnemyClass.fast && Height < StaticRefs.BoostStartingHeight && DamageEvents.CanUseAbility(this))
             modifier += AbilityPower;
 
         //Apply cold and frozen modifiers
@@ -232,7 +233,7 @@ public class Enemy : TorusMotion
 
     public bool CheckDodge(Vector2 hitPos)
     {
-        if (Class == EnemyClass.dodge && Time.time > _lastDodge + AbilityPower && Stunned == false && Frozen == false)
+        if (Class == EnemyClass.dodge && Time.time > _lastDodge + AbilityPower && DamageEvents.CanUseAbility(this))
         {
             float movement = StaticRefs.DodgeDist;
             if (TorusMotion.AngleFromPos(hitPos) > Angle)

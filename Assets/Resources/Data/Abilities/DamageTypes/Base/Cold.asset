@@ -22,8 +22,7 @@ MonoBehaviour:
   description: Weapon inflicts cold damage.
   effects:
   - name: Cold Power
-    priority: 0
-    isPower: 0
+    isWeaponPower: 0
     operation: 2
     change: 100
   preReqAbilities: []

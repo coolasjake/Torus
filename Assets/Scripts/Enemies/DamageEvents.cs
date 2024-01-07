@@ -7,7 +7,7 @@ public static class DamageEvents
     /// <summary> Reduce damage if this enemy is a tank or has some ability effecting it. </summary>
     public static float AfterAbilityReductions(this Enemy enemy, float damage)
     {
-        if (enemy.Class == EnemyClass.tank)
+        if (enemy.Class == EnemyClass.tank && CanUseAbility(enemy))
             damage -= enemy.AbilityPower;
 
         if (enemy.Frozen && ColdStats.frozenFortress)
@@ -24,6 +24,13 @@ public static class DamageEvents
         int effectiveArmour = Mathf.Clamp(enemy.Armour - enemy.meltedArmour - enemy.dissolvedArmour - pierce, 0, 10);
 
         return 1f - effectiveArmour * (type == DamageType.physical ? 0.08f : 0.05f);
+    }
+
+    public static bool CanUseAbility(Enemy enemy)
+    {
+        if (enemy.Frozen || enemy.Stunned)
+            return false;
+        return true;
     }
 
     public static void BaseTempChange(Enemy enemy)

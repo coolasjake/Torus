@@ -386,9 +386,9 @@ public abstract class Weapon : TorusMotion
             }
         }
 
-        if (statName.Contains("allow type "))
+        if (statName.Contains("enable type "))
         {
-            string simplifiedName = statName.Replace("allow type ", "");
+            string simplifiedName = statName.Replace("enable type ", "");
             DamageType damageType;
             if (Enum.TryParse(simplifiedName, out damageType))
             {

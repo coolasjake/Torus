@@ -1,29 +1,11 @@
-ART FOR ADAM TO MAKE:
+WEAPONS:
+	- Freeze ray
+	- Antimatter gun
 
-WEAPONS
-- Big Laser
-	+ Laser
-- Railgun
-- Freeze Ray
-- Boomerang Chainsaw
-	+ Chainsaw
-- Flamethrower
-	+ Fire balls
-- Antimatter Gun
-	+ Antimatter ball
-	+ Antimatter explosion
-- Machine Gun
-- Missile Launcher
-	+ Missile
-- Cheese gun
-	+ Cheese blob
-
-EFFECTS
-- Fire (animated)
-- Lightning (animated)
+FIX:
+Missile launcher explosion size
 
 ENEMIES
-- Come up with cool ideas
 - Infested (full of nanites that heal them slowly)
 
 

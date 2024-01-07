@@ -201,7 +201,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &63070256
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1388,7 +1388,6 @@ MonoBehaviour:
   - {fileID: 928874878}
   - {fileID: 2052989815}
   - {fileID: 1542349281}
-  possibleAbilities: []
   availableAbilities: []
   chosenAbilities: []
 --- !u!1 &554817057
@@ -1408,7 +1407,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &554817058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1421,7 +1420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 274ddc85ba3be794a9fc0607b67001c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  incompatibleDamageTypes: 0
+  incompatibleDamageTypes: 2
   existingDamageTypes: 4
   playerIndex: 1
   doDirectionSwapping: 0
@@ -2500,7 +2499,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1312168638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3301,7 +3300,6 @@ MonoBehaviour:
   - {fileID: 296145541}
   - {fileID: 1123601177}
   - {fileID: 1766117361}
-  possibleAbilities: []
   availableAbilities: []
   chosenAbilities: []
 --- !u!114 &1443561733
@@ -3833,7 +3831,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   incompatibleDamageTypes: 256
   existingDamageTypes: 2
-  playerIndex: 0
+  playerIndex: 1
   doDirectionSwapping: 0
   moveSpeed:
     defaultValue: 180
@@ -4380,7 +4378,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   incompatibleDamageTypes: 304
-  existingDamageTypes: 6
+  existingDamageTypes: 2
   playerIndex: 0
   doDirectionSwapping: 0
   moveSpeed:
@@ -4615,7 +4613,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1657685845}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.26, y: 0, z: 0}
+  m_LocalPosition: {x: -2.27, y: 0, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children:
   - {fileID: 1612384270}
@@ -5295,7 +5293,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1891033584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5347,7 +5345,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     physical:
-      defaultValue: 1
+      defaultValue: 5
       min: 0
       max: Infinity
       addition: 0
@@ -5355,7 +5353,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     heat:
-      defaultValue: 1
+      defaultValue: 5
       min: 0
       max: Infinity
       addition: 0
@@ -5363,7 +5361,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     cold:
-      defaultValue: 1
+      defaultValue: 5
       min: 0
       max: Infinity
       addition: 0
@@ -5371,7 +5369,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     radiation:
-      defaultValue: 1
+      defaultValue: 5
       min: 0
       max: Infinity
       addition: 0
@@ -5379,7 +5377,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     acid:
-      defaultValue: 1
+      defaultValue: 5
       min: 0
       max: Infinity
       addition: 0
@@ -5387,7 +5385,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     lightning:
-      defaultValue: 1
+      defaultValue: 5
       min: 0
       max: Infinity
       addition: 0
@@ -5395,7 +5393,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     nanites:
-      defaultValue: 1
+      defaultValue: 5
       min: 0
       max: Infinity
       addition: 0
@@ -5403,7 +5401,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     antimatter:
-      defaultValue: 1
+      defaultValue: 5
       min: 0
       max: Infinity
       addition: 0
@@ -6863,7 +6861,7 @@ PrefabInstance:
       objectReference: {fileID: 1442570269}
     - target: {fileID: 6896147028492663563, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
       propertyPath: getAbilityOnStart
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6896147028492663563, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
       propertyPath: upgradeControllers.Array.data[0]

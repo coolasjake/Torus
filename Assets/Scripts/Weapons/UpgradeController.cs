@@ -49,6 +49,7 @@ public class UpgradeController : MonoBehaviour
         foreach (Ability ability in allAbilities)
         {
             bool isValid =
+                IsAllowedOnWeapon(ability) &&
                 CanBeUnlockedOrRepeated(ability) &&
                 IsAllowedThisWave(ability) &&
                 IsValidType(ability) &&
@@ -58,6 +59,8 @@ public class UpgradeController : MonoBehaviour
             if (isValid)
                 availableAbilities.Add(ability);
         }
+
+        PrintAbilityOptions();
     }
 
     /// <summary> True if the ability has not already been unlocked, and is below max number of repeats. </summary>
@@ -84,6 +87,13 @@ public class UpgradeController : MonoBehaviour
     {
         return (ability.requireType == false && targetWeapon.incompatibleDamageTypes.Includes(ability.damageType) == false)
             || (ability.requireType == true && targetWeapon.existingDamageTypes.Includes(ability.damageType));
+    }
+
+    /// <summary> True if the ability doesn't require type and is not an incompatible damage type,
+    /// or does require type and is an existing damage type (existing trumps incompatible). </summary>
+    private bool IsAllowedOnWeapon(Ability ability)
+    {
+        return ability.allowedWeapons.Includes(targetWeapon.Type());
     }
 
     /// <summary> True if the prerequisites of the ability are met. </summary>
@@ -158,9 +168,7 @@ public class UpgradeController : MonoBehaviour
         }
 
         title.text = targetWeapon.Type().ToString() + " Upgrades";
-        //Must be before get because setup adds the default ability of existing damage types to the applied list so they aren't offered
         SetupDamageTypes();
-        GetAvailableAbilities();
     }
 
     private void SetupDamageTypes()
@@ -184,14 +192,11 @@ public class UpgradeController : MonoBehaviour
 
     private void ChooseOptions()
     {
-        foreach (Ability ability in chosenAbilities)
-        {
-            availableAbilities.Add(ability);
-        }
-        chosenAbilities.Clear();
+        GetAvailableAbilities();
 
         PrintAbilityOptions();
 
+        chosenAbilities.Clear();
         foreach (AbilityUI button in buttons)
         {
             if (availableAbilities.Count == 0)
@@ -256,14 +261,6 @@ public class UpgradeController : MonoBehaviour
         //Remove an upgrade point from the weapon
         if (targetWeapon.UseUpgradePoint() == false)
             return;
-
-        //Add remaining chosen abilities (abilities that were a button option) back to the pool
-        //chosenAbilities.RemoveAt(buttonIndex);
-        foreach (Ability ability in chosenAbilities)
-        {
-            availableAbilities.Add(ability);
-        }
-        chosenAbilities.Clear();
 
         ApplyAbility(chosenAbility);
 
