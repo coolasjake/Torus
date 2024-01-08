@@ -8,6 +8,7 @@ public class TorusTester : MonoBehaviour
     public float gizmoHeight = 1f;
     public Color gizmoColour = Color.blue;
     public int gizmoSections = 360;
+    public bool drawRays = false;
     public TorusMotion targetA;
     public TorusMotion targetB;
     public Vector2 speed = Vector2.one;
@@ -26,27 +27,39 @@ public class TorusTester : MonoBehaviour
             return;
     }
 
-    void OnDrawGizmos()
+    public static void DrawTorusGizmo(float height, int numSections, Color colour)
     {
-        Gizmos.color = gizmoColour;
+        Gizmos.color = colour;
         Vector2 lastPos = TorusMotion.GetPos(0);
-        for (int i = 0; i <= gizmoSections; ++i)
+        for (int i = 0; i <= numSections; ++i)
         {
-            Vector2 newPos = TorusMotion.GetPos(i * (360f / gizmoSections), gizmoHeight);
+            Vector2 newPos = TorusMotion.GetPos(i * (360f / numSections), height);
             Gizmos.DrawLine(lastPos, newPos);
             lastPos = newPos;
         }
+    }
 
-        for (int i = 0; i < gizmoSections / 5; ++i)
+    void OnDrawGizmos()
+    {
+        if (enabled == false)
+            return;
+
+        DrawTorusGizmo(gizmoHeight, gizmoSections, gizmoColour);
+
+        if (drawRays)
         {
-            float angle = i * (360f / (gizmoSections / 5));
-            Vector2 origin = TorusMotion.torusOrigin;
-            Vector2 torusPoint = TorusMotion.GetPos(angle, 1);
-            Vector2 space = TorusMotion.GetPos(angle, 10);
+            for (int i = 0; i < gizmoSections / 5; ++i)
+            {
+                float angle = i * (360f / (gizmoSections / 5));
+                Vector2 origin = TorusMotion.torusOrigin;
+                Vector2 torusPoint = TorusMotion.GetPos(angle, 1);
+                Vector2 space = TorusMotion.GetPos(angle, 10);
 
-            Gizmos.DrawLine(origin, torusPoint);
-            Gizmos.DrawLine(torusPoint, space);
+                Gizmos.DrawLine(origin, torusPoint);
+                Gizmos.DrawLine(torusPoint, space);
+            }
         }
+
     }
 
     private void OnDrawGizmosSelected()

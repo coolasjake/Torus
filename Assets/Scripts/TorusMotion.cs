@@ -35,6 +35,8 @@ public class TorusMotion : MonoBehaviour
         }
     }
 
+    public bool RotateWithAngle { get; set; } = true;
+
     public void MoveCloser(float dist)
     {
         Height -= dist;
@@ -70,8 +72,8 @@ public class TorusMotion : MonoBehaviour
     private void UpdatePos()
     {
         transform.position = GetPos(_angle, _height);
-        //SimpleRotation();
-        AccurateRotation();
+        if (RotateWithAngle)
+            AccurateRotation();
         transform.hasChanged = false;
     }
 

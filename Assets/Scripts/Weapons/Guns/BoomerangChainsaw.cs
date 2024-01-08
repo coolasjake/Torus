@@ -9,6 +9,7 @@ public class BoomerangChainsaw : TorusMotion
 
     [HideInInspector]
     public Vector2 torusVelocity = Vector2.zero;
+    public LineRenderer laser;
     public float radius = 1f;
 
     void FixedUpdate()
