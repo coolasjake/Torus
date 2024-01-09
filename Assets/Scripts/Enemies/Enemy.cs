@@ -231,6 +231,7 @@ public class Enemy : TorusMotion
         return ClassSpeed * modifier * Time.fixedDeltaTime * StaticRefs.BaseSpeed;
     }
 
+    /// <summary> Check if the enemy can dodge, and make it dodge then return true if it can. Pos determines dodge direction. </summary>
     public bool CheckDodge(Vector2 hitPos)
     {
         if (Class == EnemyClass.dodge && Time.time > _lastDodge + AbilityPower && DamageEvents.CanUseAbility(this))

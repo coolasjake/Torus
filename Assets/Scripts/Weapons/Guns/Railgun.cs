@@ -14,6 +14,10 @@ public class Railgun : Weapon
     [Header("Railgun Stats")]
     public ModifiableFloat bulletSpeed = new ModifiableFloat(10f, 0.01f, 1000f);
     public ModifiableFloat pierces = new ModifiableFloat(1f, 0f, 100f);
+    [Min(1)]
+    public ModifiableFloat shotsPerCharge = new ModifiableFloat(1f, 1f, 10f);
+    public ModifiableFloat shockwaveRadius = new ModifiableFloat(1f, 0.01f, 5f);
+    public ModifiableFloat shockwaveDamageMult = new ModifiableFloat(0.01f, 0.01f, 1f);
 
     [Header("Railgun Refs")]
     public LineRenderer aimingLaser;
@@ -65,8 +69,28 @@ public class Railgun : Weapon
             return;
         StaticRefs.SpawnExplosion(0.5f, rod.transform.position);
         DefaultHit(enemy);
+        if (powers[(int)RailGunPowers.Shockwave] > 0 && damageStats.physical.Value > 0)
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(rod.transform.position, shockwaveRadius.Value);
+            foreach (Collider2D collider in colliders)
+            {
+                enemy = collider.GetComponent<Enemy>();
+                if (enemy)
+                    ShockwaveHit(enemy, rod.transform.position);
+            }
+        }
         if (rod.remainingPierces-- <= 0)
             Destroy(rod.gameObject);
+    }
+
+    private void ShockwaveHit(Enemy enemy, Vector2 rodPos)
+    {
+        if (enemy.CheckDodge(rodPos))
+            return;
+        //Physical Damage
+        float physicalDamage = DamageAfterArmour(enemy, DamageType.physical) * shockwaveDamageMult.Value;
+        enemy.lastHitBy = this;
+        DamageEvents.Physical.DamageEnemy(physicalDamage, enemy);
     }
 
     public override void AddModifier(string statName, string modifierName, StatChangeOperation operation, float value)
@@ -78,6 +102,9 @@ public class Railgun : Weapon
                 return;
             case "pierces":
                 pierces.AddModifier(modifierName, value, operation);
+                return;
+            case "charges":
+                shotsPerCharge.AddModifier(modifierName, value, operation);
                 return;
         }
 
@@ -112,5 +139,6 @@ public class Railgun : Weapon
     {
         AimLaser,
         HardeningRadiation,
+        Shockwave,
     }
 }

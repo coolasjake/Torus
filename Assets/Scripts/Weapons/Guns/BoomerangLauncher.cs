@@ -12,9 +12,17 @@ public class BoomerangLauncher : Weapon
     }
 
     [Header("BoomerangLauncher Stats")]
-    public bool unstoppableMode = false;
-    public float unstoppableModeSpeedMult = 0.1f;
-    public float acceleration = 0.2f;
+    public BladeMode bladeMode = BladeMode.boomerang;
+    public enum BladeMode
+    {
+        boomerang,
+        agile,
+        disposable,
+        pong,
+    }
+    public float agileModeSpeedMult = 0.1f;
+    public float agileModeAccelleration = 0.2f;
+    public float disposableSpeedMult = 0.5f;
     bool laser = false;
     public bool holdForSlow = false;
     [Min(1f)]
@@ -22,11 +30,13 @@ public class BoomerangLauncher : Weapon
     public ModifiableFloat boomerangSpeed = new ModifiableFloat(10f, 0.01f, 1000f);
     public float boomerangMaxRange = 5f;
     public ModifiableFloat boomerangSize = new ModifiableFloat(0.5f, 0.1f, 5f);
+    public ModifiableFloat numBoomerangs = new ModifiableFloat(1, 0.1f, 5f);
     public float rotationSpeed = 1f;
 
     private float _firingPointHeight = 1f;
 
     [Header("BoomerangLauncher Refs")]
+    public Transform laserOrigin;
     private BoomerangChainsaw boomerangPrefab;
 
     private List<BoomerangChainsaw> boomerangObjs = new List<BoomerangChainsaw>();
@@ -35,7 +45,7 @@ public class BoomerangLauncher : Weapon
     protected override bool Fire()
     {
         _firingPointHeight = TorusMotion.AngleHeightFromPos(firingPoint.position).y;
-        if (boomerangObjs.Count <= 0 && Time.time > _lastShot + FireRate)
+        if (boomerangObjs.Count < numBoomerangs.Value && Time.time > _lastShot + FireRate)
         {
             boomerangObjs.Add(CreateChainsaw());
         }
@@ -46,8 +56,13 @@ public class BoomerangLauncher : Weapon
     {
         BoomerangChainsaw newBoomerang = Instantiate(boomerangPrefab, firingPoint.position, firingPoint.rotation);
         float speed = boomerangSpeed.Value;
-        if (unstoppableMode)
-            speed = speed * unstoppableModeSpeedMult;
+        if (bladeMode == BladeMode.agile)
+            speed = speed * agileModeSpeedMult;
+        else if (bladeMode == BladeMode.disposable)
+        {
+            speed = speed * disposableSpeedMult;
+            newBoomerang.laser.gameObject.SetActive(false);
+        }
         newBoomerang.torusVelocity = new Vector2(0, speed);
         newBoomerang.boomerangLauncher = this;
         newBoomerang.transform.localScale = new Vector3(boomerangSize.Value, boomerangSize.Value, boomerangSize.Value);
@@ -55,29 +70,27 @@ public class BoomerangLauncher : Weapon
         return newBoomerang;
     }
 
-    private void ReplaceChainsaws()
+    private void DestroyChainsaws()
     {
         int count = boomerangObjs.Count;
         for (int i = 0; i < count; ++i)
         {
-            BoomerangChainsaw newBoomerang = CreateChainsaw();
-            newBoomerang.torusVelocity = boomerangObjs[i].torusVelocity;
-            newBoomerang.AngleAndHeight = boomerangObjs[i].AngleAndHeight;
-            Destroy(boomerangObjs[i].gameObject);
-            boomerangObjs.RemoveAt(i);
-            --i;
+            Destroy(boomerangObjs[0].gameObject);
+            boomerangObjs.RemoveAt(0);
         }
     }
 
     protected override void WeaponUpdate()
     {
-        if (unstoppableMode)
-            UnstoppableMode();
+        if (bladeMode == BladeMode.agile)
+            AgileMode();
+        else if (bladeMode == BladeMode.boomerang)
+            BoomerangMode();
         else
-            NormalMode();
+            DisposableMode();
     }
 
-    private void NormalMode()
+    private void BoomerangMode()
     {
         float downAcc = (boomerangSpeed.Value * boomerangSpeed.Value) / (2f * (boomerangMaxRange - 1f));
         foreach (BoomerangChainsaw boomerang in boomerangObjs)
@@ -99,7 +112,7 @@ public class BoomerangLauncher : Weapon
 
             boomerang.AngleAndHeight = bPos;
             boomerang.transform.Rotate(0, 0, rotationSpeed);
-            boomerang.laser.SetPosition(0, firingPoint.position);
+            boomerang.laser.SetPosition(0, laserOrigin.position);
             boomerang.laser.SetPosition(1, boomerang.transform.position);
         }
         for (int i = 0; i < boomerangObjs.Count; ++i)
@@ -114,9 +127,32 @@ public class BoomerangLauncher : Weapon
         }
     }
 
-    private void UnstoppableMode()
+    public void DisposableMode()
     {
-        float speed = boomerangSpeed.Value * unstoppableModeSpeedMult;
+        foreach (BoomerangChainsaw boomerang in boomerangObjs)
+        {
+            float bHeight = boomerang.Height;
+            bHeight += boomerang.torusVelocity.y * Time.deltaTime;
+            boomerang.Height = bHeight;
+            boomerang.MoveAround(TorusMotion.SignedAngle(boomerang.Angle, Angle));
+            boomerang.transform.Rotate(0, 0, rotationSpeed);
+        }
+        for (int i = 0; i < boomerangObjs.Count; ++i)
+        {
+            if (boomerangObjs[i].Height >= boomerangMaxRange)
+            {
+                StaticRefs.SpawnExplosion(boomerangSize.Value, boomerangObjs[i].transform.position);
+                Destroy(boomerangObjs[i].gameObject);
+                boomerangObjs.RemoveAt(i);
+                --i;
+                _lastShot = Time.time;
+            }
+        }
+    }
+
+    private void AgileMode()
+    {
+        float speed = boomerangSpeed.Value * agileModeSpeedMult;
         foreach (BoomerangChainsaw boomerang in boomerangObjs)
         {
             float bHeight = boomerang.Height;
@@ -126,20 +162,20 @@ public class BoomerangLauncher : Weapon
             {
                 float distFromMax = boomerangMaxRange - boomerang.Height;
                 float targetSpeed = Mathf.Min(speed, distFromMax);
-                boomerang.torusVelocity.y = Mathf.MoveTowards(boomerang.torusVelocity.y, targetSpeed, speed * Time.fixedDeltaTime * acceleration);
+                boomerang.torusVelocity.y = Mathf.MoveTowards(boomerang.torusVelocity.y, targetSpeed, speed * Time.fixedDeltaTime * agileModeAccelleration);
             }
             else
             {
                 float distFromOrigin = Vector2.Distance(boomerang.transform.position, firingPoint.position);
-                if (boomerang.Height <= _firingPointHeight)
-                    distFromOrigin = 0;
-                boomerang.torusVelocity.y = Mathf.MoveTowards(boomerang.torusVelocity.y, Mathf.Max(-speed, -distFromOrigin), speed * Time.fixedDeltaTime * acceleration);
+                if (boomerang.Height <= TorusMotion.AngleHeightFromPos(firingPoint.position).y)
+                    distFromOrigin = -speed;
+                boomerang.torusVelocity.y = Mathf.MoveTowards(boomerang.torusVelocity.y, Mathf.Max(-speed, -distFromOrigin), speed * Time.fixedDeltaTime * agileModeAccelleration);
             }
             bHeight += (boomerang.torusVelocity.y + (speed * Mathf.Sin(Time.time * 5f) * 0.2f)) * Time.deltaTime;
 
             boomerang.AngleAndHeight = new Vector2(Angle, bHeight);
             boomerang.transform.Rotate(0, 0, rotationSpeed);
-            boomerang.laser.SetPosition(0, firingPoint.position);
+            boomerang.laser.SetPosition(0, laserOrigin.position);
             boomerang.laser.SetPosition(1, boomerang.transform.position);
         }
     }
@@ -154,6 +190,7 @@ public class BoomerangLauncher : Weapon
 
     public override void AddModifier(string statName, string modifierName, StatChangeOperation operation, float value)
     {
+        DestroyChainsaws();
         switch (statName.ToLower())
         {
             case "boomerang speed":
@@ -162,14 +199,26 @@ public class BoomerangLauncher : Weapon
             case "boomerang size":
                 boomerangSize.AddModifier(modifierName, value, operation);
                 return;
+            case "boomerang mode":
+                bladeMode = BladeMode.boomerang;
+                return;
+            case "agile mode":
+                bladeMode = BladeMode.agile;
+                return;
+            case "disposable mode":
+                bladeMode = BladeMode.disposable;
+                return;
+            case "pong mode":
+                bladeMode = BladeMode.disposable;
+                return;
         }
 
         base.AddModifier(statName, modifierName, operation, value);
-        ReplaceChainsaws();
     }
 
     public override void UnlockPower(string powerName, int level)
     {
+        DestroyChainsaws();
         BoomerangLauncherPowers power;
         if (Enum.TryParse(powerName, out power))
         {
@@ -178,7 +227,6 @@ public class BoomerangLauncher : Weapon
         }
         else
             Debug.Log("Couldn't find power with name: " + powerName);
-        ReplaceChainsaws();
     }
 
     protected override void Setup()

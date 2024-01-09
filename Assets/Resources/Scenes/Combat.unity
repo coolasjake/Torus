@@ -514,7 +514,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274947083}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.002, y: 0.2, z: 0}
+  m_LocalPosition: {x: 0, y: 0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1616921370}
@@ -1094,6 +1094,88 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3762576957301760414, guid: 7988fd1e42e9f0046834635f1001e190, type: 3}
   m_PrefabInstance: {fileID: 1528208237}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &541689899
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 541689900}
+  - component: {fileID: 541689901}
+  m_Layer: 0
+  m_Name: BoomerangLauncher
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &541689900
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 541689899}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1616921370}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &541689901
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 541689899}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: -1521404993
+  m_SortingLayer: -2
+  m_SortingOrder: 0
+  m_Sprite: {fileID: -6175414657902708552, guid: 1b5fd2f8905a93d49b7d157313025539, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 0.27, y: 0.13}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1001 &545196238
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1261,6 +1343,36 @@ MonoBehaviour:
   - {fileID: 1542349281}
   availableAbilities: []
   chosenAbilities: []
+--- !u!1 &552706935
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 552706936}
+  m_Layer: 0
+  m_Name: LaserOrigin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &552706936
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 552706935}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.08, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1616921370}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &554817057
 GameObject:
   m_ObjectHideFlags: 0
@@ -2370,7 +2482,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1312168638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2385,7 +2497,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   incompatibleDamageTypes: 328
   existingDamageTypes: 2
-  playerIndex: 1
+  playerIndex: 0
   doDirectionSwapping: 0
   moveSpeed:
     defaultValue: 90
@@ -2560,6 +2672,30 @@ MonoBehaviour:
     multiplier: 1
     percentage: 100
     _value: 0
+  shotsPerCharge:
+    defaultValue: 1
+    min: 1
+    max: 10
+    addition: 0
+    multiplier: 1
+    percentage: 100
+    _value: 1
+  shockwaveRadius:
+    defaultValue: 1
+    min: 0.01
+    max: 5
+    addition: 0
+    multiplier: 1
+    percentage: 100
+    _value: 1
+  shockwaveDamageMult:
+    defaultValue: 0.01
+    min: 0.01
+    max: 1
+    addition: 0
+    multiplier: 1
+    percentage: 100
+    _value: 0.01
   aimingLaser: {fileID: 2101471614}
 --- !u!212 &1312168639
 SpriteRenderer:
@@ -3705,7 +3841,7 @@ MonoBehaviour:
   playerIndex: 1
   doDirectionSwapping: 0
   moveSpeed:
-    defaultValue: 180
+    defaultValue: 140
     min: -Infinity
     max: Infinity
     addition: 0
@@ -3739,7 +3875,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     physical:
-      defaultValue: 5
+      defaultValue: 4
       min: 0
       max: Infinity
       addition: 0
@@ -3861,9 +3997,10 @@ MonoBehaviour:
   weaponRenderer: {fileID: 1616921369}
   attackPrefab: {fileID: 6683694765789104448, guid: a4dfcf855d58f644fadf5cd806b1f322, type: 3}
   firingPoint: {fileID: 274947084}
-  unstoppableMode: 1
-  unstoppableModeSpeedMult: 0.2
-  acceleration: 0.2
+  bladeMode: 2
+  agileModeSpeedMult: 0.1
+  agileModeAccelleration: 0.2
+  disposableSpeedMult: 0.5
   holdForSlow: 1
   slowFactor: 4
   boomerangSpeed:
@@ -3883,7 +4020,16 @@ MonoBehaviour:
     multiplier: 1
     percentage: 100
     _value: 0.5
+  numBoomerangs:
+    defaultValue: 1
+    min: 0.1
+    max: 5
+    addition: 0
+    multiplier: 1
+    percentage: 100
+    _value: 1
   rotationSpeed: 5
+  laserOrigin: {fileID: 552706936}
 --- !u!212 &1616921369
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3924,12 +4070,12 @@ SpriteRenderer:
   m_SortingLayerID: 1368379711
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 7732dad254d157b428726125bc3e1df8, type: 3}
+  m_Sprite: {fileID: -1803356455858000942, guid: 1b5fd2f8905a93d49b7d157313025539, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.27, y: 0.13}
+  m_Size: {x: 0.28, y: 0.168}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -3947,6 +4093,8 @@ Transform:
   m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children:
   - {fileID: 274947084}
+  - {fileID: 552706936}
+  - {fileID: 541689900}
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5168,7 +5316,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1891033584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6598,6 +6746,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6896147028036198655, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: DoEasyTestWave
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896147028036198655, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: easyTestWave.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6896147028036198655, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
+      propertyPath: easyTestWave.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6896147028492663556, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
       propertyPath: UIRefs.healthBarCanvas
       value: 
@@ -6736,7 +6896,7 @@ PrefabInstance:
       objectReference: {fileID: 1442570269}
     - target: {fileID: 6896147028492663563, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
       propertyPath: getAbilityOnStart
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6896147028492663563, guid: a28b58d1e801fd9489e0f1fb42188556, type: 3}
       propertyPath: upgradeControllers.Array.data[0]

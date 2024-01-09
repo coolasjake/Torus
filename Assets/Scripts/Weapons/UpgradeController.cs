@@ -85,7 +85,8 @@ public class UpgradeController : MonoBehaviour
     /// or does require type and is an existing damage type (existing trumps incompatible). </summary>
     private bool IsValidType(Ability ability)
     {
-        return (ability.requireType == false && targetWeapon.incompatibleDamageTypes.Includes(ability.damageType) == false)
+        return (ability.damageType == DamageType.none)
+            || (ability.requireType == false && targetWeapon.incompatibleDamageTypes.Includes(ability.damageType) == false)
             || (ability.requireType == true && targetWeapon.existingDamageTypes.Includes(ability.damageType));
     }
 
