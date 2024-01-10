@@ -902,6 +902,7 @@ Transform:
   - {fileID: 7059491000917389812}
   - {fileID: 1385598040}
   - {fileID: 3364543604646910479}
+  - {fileID: 4609677423815805349}
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1390,7 +1391,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &554817058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1408,7 +1409,7 @@ MonoBehaviour:
   playerIndex: 1
   doDirectionSwapping: 0
   moveSpeed:
-    defaultValue: 90
+    defaultValue: 80
     min: -Infinity
     max: Infinity
     addition: 0
@@ -1572,8 +1573,30 @@ MonoBehaviour:
     multiplier: 1
     percentage: 100
     _value: 10
-  flamesSpeed: 3
-  flameDuration: 1
+  flamesSpeed:
+    defaultValue: 3
+    min: 1
+    max: 10
+    addition: 0
+    multiplier: 1
+    percentage: 100
+    _value: 3
+  flameDuration:
+    defaultValue: 1
+    min: 1
+    max: 10
+    addition: 0
+    multiplier: 1
+    percentage: 100
+    _value: 3
+  flamePierce:
+    defaultValue: 0.5
+    min: 0.1
+    max: 3
+    addition: 0
+    multiplier: 1
+    percentage: 100
+    _value: 0.5
 --- !u!212 &554817059
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2542,7 +2565,7 @@ MonoBehaviour:
       percentage: 100
       _value: 0
     heat:
-      defaultValue: 50
+      defaultValue: 1
       min: 0
       max: Infinity
       addition: 0
@@ -2680,8 +2703,9 @@ MonoBehaviour:
     multiplier: 1
     percentage: 100
     _value: 1
+  minTimeBetweenShots: 0.5
   shockwaveRadius:
-    defaultValue: 1
+    defaultValue: 3
     min: 0.01
     max: 5
     addition: 0
@@ -2689,7 +2713,7 @@ MonoBehaviour:
     percentage: 100
     _value: 1
   shockwaveDamageMult:
-    defaultValue: 0.01
+    defaultValue: 0.05
     min: 0.01
     max: 1
     addition: 0
@@ -2697,6 +2721,7 @@ MonoBehaviour:
     percentage: 100
     _value: 0.01
   aimingLaser: {fileID: 2101471614}
+  shockwavePrefab: {fileID: 3601873045804199941, guid: 876142e734d4e534196d829a9f2fc091, type: 3}
 --- !u!212 &1312168639
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3823,7 +3848,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1616921368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6171,6 +6196,63 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bd71f6722dd550049a2bd2c13172be43, type: 3}
+--- !u!1001 &1010127113507535266
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 475108935}
+    m_Modifications:
+    - target: {fileID: 3601873045804199941, guid: 876142e734d4e534196d829a9f2fc091, type: 3}
+      propertyPath: m_Name
+      value: Shockwave
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601873045804199943, guid: 876142e734d4e534196d829a9f2fc091, type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601873045804199943, guid: 876142e734d4e534196d829a9f2fc091, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.7769997
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601873045804199943, guid: 876142e734d4e534196d829a9f2fc091, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.036
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601873045804199943, guid: 876142e734d4e534196d829a9f2fc091, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601873045804199943, guid: 876142e734d4e534196d829a9f2fc091, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601873045804199943, guid: 876142e734d4e534196d829a9f2fc091, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601873045804199943, guid: 876142e734d4e534196d829a9f2fc091, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601873045804199943, guid: 876142e734d4e534196d829a9f2fc091, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601873045804199943, guid: 876142e734d4e534196d829a9f2fc091, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601873045804199943, guid: 876142e734d4e534196d829a9f2fc091, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3601873045804199943, guid: 876142e734d4e534196d829a9f2fc091, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 876142e734d4e534196d829a9f2fc091, type: 3}
 --- !u!4 &3364543604646910479 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6683694765789104452, guid: a4dfcf855d58f644fadf5cd806b1f322, type: 3}
@@ -6430,6 +6512,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98b24fac84533794a9545110c45dc35a, type: 3}
+--- !u!4 &4609677423815805349 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3601873045804199943, guid: 876142e734d4e534196d829a9f2fc091, type: 3}
+  m_PrefabInstance: {fileID: 1010127113507535266}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4620748539906217108
 PrefabInstance:
   m_ObjectHideFlags: 0

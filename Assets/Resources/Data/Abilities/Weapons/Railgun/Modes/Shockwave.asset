@@ -19,8 +19,8 @@ MonoBehaviour:
   maxWave: 1
   maxRepeats: 0
   rarity: 0
-  description: Railgun rods create a shockwave when they hit enemies, dealing 1%
-    of physical damage to all enemies nearby.
+  description: Railgun rods create a shockwave the first time they hit enemies, dealing
+    5% of physical damage to all enemies nearby.
   effects:
   - name: Shockwave
     isWeaponPower: 1

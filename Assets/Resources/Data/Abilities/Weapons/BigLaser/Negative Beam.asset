@@ -26,6 +26,10 @@ MonoBehaviour:
     isWeaponPower: 0
     operation: 3
     change: 1
+  - name: Enable Type Cold
+    isWeaponPower: 0
+    operation: 3
+    change: 1
   - name: Cold Power
     isWeaponPower: 0
     operation: 2
@@ -34,13 +38,5 @@ MonoBehaviour:
     isWeaponPower: 0
     operation: 1
     change: 0
-  - name: Enable Type Cold
-    isWeaponPower: 0
-    operation: 3
-    change: 1
-  - name: Enable Type Cold
-    isWeaponPower: 0
-    operation: 3
-    change: 1
   preReqAbilities: []
   incompatibleAbilities: []

@@ -13,7 +13,7 @@ public class Ability : ScriptableObject
     public int maxWave = 20;
     [Min(0)]
     public int maxRepeats = 0;
-    public Rarity rarity = Rarity.Common;
+    public AbilityType type = AbilityType.Normal;
     [TextArea(3, 8)]
     public string description;
     public List<AbilityEffect> effects;
@@ -24,9 +24,17 @@ public class Ability : ScriptableObject
 [System.Serializable]
 public class AbilityEffect
 {
-    [Tooltip("Name of the stat or power being effected.")]
+    [Tooltip("Name of the stat or power being effected. Special names include:" +
+        "\n-[DamageType] Power -> change value of damage type." +
+        "\n-Enable [DamageType] -> add type to upgrade options." +
+        "\n-Disable [DamageType] -> remove type from upgrade options" +
+        "\n(NOTE: damage value needs to be changed seperately, e.g. Cold Power -> Multiply by 0)" +
+        "\n-Basic Stats: 'move speed', 'aiming mult', 'fire rate'.")]
     public string name = "";
+    [Tooltip("Weapon Powers are represented by an int indexed to an Enum instead of a standalone variable, and must match the Enum exactly.")]
     public bool isWeaponPower = false;
+    [Tooltip("Formula for modifiable floats is:\ndefaultValue * multiply * (percentage * 0.01f) + addition." +
+        "\n-Multipliers are compounding (3x & 3x = 9x)\n-Percentages add together (300% & 300% = 600%)")]
     public StatChangeOperation operation = StatChangeOperation.Multiply;
     public float change = 1f;
 
@@ -47,9 +55,10 @@ public enum StatChangeOperation
     Set
 }
 
-public enum Rarity
+public enum AbilityType
 {
-    Common,
+    Normal,
     Rare,
-    Legendary
+    ModeChange,
+    TeamBoost,
 }

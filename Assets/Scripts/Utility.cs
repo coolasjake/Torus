@@ -452,14 +452,14 @@ public class ModifiableFloat
     public ModifiableFloat(float Default)
     {
         defaultValue = Default;
-        _value = Default;
+        _value = CalculateValue;
     }
     public ModifiableFloat(float Default, float Min, float Max)
     {
         defaultValue = Default;
         min = Min;
         max = Max;
-        _value = Default;
+        CalculateModifierSums();
     }
 
     [SerializeField]
@@ -481,7 +481,7 @@ public class ModifiableFloat
     {
         get
         {
-            _value = Mathf.Clamp(defaultValue * multiplier * (percentage * 0.01f) + addition, min, max);
+            _value = CalculateValue;
             return _value;
         }
      }
@@ -536,8 +536,10 @@ public class ModifiableFloat
         foreach (NamedFloat mod in percentageModifiers)
             percentage += mod.value;
 
-        _value = Mathf.Clamp(defaultValue * multiplier * (percentage * 0.01f) + addition, min, max);
+        _value = CalculateValue;
     }
+
+    private float CalculateValue => Mathf.Clamp(defaultValue * multiplier * (percentage * 0.01f) + addition, min, max);
 
     public static float GenerateModifiedValue(float defaultValue, float multiplier, float percentage, float addition, float min, float max)
     {

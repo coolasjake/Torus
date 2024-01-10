@@ -10,20 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b24d2c40d1402841b8d2e98b1177a0b, type: 3}
-  m_Name: Exothermic Reaction
-  m_EditorClassIdentifier: 
+  m_Name: Pressurised Fuel
+  m_EditorClassIdentifier: Assembly-CSharp::Ability
   damageType: 3
-  allowedWeapons: -1
+  allowedWeapons: 4
   requireType: 1
-  minWave: 1
-  maxWave: 20
+  minWave: 0
+  maxWave: 1
   maxRepeats: 0
-  rarity: 0
-  description: Enemies are set on fire again after an acid-fire explotion.
+  type: 2
+  description: Spread is much smaller, but flames are faster and have longer range
   effects:
-  - name: Exothermic Reaction
+  - name: spread
     isWeaponPower: 0
-    operation: 0
-    change: 1
+    operation: 1
+    change: 0.3
+  - name: flame speed
+    isWeaponPower: 0
+    operation: 2
+    change: 50
+  - name: flame pierce
+    isWeaponPower: 0
+    operation: 2
+    change: 50
   preReqAbilities: []
   incompatibleAbilities: []

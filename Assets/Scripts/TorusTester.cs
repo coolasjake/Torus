@@ -22,7 +22,6 @@ public class TorusTester : MonoBehaviour
         if (Keyboard.current.spaceKey.wasPressedThisFrame && targetA != null && targetB != null)
             print(TorusMotion.SignedAngle(targetA.Angle, targetB.Angle));
 
-
         if (targetA == null)
             return;
     }
@@ -30,7 +29,7 @@ public class TorusTester : MonoBehaviour
     public static void DrawTorusGizmo(float height, int numSections, Color colour)
     {
         Gizmos.color = colour;
-        Vector2 lastPos = TorusMotion.GetPos(0);
+        Vector2 lastPos = TorusMotion.GetPos(0, height);
         for (int i = 0; i <= numSections; ++i)
         {
             Vector2 newPos = TorusMotion.GetPos(i * (360f / numSections), height);

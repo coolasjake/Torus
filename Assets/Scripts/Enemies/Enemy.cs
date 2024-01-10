@@ -93,8 +93,19 @@ public class Enemy : TorusMotion
     [HideInInspector]
     public int armourDebuffs = 0;
 
-    private bool _disabled = false;
-    public bool Disabled => _disabled || _frozen;
+    [HideInInspector]
+    private float _abilitySlow = 1f;
+    private float _abilitySlowUntil = 0;
+    /// <summary> Apply a slow modifier to the enemy (lower = slower). Replaces smaller slows, and is effected by enemy min speed stat. </summary>
+    public void SlowEnemy(float multiplier, float duration)
+    {
+        if (_abilitySlowUntil < Time.time || multiplier <= _abilitySlow)
+        {
+            _abilitySlowUntil = Time.time + duration;
+            _abilitySlow = multiplier;
+        }
+    }
+    public float AbilitySlow => Time.time > _abilitySlowUntil  ? 1f : _abilitySlow;
 
     private bool _frozen = false;
     public bool Frozen
@@ -224,6 +235,7 @@ public class Enemy : TorusMotion
             modifier -= data.frozenSlow + data.maxColdSlow;
         else if (temperature < 0f)
             modifier -= (temperature / data.freezeTemp) * data.maxColdSlow;
+        modifier *= AbilitySlow;
 
         //Clamp modifier to not be less than the maximum slow value
         modifier = Mathf.Clamp(modifier, 1f - data.maxSlow, 3f);

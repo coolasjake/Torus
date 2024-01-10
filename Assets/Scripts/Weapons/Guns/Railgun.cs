@@ -16,11 +16,15 @@ public class Railgun : Weapon
     public ModifiableFloat pierces = new ModifiableFloat(1f, 0f, 100f);
     [Min(1)]
     public ModifiableFloat shotsPerCharge = new ModifiableFloat(1f, 1f, 10f);
+    private int _shotsSinceCharge = 0;
+    public float minTimeBetweenShots = 0.2f;
     public ModifiableFloat shockwaveRadius = new ModifiableFloat(1f, 0.01f, 5f);
     public ModifiableFloat shockwaveDamageMult = new ModifiableFloat(0.01f, 0.01f, 1f);
+    private float hotrodPhysToHeatAmount = 0.5f;
 
     [Header("Railgun Refs")]
     public LineRenderer aimingLaser;
+    public GameObject shockwavePrefab;
 
     private RaycastHit2D aimLaserHit;
 
@@ -28,7 +32,15 @@ public class Railgun : Weapon
 
     protected override bool Fire()
     {
-        if (Time.time > _lastShot + FireRate)
+        if (_shotsSinceCharge >= shotsPerCharge.Value)
+        {
+            if (Time.time > _lastShot + FireRate)
+                _shotsSinceCharge = 0;
+            else
+                return true;
+        }
+
+        if (Time.time > _lastShot + minTimeBetweenShots)
         {
             RailRod newRod = Instantiate(rodPrefab, firingPoint.position, firingPoint.rotation);
             Vector2 dir = firingPoint.up;
@@ -36,6 +48,7 @@ public class Railgun : Weapon
             newRod.railgun = this;
             newRod.remainingPierces = Mathf.RoundToInt(pierces.Value);
             _lastShot = Time.time;
+            _shotsSinceCharge += 1;
         }
         return true;
     }
@@ -69,8 +82,16 @@ public class Railgun : Weapon
             return;
         StaticRefs.SpawnExplosion(0.5f, rod.transform.position);
         DefaultHit(enemy);
-        if (powers[(int)RailGunPowers.Shockwave] > 0 && damageStats.physical.Value > 0)
+
+        //Shockwave if this is the first hit
+        if (powers[(int)RailGunPowers.Shockwave] > 0 && rod.remainingPierces == Mathf.RoundToInt(pierces.Value) && damageStats.physical.Value > 0)
         {
+            if (shockwavePrefab != null)
+            {
+                float scale = shockwaveRadius.Value;
+                GameObject explosion = Instantiate(shockwavePrefab, rod.transform.position, Quaternion.identity);
+                explosion.transform.localScale = new Vector3(scale, scale, scale);
+            }
             Collider2D[] colliders = Physics2D.OverlapCircleAll(rod.transform.position, shockwaveRadius.Value);
             foreach (Collider2D collider in colliders)
             {
@@ -79,6 +100,7 @@ public class Railgun : Weapon
                     ShockwaveHit(enemy, rod.transform.position);
             }
         }
+
         if (rod.remainingPierces-- <= 0)
             Destroy(rod.gameObject);
     }
@@ -91,6 +113,22 @@ public class Railgun : Weapon
         float physicalDamage = DamageAfterArmour(enemy, DamageType.physical) * shockwaveDamageMult.Value;
         enemy.lastHitBy = this;
         DamageEvents.Physical.DamageEnemy(physicalDamage, enemy);
+    }
+
+    protected void HotrodHeatHit(Enemy enemy)
+    {
+        if ((damageStats.heat.Value == 0 || damageStats.physical.Value == 0) && igniteChance.Value == 0)
+            return;
+
+        //Heat Damage
+        float heatDamage = damageStats.GetDamage(DamageType.physical) * hotrodPhysToHeatAmount * DamageEvents.ArmourMult(DamageType.heat, enemy, Mathf.RoundToInt(armourPierce.Value));
+        enemy.lastHitBy = this;
+        DamageEvents.Heat.HeatEnemy(heatDamage, enemy);
+
+        if (Random.value < igniteChance.Value)
+        {
+            DamageEvents.Heat.IgniteEnemy(fireDurationMult.Value, enemy);
+        }
     }
 
     public override void AddModifier(string statName, string modifierName, StatChangeOperation operation, float value)
@@ -122,10 +160,15 @@ public class Railgun : Weapon
         else
             Debug.Log("Couldn't find power with name: " + powerName);
 
-        if (power == RailGunPowers.AimLaser)
+        switch (power)
         {
-            if (level == 1)
-                aimingLaser.gameObject.SetActive(true);
+            case RailGunPowers.AimLaser:
+                if (level == 1)
+                    aimingLaser.gameObject.SetActive(true);
+                break;
+            case RailGunPowers.HotRods:
+                HeatHit = HotrodHeatHit;
+                break;
         }
     }
 
@@ -140,5 +183,6 @@ public class Railgun : Weapon
         AimLaser,
         HardeningRadiation,
         Shockwave,
+        HotRods,
     }
 }

@@ -11,11 +11,15 @@ public class Flamethrower : Weapon
         return WeaponType.FlameThrower;
     }
 
-    [Header("Machinegun Stats")]
+    [Header("Flamethrower Stats")]
     public ModifiableFloat spreadAngle = new ModifiableFloat(20f, 0f, 90f);
 
-    public float flamesSpeed = 3f;
-    public float flameDuration = 3f;
+    public ModifiableFloat flamesSpeed = new ModifiableFloat(3f, 1f, 10f);
+    public ModifiableFloat flameDuration = new ModifiableFloat(1f, 0.1f, 10f);
+    public ModifiableFloat flamePierce = new ModifiableFloat(0.5f, 0.1f, 3f);
+
+    public float flameWallSlow = 0.2f;
+    public float flameWallSlowDur = 0.2f;
 
     //private float fireRateDebit = 0;
 
@@ -38,11 +42,12 @@ public class Flamethrower : Weapon
     private void SpawnFlame()
     {
         Flame newFlame = Instantiate(flamePrefab, firingPoint.position, firingPoint.rotation);
-        newFlame.projectileDuration = flameDuration;
+        newFlame.projectileDuration = flameDuration.Value;
         Vector2 dir = firingPoint.up;
         dir = dir.Rotate(Random.Range(-spreadAngle.Value, spreadAngle.Value));
-        newFlame.GetComponent<Rigidbody2D>().velocity = dir * flamesSpeed;
+        newFlame.GetComponent<Rigidbody2D>().velocity = dir * flamesSpeed.Value;
         newFlame.flamethrower = this;
+        newFlame.shrinkTime = flamePierce.Value;
     }
 
     public void FlameHit(Flame bullet, Enemy enemy)
@@ -52,7 +57,7 @@ public class Flamethrower : Weapon
         if (enemiesToHit.Contains(enemy) == false)
             enemiesToHit.Add(enemy);
         //DefaultHit(enemy);
-        bullet.Shrink(0.5f);
+        bullet.Shrink(flamePierce.Value);
 
         //bullet.gameObject.SetActive(false);
         //Destroy(bullet.gameObject);
@@ -61,7 +66,11 @@ public class Flamethrower : Weapon
     protected override void WeaponFixedUpdate()
     {
         foreach (Enemy enemy in enemiesToHit)
+        {
             DefaultHit(enemy);
+            if (powers[(int)FlamethrowerPowers.FlameWall] > 0)
+                enemy.SlowEnemy(flameWallSlow, flameWallSlowDur);
+        }
         enemiesToHit.Clear();
     }
 
@@ -72,6 +81,12 @@ public class Flamethrower : Weapon
             case "spread":
                 spreadAngle.AddModifier(modifierName, value, operation);
                 return;
+            case "flame speed":
+                flamesSpeed.AddModifier(modifierName, value, operation);
+                return;
+            case "flame pierce":
+                flameDuration.AddModifier(modifierName, value, operation);
+                return;
         }
 
         base.AddModifier(statName, modifierName, operation, value);
@@ -79,7 +94,7 @@ public class Flamethrower : Weapon
 
     public override void UnlockPower(string powerName, int level)
     {
-        MachineGunPowers power;
+        FlamethrowerPowers power;
         if (Enum.TryParse(powerName, out power))
         {
             powers[(int)power] = level;
@@ -91,17 +106,10 @@ public class Flamethrower : Weapon
     protected override void Setup()
     {
         flamePrefab = attackPrefab.GetComponent<Flame>();
-        powers = new int[Enum.GetNames(typeof(MachineGunPowers)).Length];
+        powers = new int[Enum.GetNames(typeof(FlamethrowerPowers)).Length];
     }
 
-    private enum MachineGunPowers {
-        DoubleShot,
-        ExtraShot,
-        SecondGun,
-        ArmourPierce,
-        EnemiesExplode,
-        ArmourStrip,
-        Fireballs,
-        InstantFreeze,
+    private enum FlamethrowerPowers {
+        FlameWall,
     }
 }

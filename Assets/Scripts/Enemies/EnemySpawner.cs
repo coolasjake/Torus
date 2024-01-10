@@ -468,6 +468,8 @@ public class EnemySpawner : MonoBehaviour
     public bool breakAfterSpacing = false;
     private void OnDrawGizmosSelected()
     {
+        TorusTester.DrawTorusGizmo(spawningHeight, 180, Color.red);
+
         for (int i = 0; i < Mathf.Min(enemies.Count); ++i)
         {
             Gizmos.color = Color.red.ChangeHue((i * 256f) / enemies.Count);
