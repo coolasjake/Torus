@@ -299,7 +299,7 @@ public static class Utility
         return list;
     }
 
-    public static void ShuffleList<T>(this List<T> list)
+    public static void Shuffle<T>(this IList<T> list)
     {
         for (int i = 0; i < list.Count; i++)
         {

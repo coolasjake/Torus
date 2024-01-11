@@ -18,8 +18,8 @@ MonoBehaviour:
   minWave: 1
   maxWave: 20
   maxRepeats: 0
-  rarity: 0
-  description: Enemies have a chance of freezing early when hit.
+  type: 0
+  description: Physical attacks do even more damage to frozen enemies.
   effects:
   - name: Violent Shattering
     isWeaponPower: 0

@@ -24,7 +24,10 @@ public class MissionPlan : ScriptableObject
         public float rareTypesEndTime = 1f;
         [Min(1)]
         public int numBursts = 3;
+        [Range(0f, 180f)]
+        public float maxSpread = 0;
         public bool pickFleetsRandomly = true;
         public List<FleetType> fleets = new List<FleetType>();
     }
+
 }

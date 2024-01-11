@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b24d2c40d1402841b8d2e98b1177a0b, type: 3}
-  m_Name: Negative Beam
+  m_Name: Normal Laser
   m_EditorClassIdentifier: 
   damageType: 0
   allowedWeapons: 8
@@ -19,24 +19,7 @@ MonoBehaviour:
   maxWave: 1
   maxRepeats: 0
   type: 0
-  description: The laser deals cold damage instead of heat damage, and cold upgrades
-    replace heat upgrades.
-  effects:
-  - name: Diable Type Heat
-    isWeaponPower: 0
-    operation: 3
-    change: 1
-  - name: Enable Type Cold
-    isWeaponPower: 0
-    operation: 3
-    change: 1
-  - name: Cold Power
-    isWeaponPower: 0
-    operation: 2
-    change: 100
-  - name: Heat Power
-    isWeaponPower: 0
-    operation: 1
-    change: 0
+  description: laser go brrrrr
+  effects: []
   preReqAbilities: []
   incompatibleAbilities: []

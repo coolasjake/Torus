@@ -19,18 +19,8 @@ MonoBehaviour:
     numberOfEnemies: 2
     relativeAngle: 0
     arrivalDelay: 0
-  - name: Fast 2
-    enemyClass: 1
-    numberOfEnemies: 1
-    relativeAngle: 45
-    arrivalDelay: 0
   - name: Fast 3
     enemyClass: 1
     numberOfEnemies: 2
     relativeAngle: 180
-    arrivalDelay: 0
-  - name: Fast 4
-    enemyClass: 1
-    numberOfEnemies: 1
-    relativeAngle: -135
     arrivalDelay: 0

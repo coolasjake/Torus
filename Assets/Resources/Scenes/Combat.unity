@@ -201,7 +201,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &63070256
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -284,7 +284,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   incompatibleDamageTypes: 202
   existingDamageTypes: 4
-  playerIndex: 0
+  playerIndex: 1
   doDirectionSwapping: 0
   moveSpeed:
     defaultValue: 90
@@ -1391,7 +1391,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &554817058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1597,6 +1597,8 @@ MonoBehaviour:
     multiplier: 1
     percentage: 100
     _value: 0.5
+  flameWallSlow: 0.5
+  flameWallSlowDur: 0.5
 --- !u!212 &554817059
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2505,7 +2507,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1312168638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3848,7 +3850,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1616921368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3863,7 +3865,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   incompatibleDamageTypes: 256
   existingDamageTypes: 2
-  playerIndex: 1
+  playerIndex: 0
   doDirectionSwapping: 0
   moveSpeed:
     defaultValue: 140

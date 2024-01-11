@@ -18,7 +18,7 @@ MonoBehaviour:
   minWave: 1
   maxWave: 20
   maxRepeats: 0
-  rarity: 0
+  type: 0
   description: The first enemy hit by the laser has no delay between lightning strikes.
   effects:
   - name: InfiniteLightning

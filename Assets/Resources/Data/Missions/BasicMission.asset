@@ -16,6 +16,7 @@ MonoBehaviour:
   missionPlan: {fileID: 11400000, guid: 6cc863c8f5c41bc4897191a45dd98a05, type: 2}
   mainEnemyTypes:
   - {fileID: 11400000, guid: a718cfaa43d44cb45b6f718e957291c1, type: 2}
+  - {fileID: 11400000, guid: a718cfaa43d44cb45b6f718e957291c1, type: 2}
   rareEnemyTypes:
   - {fileID: 11400000, guid: 28edd38b77d0ac048940971327495eaa, type: 2}
   chosenWeapons: 0100000002000000

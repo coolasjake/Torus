@@ -18,8 +18,9 @@ MonoBehaviour:
   minWave: 1
   maxWave: 20
   maxRepeats: 0
-  rarity: 0
-  description: Enemies have a chance of freezing early when hit.
+  type: 0
+  description: Radiation damage to frozen enemies also hit nearby enemies (doesn't
+    work get rekt n00b)
   effects:
   - name: Crystal Refraction
     isWeaponPower: 0

@@ -49,7 +49,7 @@ public class EnemySpawner : MonoBehaviour
         //Randomly assign difficulty points to fleets of main/rare enemies
         fleetAngles.Clear();
         if (_waveNumber >= missionData.missionPlan.waves.Count)
-            ChooseAllFleets(missionData.missionPlan.waves[missionData.missionPlan.waves.Count]);
+            ChooseAllFleets(missionData.missionPlan.waves[missionData.missionPlan.waves.Count - 1]);
         else
             ChooseAllFleets(missionData.missionPlan.waves[_waveNumber]);
 
@@ -65,55 +65,16 @@ public class EnemySpawner : MonoBehaviour
         _waveStartTime = Time.time;
     }
 
-    private void ChooseFleets(MissionPlan.WaveData wave, bool main)
-    {
-        List<int> fleetTypeIndexes = Utility.CreateIndexList(wave.fleets.Count);
-        int usedPoints = 0;
-        int totalPoints = main ? wave.pointsForMainTypes : wave.pointsForRareTypes;
-        int numMainBursts = wave.pointsForMainTypes / wave.numBursts;
-        int numRareBursts = wave.pointsForRareTypes / wave.numBursts;
-
-        int fleetNum = 0;
-        int randomOffset = Random.Range(0, wave.fleets.Count);
-        while (usedPoints < totalPoints)
-        {
-            //Choose a fleet plan
-            FleetType plan;
-            if (fleetTypeIndexes.Count == 0)
-                plan = defaultFleets.Random();
-            else if (wave.pickFleetsRandomly)
-                plan = wave.fleets[fleetTypeIndexes.Random()];
-            else
-                plan = wave.fleets[(fleetNum + randomOffset) % wave.fleets.Count];
-
-            //Choose an enemy type
-            EnemyData chosenType;
-            if (main)
-                chosenType = missionData.mainEnemyTypes.Random();
-            else
-                chosenType = missionData.rareEnemyTypes.Random();
-
-            //Choose angle and start time, then add the fleet to the list
-            float angle = ChooseFleetAngle();
-            float startTime;
-            if (main)
-                startTime = (usedPoints / wave.numBursts) * (wave.waveTime / numMainBursts);
-            else
-                startTime = (usedPoints / wave.numBursts) * (wave.waveTime / numMainBursts);
-            fleetsToSpawn.Add(new EnemyFleet { baseAngle = angle, enemyType = chosenType, plan = plan, startDelay = startTime });
-            ++fleetNum;
-            usedPoints += plan.difficultyPoints;
-
-            //Remove fleet types that require more than the remaining points
-            for (int i = 0; i < fleetTypeIndexes.Count; ++i)
-            {
-                if (wave.fleets[fleetTypeIndexes[i]].difficultyPoints > (totalPoints - usedPoints))
-                    fleetTypeIndexes.RemoveAt(i--);
-            }
-        }
-    }
     private void ChooseAllFleets(MissionPlan.WaveData wave)
     {
+        float[] armyAngles = new float[missionData.mainEnemyTypes.Count];
+        armyAngles[0] = Random.Range(0f, 360f);
+        float armySpacing = 360f / armyAngles.Length;
+        for (int i = 1; i < armyAngles.Length; ++i)
+            armyAngles[i] = (armyAngles[0] + armySpacing + Random.Range(-armySpacing * 0.2f, armySpacing * 0.2f)) % 360f;
+        armyAngles.Shuffle();
+        armySpacing = Mathf.Min(armySpacing, 120f);
+
         List<int> mainTypeIndexes = Utility.CreateIndexList(wave.fleets.Count);
         List<int> rareTypeIndexes = Utility.CreateIndexList(wave.fleets.Count);
         int mPoints = 0;
@@ -172,13 +133,21 @@ public class EnemySpawner : MonoBehaviour
 
             //Choose an enemy type
             EnemyData chosenType;
+            int chosenIndex = 0;
             if (spawningMain)
-                chosenType = missionData.mainEnemyTypes.Random();
+            {
+                chosenIndex = Random.Range(0, missionData.mainEnemyTypes.Count);
+                chosenType = missionData.mainEnemyTypes[chosenIndex];
+            }
             else
                 chosenType = missionData.rareEnemyTypes.Random();
 
             //Choose angle and start time, then add the fleet to the list
-            float angle = ChooseFleetAngle();
+            float angle;
+            if (spawningMain)
+                angle = ChooseFleetAngle(armyAngles[chosenIndex], armySpacing);
+            else
+                angle = ChooseFleetAngle(Random.Range(0f, 360f), 360f);
             float startTime = ((float)currentBurst / wave.numBursts) * wave.waveTime;
             fleetsToSpawn.Add(new EnemyFleet { baseAngle = angle, enemyType = chosenType, plan = plan, startDelay = startTime });
             ++fleetNum;
@@ -204,17 +173,21 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private float ChooseFleetAngle()
+    private float ChooseFleetAngle(float armyAngle, float armySpacing)
     {
+        float spacing = armySpacing / 2f;
         if (fleetAngles.Count == 0)
-            return Random.Range(0f, 360f);
+            return Random.Range(armyAngle - spacing, armyAngle + spacing);
 
         float biggestGap = 0f;
         float prevAngle = fleetAngles.Last();
         int gapIndex = 0;
+        //Find pair of angles that have the biggest gap between them
         for (int i = 0; i < fleetAngles.Count; ++i)
         {
-            float gap = Mathf.Abs(fleetAngles[i] - fleetAngles[(i + 1) % fleetAngles.Count]);
+            float angleA = Mathf.Clamp(TorusMotion.SignedAngle(armyAngle, fleetAngles[i]), -spacing, spacing) + armyAngle;
+            float angleB = Mathf.Clamp(TorusMotion.SignedAngle(armyAngle, fleetAngles[(i + 1) % fleetAngles.Count]), -spacing, spacing) + armyAngle;
+            float gap = Mathf.Abs(angleA - angleB);
             if (gap > biggestGap)
             {
                 biggestGap = gap;
@@ -224,6 +197,7 @@ public class EnemySpawner : MonoBehaviour
         float start = fleetAngles[gapIndex];
         float end = fleetAngles[(gapIndex + 1) % fleetAngles.Count];
         float angle = (Random.Range(start, end) + Random.Range(start, end)) / 2f;
+        angle = Mathf.Clamp(TorusMotion.SignedAngle(armyAngle, angle), -spacing, spacing) + armyAngle;
         fleetAngles.Add(angle);
         return angle;
     }

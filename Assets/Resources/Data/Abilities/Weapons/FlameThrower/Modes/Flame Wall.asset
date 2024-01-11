@@ -24,12 +24,12 @@ MonoBehaviour:
   effects:
   - name: spread
     isWeaponPower: 0
-    operation: 2
-    change: 50
+    operation: 1
+    change: 3
   - name: flame speed
     isWeaponPower: 0
     operation: 1
-    change: 0.5
+    change: 0.7
   - name: FlameWall
     isWeaponPower: 1
     operation: 3
