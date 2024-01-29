@@ -21,6 +21,7 @@ public class Railgun : Weapon
     public ModifiableFloat shockwaveRadius = new ModifiableFloat(1f, 0.01f, 5f);
     public ModifiableFloat shockwaveDamageMult = new ModifiableFloat(0.01f, 0.01f, 1f);
     private float hotrodPhysToHeatAmount = 0.5f;
+    public float haltingTime = 0.2f;
 
     [Header("Railgun Refs")]
     public LineRenderer aimingLaser;
@@ -50,7 +51,7 @@ public class Railgun : Weapon
             _lastShot = Time.time;
             _shotsSinceCharge += 1;
         }
-        return true;
+        return (Time.time < _lastShot + haltingTime);
     }
 
     protected override void WeaponUpdate()

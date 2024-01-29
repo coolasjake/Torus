@@ -41,18 +41,18 @@ TagManager:
   - name: Background
     uniqueID: 1541386143
     locked: 0
-  - name: SpaceStation
-    uniqueID: 2773562303
-    locked: 0
   - name: Bullet
     uniqueID: 4097435751
+    locked: 0
+  - name: Weapon
+    uniqueID: 1368379711
+    locked: 0
+  - name: SpaceStation
+    uniqueID: 2773562303
     locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
   - name: Effects
     uniqueID: 1195906583
-    locked: 0
-  - name: Weapon
-    uniqueID: 1368379711
     locked: 0

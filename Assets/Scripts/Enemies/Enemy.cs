@@ -186,6 +186,9 @@ public class Enemy : TorusMotion
     /// physical, acid, nanites. </summary>
     [HideInInspector]
     public float antimatter = 0;
+    /// <summary> True if the antimatter gun explosion has collected the size of this enemy for its explosion. Reset to false when the explosion damage occurs. </summary>
+    [HideInInspector]
+    public bool matterCollected = false;
 
 
     [HideInInspector]
@@ -288,7 +291,10 @@ public class Enemy : TorusMotion
             ShowAntimatterEffect();
 
             if (triggerAntimatter || acid > 0 || nanites > 0)
-                StaticRefs.SpawnAntimatterExplosion(transform.position, this);
+            {
+                AntimatterExplosion explosion = StaticRefs.SpawnAntimatterExplosion(transform.position, this);
+                explosion.CollectAntimatter.Invoke(explosion, this);
+            }
         }
         else
         {

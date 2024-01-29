@@ -12,10 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b24d2c40d1402841b8d2e98b1177a0b, type: 3}
   m_Name: Overclock
   m_EditorClassIdentifier: Assembly-CSharp::Ability
+  damageType: 1
+  allowedWeapons: 241
+  requireType: 1
+  minWave: 1
+  maxWave: 20
+  maxRepeats: 0
+  type: 0
   description: Overclock the weapon to fire faster.
   effects:
   - name: Fire Rate
-    priority: 0
-    isPower: 0
-    operation: 1
-    change: 1
+    isWeaponPower: 0
+    operation: 2
+    change: 50
+  preReqAbilities: []
+  incompatibleAbilities: []

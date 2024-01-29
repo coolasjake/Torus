@@ -79,7 +79,7 @@ public static class DamageEvents
         enemy.temperature = Mathf.Clamp(enemy.temperature, enemy.data.freezeTemp, enemy.data.maxSafeTemp);
     }
 
-    public static void CollectAntimatterFrom(this AntimatterExplosion explosion, Enemy enemy)
+    public static void DefaultAntimatterCollect(this AntimatterExplosion explosion, Enemy enemy)
     {
         explosion.totalAntimatter += enemy.antimatter;
         enemy.antimatter = 0;
@@ -87,7 +87,7 @@ public static class DamageEvents
         enemy.acid = 0;
     }
 
-    public static void DealAntimatterDamageTo(this AntimatterExplosion explosion, Enemy enemy)
+    public static void DefaultAntimatterExplosionDamage(AntimatterExplosion explosion, Enemy enemy)
     {
         enemy.lastHitBy = explosion.triggerWeapon;
         enemy.ReduceHealthBy(enemy.Class == EnemyClass.tank ? explosion.totalAntimatter * 0.5f : explosion.totalAntimatter);

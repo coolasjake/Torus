@@ -4,13 +4,23 @@ using UnityEngine;
 
 public class Missile : MonoBehaviour
 {
+    public Rigidbody2D RB;
     [HideInInspector]
     public MissileLauncher missileLauncher;
+    public float acceleration = 0f;
 
     // Start is called before the first frame update
     void Start()
     {
+        if (RB == null)
+            RB = GetComponent<Rigidbody2D>();
         StartCoroutine(DestroyAfterTime(5f));
+    }
+
+    private void FixedUpdate()
+    {
+        if (acceleration != 0)
+            RB.velocity = RB.velocity + RB.velocity.normalized * acceleration * Time.fixedDeltaTime;
     }
 
     private IEnumerator DestroyAfterTime(float time)

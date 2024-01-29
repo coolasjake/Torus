@@ -12,6 +12,10 @@ public class AntimatterExplosion : MonoBehaviour
     public float minSize = 0.3f;
     public float sizeMultiplier = 1f;
 
+    public AntimatterExplosionEvent DealExplosionDamage = DamageEvents.DefaultAntimatterExplosionDamage;
+    public AntimatterExplosionEvent CollectAntimatter = DamageEvents.DefaultAntimatterCollect;
+    public delegate void AntimatterExplosionEvent(AntimatterExplosion explosion, Enemy enemy);
+
     [Min(0)]
     public float testAntimatter = 10f;
 
@@ -43,9 +47,9 @@ public class AntimatterExplosion : MonoBehaviour
             if (enemy)
             {
                 if (animatingExplosion)
-                    this.DealAntimatterDamageTo(enemy);
+                    DealExplosionDamage?.Invoke(this, enemy);
                 else if (enemy.antimatter > 0)
-                    this.CollectAntimatterFrom(enemy);
+                    CollectAntimatter?.Invoke(this, enemy);
             }
         }
 

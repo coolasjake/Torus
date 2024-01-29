@@ -10,17 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b24d2c40d1402841b8d2e98b1177a0b, type: 3}
-  m_Name: Ice Coating
-  m_EditorClassIdentifier: Assembly-CSharp::Ability
-  description: Weapon inflicts %20 more cold damage, and bullets fire faster.
+  m_Name: Eternal Flames
+  m_EditorClassIdentifier: 
+  damageType: 3
+  allowedWeapons: -1
+  requireType: 1
+  minWave: 1
+  maxWave: 20
+  maxRepeats: 0
+  type: 0
+  description: Fire is lasts longer.
   effects:
-  - name: Cold Power
-    priority: 0
-    isPower: 0
-    operation: 1
-    change: 0.2
-  - name: FireRate
-    priority: 0
-    isPower: 0
-    operation: 1
-    change: 0.2
+  - name: Fire Duration
+    isWeaponPower: 0
+    operation: 0
+    change: 1
+  preReqAbilities: []
+  incompatibleAbilities: []

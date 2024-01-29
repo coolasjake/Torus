@@ -109,7 +109,6 @@ public class StaticRefs : MonoBehaviour
         if (singleton.effectSettings.antimatterExplosionPrefab != null)
         {
             AntimatterExplosion explosion = Instantiate(singleton.effectSettings.antimatterExplosionPrefab, pos, Quaternion.identity, singleton.transform);
-            explosion.CollectAntimatterFrom(enemy);
             explosion.transform.localScale = Vector3.zero;
             explosion.triggerWeapon = enemy.lastHitBy;
             return explosion;

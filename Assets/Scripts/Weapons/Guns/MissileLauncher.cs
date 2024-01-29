@@ -12,7 +12,9 @@ public class MissileLauncher : Weapon
 
     [Header("MissileLauncher Stats")]
     public ModifiableFloat missileSpeed = new ModifiableFloat(10f, 0.01f, 1000f);
+    public ModifiableFloat missileAccelleration = new ModifiableFloat(0.5f, 0.01f, 10f);
     public ModifiableFloat explosionSize = new ModifiableFloat(1f, 0f, 100f);
+    public float haltingTime = 0.2f;
 
     [Header("MissileLauncher Refs")]
 
@@ -26,9 +28,10 @@ public class MissileLauncher : Weapon
             Vector2 dir = firingPoint.up;
             newMissile.GetComponent<Rigidbody2D>().velocity = dir * missileSpeed.Value;
             newMissile.missileLauncher = this;
+            newMissile.acceleration = missileAccelleration.Value;
             _lastShot = Time.time;
         }
-        return true;
+        return (Time.time < _lastShot + haltingTime);
     }
 
     protected override void WeaponUpdate()

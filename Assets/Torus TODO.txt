@@ -1,6 +1,9 @@
 WEAPONS:
-	- Freeze ray
-	- Antimatter gun
+	- Create Freeze ray
+	- Create Antimatter gun
+
+WEAPONS ASSETS:
+	- Missile Launcher
 
 FIX:
 Missile launcher explosion size
