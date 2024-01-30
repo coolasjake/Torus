@@ -15,6 +15,7 @@ public abstract class Weapon : TorusMotion
 
     public int playerIndex = 0;
     public bool doDirectionSwapping = false;
+    public WeaponInput Input => weaponInput;
     private WeaponInput weaponInput;
 
     [Header("Weapon Options")]
@@ -73,9 +74,17 @@ public abstract class Weapon : TorusMotion
 
     void Start()
     {
-        CreateInputObject();
-        AssignDefaultEvents();
-        Setup();
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        if (weaponInput == null)
+        {
+            CreateInputObject();
+            AssignDefaultEvents();
+            Setup();
+        }
     }
 
     protected bool _firing = false;
@@ -125,6 +134,9 @@ public abstract class Weapon : TorusMotion
 
     private void Update()
     {
+        if (PauseManager.Paused)
+            return;
+
         WeaponUpdate();
     }
 

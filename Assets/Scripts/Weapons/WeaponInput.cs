@@ -2,9 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
+[RequireComponent(typeof(PlayerInput))]
 public class WeaponInput : MonoBehaviour
 {
+    public PlayerInput playerInput;
+    public MultiplayerEventSystem MPEvents;
+
+    private void Reset()
+    {
+        if (playerInput == null)
+            playerInput = GetComponent<PlayerInput>();
+
+        if (MPEvents == null)
+            MPEvents = GetComponentInChildren<MultiplayerEventSystem>();
+    }
+
     public Vector2 Movement => _movementInput;
     private Vector2 _movementInput = Vector2.zero;
     public bool MovementDown

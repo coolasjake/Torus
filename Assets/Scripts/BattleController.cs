@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class BattleController : MonoBehaviour
@@ -16,6 +17,11 @@ public class BattleController : MonoBehaviour
     public static int numReadyPlayers = 0;
 
     public List<UpgradeController> upgradeControllers = new List<UpgradeController>();
+    public RectTransform countdownPanel;
+    public TMP_Text countdownText;
+    public TMP_Text countdownTimer;
+    public float countdownTime = 5f;
+
     public EnemySpawner enemySpawner;
 
     public bool getAbilityOnStart = false;
@@ -51,7 +57,52 @@ public class BattleController : MonoBehaviour
         }
 
         if (numReadyPlayers == _readyPlayers.Length)
-            StartCombat();
+        {
+            singleton.StartCountdown();
+            //FinishUpgrading();
+            //StartCombat();
+        }
+    }
+
+    public static void BecomeNotReady(UpgradeController player)
+    {
+        int index = singleton.upgradeControllers.FindIndex(X => X == player);
+        _readyPlayers[index] = false;
+
+        if (singleton._countdownCoroutine != null)
+            singleton.StopCountdown();
+    }
+
+    private void StartCountdown()
+    {
+        _countdownCoroutine = StartCoroutine(CountdownToStart());
+    }
+
+    private void StopCountdown()
+    {
+        StopCoroutine(_countdownCoroutine);
+        countdownPanel.gameObject.SetActive(false);
+        _countdownCoroutine = null;
+    }
+
+    private Coroutine _countdownCoroutine;
+    private IEnumerator CountdownToStart()
+    {
+        countdownPanel.gameObject.SetActive(true);
+        countdownText.text = "Wave " + WaveNumber + " starting in:";
+        countdownTimer.text = countdownTime.ToString();
+
+        float startTime = Time.realtimeSinceStartup;
+        WaitForEndOfFrame wait = new WaitForEndOfFrame();
+        while (Time.realtimeSinceStartup < startTime + countdownTime)
+        {
+            countdownTimer.text = Utility.SecondsToTime(countdownTime - (Time.realtimeSinceStartup - startTime) - 1f);
+            yield return wait;
+        }
+
+        FinishUpgrading();
+        StartCombat();
+        _countdownCoroutine = null;
     }
 
     public static void EndWave()
@@ -62,6 +113,8 @@ public class BattleController : MonoBehaviour
         {
             upgrader.StartUpgrading();
         }
+
+        PauseManager.SystemPause(singleton);
     }
 
     public static void StartCombat()
@@ -70,7 +123,17 @@ public class BattleController : MonoBehaviour
         {
             upgrader.Hide();
         }
+        singleton.countdownPanel.gameObject.SetActive(false);
         singleton.enemySpawner.StartWave();
+        PauseManager.SystemUnPause(singleton);
+    }
+
+    public static void FinishUpgrading()
+    {
+        foreach (UpgradeController upgrader in singleton.upgradeControllers)
+        {
+            upgrader.FinishUpgrading();
+        }
     }
 
     public static void DamageStation(int damage)

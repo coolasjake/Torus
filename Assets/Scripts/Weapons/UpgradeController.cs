@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.UI;
 
 public class UpgradeController : MonoBehaviour
 {
@@ -12,6 +14,9 @@ public class UpgradeController : MonoBehaviour
     public TMP_Text title;
 
     public List<AbilityUI> buttons = new List<AbilityUI>();
+    public Button deselectButton;
+    public Sprite abilityChosenSprite;
+    public Sprite defaultAbilitySprite;
 
     public static Ability[] allAbilities = null;
 
@@ -24,7 +29,10 @@ public class UpgradeController : MonoBehaviour
     private List<Ability> appliedAbilities = new List<Ability>();
     private List<Ability> impossibleAbilities = new List<Ability>();
 
+    private MultiplayerEventSystem UIManager => targetWeapon.Input.MPEvents;
+
     private bool _initialized = false;
+    private int _selectedButton = -1;
 
     public void Hide()
     {
@@ -146,6 +154,8 @@ public class UpgradeController : MonoBehaviour
         Show();
         GiveTestPoints();
         ChooseOptions();
+
+        UIManager.SetSelectedGameObject(buttons[1].gameObject);
     }
 
     public void Initialize()
@@ -168,6 +178,9 @@ public class UpgradeController : MonoBehaviour
             }
         }
 
+        targetWeapon.Initialize();
+        UIManager.playerRoot = this.gameObject;
+        UIManager.firstSelectedGameObject = buttons[1].gameObject;
         title.text = targetWeapon.Type().ToString() + " Upgrades";
         SetupDamageTypes();
     }
@@ -246,26 +259,89 @@ public class UpgradeController : MonoBehaviour
         }
         
         if (hasPoints == false)
-            FinishUpgrading();
+            BattleController.BecomeReady(this);
     }
 
     public void FinishUpgrading()
     {
-        BattleController.BecomeReady(this);
-    }
+        if (_selectedButton.Outside(0, buttons.Count - 1))
+            return;
 
-    public void SelectButton(int buttonIndex)
-    {
         //Get Ability
-        Ability chosenAbility = chosenAbilities[buttonIndex];
+        Ability chosenAbility = chosenAbilities[_selectedButton];
 
         //Remove an upgrade point from the weapon
         if (targetWeapon.UseUpgradePoint() == false)
             return;
 
+
         ApplyAbility(chosenAbility);
 
+        foreach (AbilityUI button in buttons)
+        {
+            button.button.interactable = false;
+        }
+        buttons[_selectedButton].button.image.sprite = abilityChosenSprite;
+
+        _selectedButton = -1;
+
+        //ChooseOptions();
+    }
+
+    public void SelectButton(int buttonIndex)
+    {
+        SelectAbilityButton(buttonIndex);
+        return;
+
+        //Get Ability
+        Ability chosenAbility = chosenAbilities[_selectedButton];
+
+        //Remove an upgrade point from the weapon
+        if (targetWeapon.UseUpgradePoint() == false)
+            return;
+
+
+        ApplyAbility(chosenAbility);
+
+        foreach (AbilityUI button in buttons)
+        {
+            button.button.interactable = false;
+        }
+        buttons[_selectedButton].button.image.sprite = abilityChosenSprite;
+
+        _selectedButton = -1;
+
         ChooseOptions();
+    }
+
+    private void SelectAbilityButton(int index)
+    {
+        foreach (AbilityUI button in buttons)
+        {
+            button.button.interactable = false;
+        }
+        buttons[index].button.interactable = true;
+        UIManager.SetSelectedGameObject(deselectButton.gameObject);
+        buttons[index].button.image.sprite = abilityChosenSprite;
+
+        _selectedButton = index;
+
+        BattleController.BecomeReady(this);
+    }
+
+    public void Deselect()
+    {
+        buttons[_selectedButton].button.image.sprite = defaultAbilitySprite;
+        foreach (AbilityUI button in buttons)
+        {
+            button.button.interactable = true;
+        }
+
+        UIManager.SetSelectedGameObject(buttons[_selectedButton].gameObject);
+
+        _selectedButton = -1;
+
+        BattleController.BecomeNotReady(this);
     }
 
     public void ApplyAbility(Ability chosenAbility)

@@ -74,6 +74,13 @@ public static class Utility
         return false;
     }
 
+    public static bool Outside(this int value, int lowerBounds, int upperBounds)
+    {
+        if (value < lowerBounds || value > upperBounds)
+            return true;
+        return false;
+    }
+
     /// <summary> Return true if the integer is within the specified bounds [inclusive]. </summary>
     public static bool Inside(this int value, int lowerBounds, int upperBounds)
     {
@@ -419,7 +426,7 @@ public static class Utility
         return SecondsToTime(seconds, false, true, true, false);
     }
 
-    public static string SecondsToTime(float seconds, bool showMili, bool showSeconds, bool showMinutes, bool showHours)
+    public static string SecondsToTime(float seconds, bool showMili = false, bool showSeconds = true, bool showMinutes = true, bool showHours = false)
     {
         List<int> units = new List<int>();
 
