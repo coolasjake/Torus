@@ -9,6 +9,7 @@ public class MissionPlan : ScriptableObject
 {
     public List<WaveData> waves = new List<WaveData>();
 
+    /*
     [System.Serializable]
     public class WaveData
     {
@@ -29,5 +30,5 @@ public class MissionPlan : ScriptableObject
         public bool pickFleetsRandomly = true;
         public List<FleetType> fleets = new List<FleetType>();
     }
-
+    */
 }

@@ -9,106 +9,72 @@ public class StaticRefs : MonoBehaviour
     private static StaticRefs singleton;
 
     [SerializeField]
-    private Vector2 torusScale = Vector2.one;
-
+    private StaticSettings dataObject;
+    private static StaticSettings data;
     [SerializeField]
-    private GameObject inputPrefab;
+    private Canvas defaultCanvas;
+
+    private const string path = "Data/";
+
+    public static LayerMask AttackMask => data.attackMask;
 
     public static WeaponInput SpawnInputPrefab(Transform parent, int index, string scheme)
     {
-        WeaponInput newInput = PlayerInput.Instantiate(singleton.inputPrefab, playerIndex: index, controlScheme: scheme, pairWithDevice: Keyboard.current).GetComponent<WeaponInput>();
+        WeaponInput newInput = PlayerInput.Instantiate(data.inputPrefab, playerIndex: index, controlScheme: scheme, pairWithDevice: Keyboard.current).GetComponent<WeaponInput>();
         newInput.transform.SetParent(parent);
         return newInput;
     }
 
-    [SerializeField]
-    private LayerMask attackMask;
-    public static LayerMask AttackMask => singleton.attackMask;
-
-    [SerializeField]
-    private GameObject stationExplosionPrefab;
+    public static WeaponInput SpawnHubInputPrefab(Transform parent, int index, string scheme)
+    {
+        WeaponInput newInput = PlayerInput.Instantiate(data.inputPrefab, playerIndex: index, controlScheme: scheme, pairWithDevice: Keyboard.current).GetComponent<WeaponInput>();
+        newInput.transform.SetParent(parent);
+        return newInput;
+    }
 
     public static void SpawnStationExplosion(float maxSize)
     {
-        if (singleton.stationExplosionPrefab != null)
+        if (data.stationExplosionPrefab != null)
         {
-            GameObject explosion = Instantiate(singleton.stationExplosionPrefab, TorusMotion.torusOrigin, Quaternion.identity, singleton.transform);
+            GameObject explosion = Instantiate(data.stationExplosionPrefab, TorusMotion.torusOrigin, Quaternion.identity, singleton.transform);
             explosion.transform.localScale = new Vector3(maxSize, maxSize, maxSize);
         }
     }
 
-    [Header("UI and Effects")]
-
-    [SerializeField]
-    private InspectorClass_SpriteRefs UIRefs = new InspectorClass_SpriteRefs();
-    [System.Serializable]
-    public class InspectorClass_SpriteRefs
-    {
-        public Canvas healthBarCanvas;
-
-        public HealthBar healthBarPrefab;
-
-        public List<Sprite> healthArmourBorders = new List<Sprite>();
-        [EnumNamedArray(typeof(DamageType))]
-        public Sprite[] damageTypeIcons = new Sprite[System.Enum.GetNames(typeof(DamageType)).Length];
-        public List<Sprite> upgradeLvlIcons = new List<Sprite>();
-    }
-
-    [SerializeField]
-    private InspectorClass_EffectSettings effectSettings = new InspectorClass_EffectSettings();
-    [System.Serializable]
-    public class InspectorClass_EffectSettings
-    {
-        public GameObject frozenEffectPrefab;
-        public GameObject fireEffectPrefab;
-        public GameObject nanitesEffectPrefab;
-        public GameObject acidEffectPrefab;
-        public GameObject antimatterEffectPrefab;
-        public GameObject tempEffectPrefab;
-        public Color coldColour = Color.blue;
-        public Color hotColour = Color.red;
-        public GameObject explosionPrefab;
-        public GameObject acidExplosionPrefab;
-        public LightningObj lightningPrefab;
-        public GameObject lightningExplosionPrefab;
-        public AntimatterExplosion antimatterExplosionPrefab;
-        public NuclearExplosion nuclearExplosionPrefab;
-    }
-
     public static void SpawnExplosion(float scale, Vector2 pos)
     {
-        if (singleton.effectSettings.explosionPrefab != null)
+        if (data.effectSettings.explosionPrefab != null)
         {
-            GameObject explosion = Instantiate(singleton.effectSettings.explosionPrefab, pos, Quaternion.identity, singleton.transform);
+            GameObject explosion = Instantiate(data.effectSettings.explosionPrefab, pos, Quaternion.identity, singleton.transform);
             explosion.transform.localScale = new Vector3(scale, scale, scale);
         }
     }
 
     public static void SpawnAcidExplosion(float scale, Vector2 pos)
     {
-        if (singleton.effectSettings.acidExplosionPrefab != null)
+        if (data.effectSettings.acidExplosionPrefab != null)
         {
             //scale = scale * 0.5f;
             //Debug.LogWarning("Acid explosion is scaled down.");
-            GameObject explosion = Instantiate(singleton.effectSettings.acidExplosionPrefab, pos, Quaternion.identity, singleton.transform);
+            GameObject explosion = Instantiate(data.effectSettings.acidExplosionPrefab, pos, Quaternion.identity, singleton.transform);
             explosion.transform.localScale = new Vector3(scale, scale, scale);
         }
     }
 
     public static void SpawnLightningExplosion(float scale, Vector2 pos)
     {
-        if (singleton.effectSettings.lightningExplosionPrefab != null)
+        if (data.effectSettings.lightningExplosionPrefab != null)
         {
-            GameObject explosion = Instantiate(singleton.effectSettings.lightningExplosionPrefab, pos, Quaternion.identity, singleton.transform);
+            GameObject explosion = Instantiate(data.effectSettings.lightningExplosionPrefab, pos, Quaternion.identity, singleton.transform);
             explosion.transform.localScale = new Vector3(scale, scale, scale);
         }
     }
 
     public static AntimatterExplosion SpawnAntimatterExplosion(Vector2 pos, Enemy enemy)
     {
-        if (singleton.effectSettings.antimatterExplosionPrefab != null)
+        if (data.effectSettings.antimatterExplosionPrefab != null)
         {
-            AntimatterExplosion explosion = Instantiate(singleton.effectSettings.antimatterExplosionPrefab, pos, Quaternion.identity, singleton.transform);
+            AntimatterExplosion explosion = Instantiate(data.effectSettings.antimatterExplosionPrefab, pos, Quaternion.identity, singleton.transform);
             explosion.transform.localScale = Vector3.zero;
             explosion.triggerWeapon = enemy.lastHitBy;
             return explosion;
@@ -118,211 +84,159 @@ public class StaticRefs : MonoBehaviour
 
     public static void SpawnNuclearExplosion(Vector2 pos)
     {
-        if (singleton.effectSettings.lightningExplosionPrefab != null)
+        if (data.effectSettings.lightningExplosionPrefab != null)
         {
-            NuclearExplosion explosion = Instantiate(singleton.effectSettings.nuclearExplosionPrefab, pos, Quaternion.identity, singleton.transform);
+            NuclearExplosion explosion = Instantiate(data.effectSettings.nuclearExplosionPrefab, pos, Quaternion.identity, singleton.transform);
         }
     }
 
     public static Sprite ArmourBorder(int level)
     {
-        level = Mathf.Clamp(level, 0, singleton.UIRefs.healthArmourBorders.Count - 1);
-        return singleton.UIRefs.healthArmourBorders[level];
+        level = Mathf.Clamp(level, 0, data.UIRefs.healthArmourBorders.Count - 1);
+        return data.UIRefs.healthArmourBorders[level];
     }
 
     public static Sprite UpgradeLvlIcon(int level)
     {
-        level = Mathf.Clamp(level, 0, singleton.UIRefs.upgradeLvlIcons.Count - 1);
-        return singleton.UIRefs.upgradeLvlIcons[level];
+        level = Mathf.Clamp(level, 0, data.UIRefs.upgradeLvlIcons.Count - 1);
+        return data.UIRefs.upgradeLvlIcons[level];
     }
 
     public static Sprite DamageTypeIcon(DamageType damageType)
     {
-        int typeAsInt = Mathf.Clamp((int)damageType, 0, singleton.UIRefs.damageTypeIcons.Length - 1);
-        return singleton.UIRefs.damageTypeIcons[typeAsInt];
+        int typeAsInt = Mathf.Clamp((int)damageType, 0, data.UIRefs.damageTypeIcons.Length - 1);
+        return data.UIRefs.damageTypeIcons[typeAsInt];
     }
 
     public static HealthBar SpawnHealthBar(int armourLvl)
     {
-        HealthBar HB = Instantiate(singleton.UIRefs.healthBarPrefab, singleton.UIRefs.healthBarCanvas.transform);
+        if (singleton.defaultCanvas == null)
+            singleton.defaultCanvas = FindObjectOfType<Canvas>();
+
+        HealthBar HB = Instantiate(data.UIRefs.healthBarPrefab, singleton.defaultCanvas.transform);
         HB.SetArmour(armourLvl);
         return HB;
     }
 
     public static GameObject SpawnFrozenEffect(Enemy enemy)
     {
-        GameObject effect = Instantiate(singleton.effectSettings.frozenEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
+        GameObject effect = Instantiate(data.effectSettings.frozenEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
         effect.transform.localScale = new Vector3(enemy.Size, enemy.Size, enemy.Size);
         return effect;
     }
 
     public static GameObject SpawnFireEffect(Enemy enemy)
     {
-        GameObject effect = Instantiate(singleton.effectSettings.fireEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
+        GameObject effect = Instantiate(data.effectSettings.fireEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
         effect.transform.localScale = new Vector3(enemy.Size, enemy.Size, enemy.Size);
         return effect;
     }
 
     public static GameObject SpawnNanitesEffect(Enemy enemy)
     {
-        GameObject effect = Instantiate(singleton.effectSettings.nanitesEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
+        GameObject effect = Instantiate(data.effectSettings.nanitesEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
         effect.transform.localScale = new Vector3(enemy.Size, enemy.Size, enemy.Size);
         return effect;
     }
 
     public static GameObject SpawnAcidEffect(Enemy enemy)
     {
-        GameObject effect = Instantiate(singleton.effectSettings.acidEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
+        GameObject effect = Instantiate(data.effectSettings.acidEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
         effect.transform.localScale = new Vector3(enemy.Size, enemy.Size, enemy.Size);
         return effect;
     }
 
     public static GameObject SpawnAntimatterEffect(Enemy enemy)
     {
-        GameObject effect = Instantiate(singleton.effectSettings.antimatterEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
+        GameObject effect = Instantiate(data.effectSettings.antimatterEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
         effect.transform.localScale = new Vector3(enemy.Size, enemy.Size, enemy.Size);
         return effect;
     }
 
     public static SpriteRenderer SpawnTempEffect(Enemy enemy)
     {
-        GameObject effect = Instantiate(singleton.effectSettings.tempEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
+        GameObject effect = Instantiate(data.effectSettings.tempEffectPrefab, enemy.transform.position, enemy.transform.rotation, enemy.transform);
         effect.GetComponent<SpriteMask>().sprite = enemy.spriteRenderer.sprite;
         return effect.GetComponent<SpriteRenderer>();
     }
 
     public static void SpawnLightning(Enemy enemyA, Enemy enemyB)
     {
-        LightningObj effect = Instantiate(singleton.effectSettings.lightningPrefab, singleton.transform);
+        LightningObj effect = Instantiate(data.effectSettings.lightningPrefab, singleton.transform);
         effect.SetTargets(enemyA, enemyB);
     }
 
     public static Color ColdColour(float coldValue)
     {
-        return singleton.effectSettings.coldColour.WithAlpha(Mathf.Clamp01(coldValue) * 0.5f);
+        return data.effectSettings.coldColour.WithAlpha(Mathf.Clamp01(coldValue) * 0.5f);
     }
 
     public static Color HotColour(float hotValue)
     {
-        return singleton.effectSettings.hotColour.WithAlpha(Mathf.Clamp01(hotValue) * 0.5f);
+        return data.effectSettings.hotColour.WithAlpha(Mathf.Clamp01(hotValue) * 0.5f);
     }
 
-    [Header("Enemy Settings")]
-    [SerializeField]
-    [Min(0)]
-    [Tooltip("How far an enemy will move per update with a speed of 1.")]
-    private float baseEnemySpeed = 0.1f;
+    public static float BaseSpeed => data.baseEnemySpeed;
+    public static float DodgeDist => data.dodgeDist;
+    public static float BoostStartingHeight => data.boostStartingHeight;
 
-    [SerializeField]
-    [Min(0)]
-    [Tooltip("How far a dodge enemy will move when it dodges.")]
-    private float dodgeDist = 0.5f;
-    public static float BaseSpeed => singleton.baseEnemySpeed;
-    public static float DodgeDist => singleton.dodgeDist;
 
-    /// <summary> The height that fast enemies start boosting (using their ability to move faster) at. </summary>
-    [SerializeField]
-    private float boostStartingHeight = 6f;
-    public static float BoostStartingHeight => singleton.boostStartingHeight;
-
-    [Header("Controls Settings")]
-    [SerializeField]
-    [Min(-90f)]
-    [Tooltip("Controls the angle that a weapon has to have before the left/right movement direction is flipped to be more intuitive.")]
-    private float weaponDirectionSwapBuffer = 0f;
-
-    public static float SwapAngle => singleton.weaponDirectionSwapBuffer;
-
-    [Header("Damage Type Settings")]
-    [SerializeField]
-    private InspectorClass_DamageSettings damageSettings = new InspectorClass_DamageSettings();
-
-    [System.Serializable]
-    public class InspectorClass_DamageSettings
-    {
-        [EnumNamedArray(typeof(DamageType))]
-        public DamageTypeFlags[] typeCompatibilities = new DamageTypeFlags[System.Enum.GetNames(typeof(DamageType)).Length];
-
-        [EnumNamedArray(typeof(DamageType))]
-        public Ability[] defaultAbilitiesForTypes = new Ability[System.Enum.GetNames(typeof(DamageType)).Length];
-
-        [Min(0)]
-        [Tooltip("Controls how often acid deals damage.")]
-        public float timeBetweenAcidTicks = 0.2f;
-        [Min(0)]
-        [Tooltip("Controls how often nanites deal damage.")]
-        public float timeBetweenNaniteTicks = 0.75f;
-        [Min(0)]
-        [Tooltip("Controls the fraction of health where nanites cannot deal any damage.")]
-        public float nanitesHealthCutoff = 0.2f;
-        [Min(0)]
-        [Tooltip("Controls how often temperature deals damage and falls back towards resting.")]
-        public float timeBetweenTempTicks = 0.5f;
-        [Min(0)]
-        [Tooltip("Default time that fire lasts after an enemy is ignited.")]
-        public float fireDuration = 3f;
-        [Min(0)]
-        [Tooltip("Controls how often radiation deals damage, and how long before the first tick starts (unlike other DOTs).")]
-        public float timeBetweenRadiationTicks = 2f;
-        [Min(0)]
-        [Tooltip("Value of radiation at which double damage and other effects trigger.")]
-        public float criticalMassThreshold = 100f;
-        [Min(0)]
-        [Tooltip("Minimum time between lightning hits from the same weapon.")]
-        public float lightningGroundedDur = 0.5f;
-    }
+    public static float SwapAngle => data.weaponDirectionSwapBuffer;
 
     /// <summary> Check if type A is allowed with type B (order will matter if type compatabilities are not symetrical). </summary>
     public static bool DamageTypesAreCompatible(DamageType typeA, DamageType typeB)
     {
-        return singleton.damageSettings.typeCompatibilities[(int)typeB].Includes(typeA);
+        return data.damageSettings.typeCompatibilities[(int)typeB].Includes(typeA);
     }
 
     /// <summary> Check if type A is allowed with type B (order will matter if type compatabilities are not symetrical). </summary>
     public static Ability DefaultAbility(DamageType damageType)
     {
-        int typeAsInt = Mathf.Clamp((int)damageType, 0, singleton.damageSettings.defaultAbilitiesForTypes.Length - 1);
-        return singleton.damageSettings.defaultAbilitiesForTypes[typeAsInt];
+        int typeAsInt = Mathf.Clamp((int)damageType, 0, data.damageSettings.defaultAbilitiesForTypes.Length - 1);
+        return data.damageSettings.defaultAbilitiesForTypes[typeAsInt];
     }
 
     public static bool DoAcidTick(float lastTick)
     {
-        return Time.time >= lastTick + singleton.damageSettings.timeBetweenAcidTicks;
+        return Time.time >= lastTick + data.damageSettings.timeBetweenAcidTicks;
     }
     public static float AcidTickDamage(float DPS)
     {
-        return DPS * singleton.damageSettings.timeBetweenAcidTicks;
+        return DPS * data.damageSettings.timeBetweenAcidTicks;
     }
     public static bool DoNanitesTick(float lastTick, bool frozen)
     {
-        return Time.time >= lastTick + (singleton.damageSettings.timeBetweenNaniteTicks * (frozen ? 2f : 1f));
+        return Time.time >= lastTick + (data.damageSettings.timeBetweenNaniteTicks * (frozen ? 2f : 1f));
     }
-    public static float NanitesCutoff => singleton.damageSettings.nanitesHealthCutoff;
-    public static float NanitesTickRate => singleton.damageSettings.timeBetweenNaniteTicks;
+    public static float NanitesCutoff => data.damageSettings.nanitesHealthCutoff;
+    public static float NanitesTickRate => data.damageSettings.timeBetweenNaniteTicks;
     public static bool DoTempTick(float lastTick)
     {
-        return Time.time >= lastTick + singleton.damageSettings.timeBetweenTempTicks;
+        return Time.time >= lastTick + data.damageSettings.timeBetweenTempTicks;
     }
-    public static float FireDur => singleton.damageSettings.fireDuration;
-    public static float TempTickRate => singleton.damageSettings.timeBetweenTempTicks;
+    public static float FireDur => data.damageSettings.fireDuration;
+    public static float TempTickRate => data.damageSettings.timeBetweenTempTicks;
     public static bool DoRadiationTick(float lastTick)
     {
-        return Time.time >= lastTick + singleton.damageSettings.timeBetweenRadiationTicks;
+        return Time.time >= lastTick + data.damageSettings.timeBetweenRadiationTicks;
     }
-    public static float CriticalMass => singleton.damageSettings.criticalMassThreshold;
-    public static float GroundedDur => singleton.damageSettings.lightningGroundedDur;
+    public static float CriticalMass => data.damageSettings.criticalMassThreshold;
+    public static float GroundedDur => data.damageSettings.lightningGroundedDur;
 
     public static int debugCounter = 0;
 
     void Awake()
     {
         singleton = this;
-        TorusMotion.torusScale = torusScale;
+        data = dataObject;
+        if (data == null)
+            data = Resources.Load<StaticSettings>(path);
+        TorusMotion.torusScale = data.torusScale;
     }
 
     void OnDrawGizmos()
     {
-        TorusMotion.torusScale = torusScale;
+        TorusMotion.torusScale = data.torusScale;
     }
 }
 

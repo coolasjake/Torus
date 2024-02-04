@@ -1,0 +1,129 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a02ba8038807c242a6b312b5a10e7cf, type: 3}
+  m_Name: Purploid - Frozen Skirmish
+  m_EditorClassIdentifier: 
+  faction: 0
+  difficulty: 1
+  waves:
+  - name: Wave 1
+    waveTime: 20
+    pointsForMainTypes: 4
+    pointsForRareTypes: 0
+    rareTypesStartTime: 0
+    rareTypesEndTime: 1
+    numBursts: 2
+    maxSpread: 0
+    pickFleetsRandomly: 0
+    fleets:
+    - {fileID: 11400000, guid: 237a5831b226d2e4eab966b3ac198fb9, type: 2}
+    - {fileID: 11400000, guid: c2f593cff4c240c46b5069ecc20b4319, type: 2}
+    - {fileID: 11400000, guid: bdac6d63210ea0a40aa215284512c338, type: 2}
+    - {fileID: 11400000, guid: 8e0e0585872200f40bbed41fa4995f9b, type: 2}
+  - name: Wave 2
+    waveTime: 20
+    pointsForMainTypes: 8
+    pointsForRareTypes: 1
+    rareTypesStartTime: 0
+    rareTypesEndTime: 0
+    numBursts: 3
+    maxSpread: 0
+    pickFleetsRandomly: 1
+    fleets:
+    - {fileID: 11400000, guid: ca67a9454debf9f4ca2224badae1b666, type: 2}
+    - {fileID: 11400000, guid: 350d99d30909df5449658776595f9937, type: 2}
+    - {fileID: 11400000, guid: 6dec0c9b9720dd54b8eb90cf2d7960aa, type: 2}
+    - {fileID: 11400000, guid: a596f0f1331c0f44f98d07295defeb2b, type: 2}
+    - {fileID: 11400000, guid: de629bc0b542af74c8cc1197ee0a6b85, type: 2}
+    - {fileID: 11400000, guid: 2cc4e4f1674192b4a8b077772a909b74, type: 2}
+    - {fileID: 11400000, guid: f929964220032f545904b2a43b0a4303, type: 2}
+    - {fileID: 11400000, guid: 5e71248ef71c64f49841722e34b6035b, type: 2}
+  - name: Wave 3
+    waveTime: 40
+    pointsForMainTypes: 15
+    pointsForRareTypes: 2
+    rareTypesStartTime: 1
+    rareTypesEndTime: 1
+    numBursts: 3
+    maxSpread: 0
+    pickFleetsRandomly: 1
+    fleets:
+    - {fileID: 11400000, guid: ca67a9454debf9f4ca2224badae1b666, type: 2}
+    - {fileID: 11400000, guid: 350d99d30909df5449658776595f9937, type: 2}
+    - {fileID: 11400000, guid: 6dec0c9b9720dd54b8eb90cf2d7960aa, type: 2}
+    - {fileID: 11400000, guid: a596f0f1331c0f44f98d07295defeb2b, type: 2}
+    - {fileID: 11400000, guid: de629bc0b542af74c8cc1197ee0a6b85, type: 2}
+    - {fileID: 11400000, guid: 2cc4e4f1674192b4a8b077772a909b74, type: 2}
+    - {fileID: 11400000, guid: f929964220032f545904b2a43b0a4303, type: 2}
+    - {fileID: 11400000, guid: 5e71248ef71c64f49841722e34b6035b, type: 2}
+  - name: Wave 4
+    waveTime: 60
+    pointsForMainTypes: 18
+    pointsForRareTypes: 3
+    rareTypesStartTime: 0
+    rareTypesEndTime: 0.5
+    numBursts: 3
+    maxSpread: 0
+    pickFleetsRandomly: 1
+    fleets:
+    - {fileID: 11400000, guid: ca67a9454debf9f4ca2224badae1b666, type: 2}
+    - {fileID: 11400000, guid: 350d99d30909df5449658776595f9937, type: 2}
+    - {fileID: 11400000, guid: 6dec0c9b9720dd54b8eb90cf2d7960aa, type: 2}
+    - {fileID: 11400000, guid: a596f0f1331c0f44f98d07295defeb2b, type: 2}
+    - {fileID: 11400000, guid: de629bc0b542af74c8cc1197ee0a6b85, type: 2}
+    - {fileID: 11400000, guid: 2cc4e4f1674192b4a8b077772a909b74, type: 2}
+    - {fileID: 11400000, guid: f929964220032f545904b2a43b0a4303, type: 2}
+    - {fileID: 11400000, guid: 5e71248ef71c64f49841722e34b6035b, type: 2}
+  - name: Wave 5
+    waveTime: 60
+    pointsForMainTypes: 21
+    pointsForRareTypes: 6
+    rareTypesStartTime: 0.5
+    rareTypesEndTime: 1
+    numBursts: 3
+    maxSpread: 0
+    pickFleetsRandomly: 1
+    fleets:
+    - {fileID: 11400000, guid: ca67a9454debf9f4ca2224badae1b666, type: 2}
+    - {fileID: 11400000, guid: 350d99d30909df5449658776595f9937, type: 2}
+    - {fileID: 11400000, guid: 6dec0c9b9720dd54b8eb90cf2d7960aa, type: 2}
+    - {fileID: 11400000, guid: a596f0f1331c0f44f98d07295defeb2b, type: 2}
+    - {fileID: 11400000, guid: de629bc0b542af74c8cc1197ee0a6b85, type: 2}
+    - {fileID: 11400000, guid: 2cc4e4f1674192b4a8b077772a909b74, type: 2}
+    - {fileID: 11400000, guid: f929964220032f545904b2a43b0a4303, type: 2}
+    - {fileID: 11400000, guid: 5e71248ef71c64f49841722e34b6035b, type: 2}
+  - name: Wave 5
+    waveTime: 60
+    pointsForMainTypes: 24
+    pointsForRareTypes: 12
+    rareTypesStartTime: 0
+    rareTypesEndTime: 1
+    numBursts: 3
+    maxSpread: 0
+    pickFleetsRandomly: 1
+    fleets:
+    - {fileID: 11400000, guid: ca67a9454debf9f4ca2224badae1b666, type: 2}
+    - {fileID: 11400000, guid: 350d99d30909df5449658776595f9937, type: 2}
+    - {fileID: 11400000, guid: 6dec0c9b9720dd54b8eb90cf2d7960aa, type: 2}
+    - {fileID: 11400000, guid: a596f0f1331c0f44f98d07295defeb2b, type: 2}
+    - {fileID: 11400000, guid: de629bc0b542af74c8cc1197ee0a6b85, type: 2}
+    - {fileID: 11400000, guid: 2cc4e4f1674192b4a8b077772a909b74, type: 2}
+    - {fileID: 11400000, guid: f929964220032f545904b2a43b0a4303, type: 2}
+    - {fileID: 11400000, guid: 5e71248ef71c64f49841722e34b6035b, type: 2}
+  mainEnemyTypes:
+  - {fileID: 11400000, guid: a718cfaa43d44cb45b6f718e957291c1, type: 2}
+  - {fileID: 11400000, guid: a718cfaa43d44cb45b6f718e957291c1, type: 2}
+  rareEnemyTypes:
+  - {fileID: 11400000, guid: 28edd38b77d0ac048940971327495eaa, type: 2}
+  chosenWeapons: 0100000002000000
+  torusPrefab: {fileID: 0}
+  systemBackground: {fileID: 0}

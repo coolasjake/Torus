@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public MissionData missionData;
+    private MissionData MData => BattleController.missionData;
 
     [EnumNamedArray(typeof(EnemyClass))]
     public Enemy[] classBasePrefabs = new Enemy[Enum.GetNames(typeof(EnemyClass)).Length];
@@ -48,12 +48,12 @@ public class EnemySpawner : MonoBehaviour
 
         //Randomly assign difficulty points to fleets of main/rare enemies
         fleetAngles.Clear();
-        if (_waveNumber >= missionData.missionPlan.waves.Count)
-            ChooseAllFleets(missionData.missionPlan.waves[missionData.missionPlan.waves.Count - 1]);
+        if (_waveNumber >= MData.waves.Count)
+            ChooseAllFleets(MData.waves[MData.waves.Count - 1]);
         else
-            ChooseAllFleets(missionData.missionPlan.waves[_waveNumber]);
+            ChooseAllFleets(MData.waves[_waveNumber]);
 
-        string waveDescription = "Wave " + _waveNumber + " (" + missionData.missionPlan.waves[_waveNumber].name + ") = ";
+        string waveDescription = "Wave " + _waveNumber + " (" + MData.waves[_waveNumber].name + ") = ";
         foreach (EnemyFleet fleet in fleetsToSpawn)
         {
             StartCoroutine(SpawnFleet(fleet, fleet.startDelay));
@@ -65,9 +65,9 @@ public class EnemySpawner : MonoBehaviour
         _waveStartTime = Time.time;
     }
 
-    private void ChooseAllFleets(MissionPlan.WaveData wave)
+    private void ChooseAllFleets(WaveData wave)
     {
-        float[] armyAngles = new float[missionData.mainEnemyTypes.Count];
+        float[] armyAngles = new float[MData.mainEnemyTypes.Count];
         armyAngles[0] = Random.Range(0f, 360f);
         float armySpacing = 360f / armyAngles.Length;
         for (int i = 1; i < armyAngles.Length; ++i)
@@ -136,11 +136,11 @@ public class EnemySpawner : MonoBehaviour
             int chosenIndex = 0;
             if (spawningMain)
             {
-                chosenIndex = Random.Range(0, missionData.mainEnemyTypes.Count);
-                chosenType = missionData.mainEnemyTypes[chosenIndex];
+                chosenIndex = Random.Range(0, MData.mainEnemyTypes.Count);
+                chosenType = MData.mainEnemyTypes[chosenIndex];
             }
             else
-                chosenType = missionData.rareEnemyTypes.Random();
+                chosenType = MData.rareEnemyTypes.Random();
 
             //Choose angle and start time, then add the fleet to the list
             float angle;
@@ -212,7 +212,7 @@ public class EnemySpawner : MonoBehaviour
     {
         for (int i = 0; i < 360; i += 20)
         {
-            EnemyData randomMainType = missionData.mainEnemyTypes.Random();
+            EnemyData randomMainType = MData.mainEnemyTypes.Random();
             EnemyClass randomClass = (EnemyClass)Random.Range(0, System.Enum.GetNames(typeof(EnemyClass)).Length);
             SpawnEnemy(i, randomMainType, randomClass);
         }
@@ -220,7 +220,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void EasyTestWave()
     {
-        EnemyData randomMainType = missionData.mainEnemyTypes.Random();
+        EnemyData randomMainType = MData.mainEnemyTypes.Random();
 
         foreach (EnemyClass enemyClass in easyTestWave)
         {

@@ -225,6 +225,26 @@ public static class Utility
         return IntToAxis(GetBiggestAxisIndexOfVector(vector));
     }
 
+    public static Vector2 SimplifyToDir(this Vector2 v2)
+    {
+        if (v2.x >= v2.y)
+        {
+            if (v2.x > 0)
+                return new Vector2(1f, 0f);
+            else if (v2.x < 0)
+                return new Vector2(-1f, 0f);
+            else
+                return Vector2.zero;
+        }
+        else
+        {
+            if (v2.y > 0)
+                return new Vector2(0f, 1f);
+            else
+                return new Vector2(0f, -1f);
+        }
+    }
+
     public static Vector3 MultipliedBy(this Vector3 v1, Vector3 v2)
     {
         return new Vector3(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
@@ -239,6 +259,12 @@ public static class Utility
     public static Vector3 ToVector3(this Vector2 v)
     {
         return new Vector3(v.x, 0, v.y);
+    }
+
+    /// <summary> Change a vector2 into a vector 3 as if the V2 is horizontal instead of vertical (so that the y value becomes the z value). </summary>
+    public static Vector2 ToVector2(this Vector3 v)
+    {
+        return new Vector2(v.x, v.z);
     }
 
     public static bool WithinRange(Vector3 pointA, Vector3 pointB, float range)

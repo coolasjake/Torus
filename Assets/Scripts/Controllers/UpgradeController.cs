@@ -9,7 +9,7 @@ public class UpgradeController : MonoBehaviour
 {
     public Weapon targetWeapon;
     public int index = 0;
-    public string abilityDataFolder = "/AbilityData";
+    public string abilityDataFolder = "Data/AbilityData";
 
     public TMP_Text title;
 

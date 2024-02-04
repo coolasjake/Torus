@@ -6,6 +6,7 @@ using UnityEngine;
 public class BattleController : MonoBehaviour
 {
     public static BattleController singleton;
+    public static MissionData missionData;
 
     public static int WaveNumber => singleton.enemySpawner.WaveNumber;
     public int stationHealth = 9;
