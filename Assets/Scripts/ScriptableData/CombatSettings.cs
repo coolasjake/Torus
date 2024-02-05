@@ -2,24 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "StaticSettings", menuName = "ScriptableObjects/StaticSettings", order = 1)]
-public class StaticSettings : ScriptableObject
+[CreateAssetMenu(fileName = "CombatSettings", menuName = "ScriptableObjects/CombatSettings", order = 1)]
+public class CombatSettings : ScriptableObject
 {
-    [SerializeField]
+    
     public Vector2 torusScale = Vector2.one;
 
-    [SerializeField]
     public GameObject inputPrefab;
 
-    [SerializeField]
     public LayerMask attackMask;
 
-    [SerializeField]
     public GameObject stationExplosionPrefab;
 
     [Header("UI and Effects")]
 
-    [SerializeField]
+    
     public InspectorClass_SpriteRefs UIRefs = new InspectorClass_SpriteRefs();
     [System.Serializable]
     public class InspectorClass_SpriteRefs
@@ -32,7 +29,7 @@ public class StaticSettings : ScriptableObject
         public List<Sprite> upgradeLvlIcons = new List<Sprite>();
     }
 
-    [SerializeField]
+    
     public InspectorClass_EffectSettings effectSettings = new InspectorClass_EffectSettings();
     [System.Serializable]
     public class InspectorClass_EffectSettings
@@ -54,27 +51,26 @@ public class StaticSettings : ScriptableObject
     }
 
     [Header("Enemy Settings")]
-    [SerializeField]
+    
     [Min(0)]
     [Tooltip("How far an enemy will move per update with a speed of 1.")]
     public float baseEnemySpeed = 0.1f;
 
-    [SerializeField]
+    
     [Min(0)]
     [Tooltip("How far a dodge enemy will move when it dodges.")]
     public float dodgeDist = 0.5f;
 
     /// <summary> The height that fast enemies start boosting (using their ability to move faster) at. </summary>
-    [SerializeField]
+    
     public float boostStartingHeight = 6f;
+
     [Header("Controls Settings")]
-    [SerializeField]
     [Min(-90f)]
     [Tooltip("Controls the angle that a weapon has to have before the left/right movement direction is flipped to be more intuitive.")]
     public float weaponDirectionSwapBuffer = 0f;
 
     [Header("Damage Type Settings")]
-    [SerializeField]
     public InspectorClass_DamageSettings damageSettings = new InspectorClass_DamageSettings();
 
     [System.Serializable]

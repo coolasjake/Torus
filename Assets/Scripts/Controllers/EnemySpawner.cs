@@ -10,6 +10,7 @@ public class EnemySpawner : MonoBehaviour
 
     [EnumNamedArray(typeof(EnemyClass))]
     public Enemy[] classBasePrefabs = new Enemy[Enum.GetNames(typeof(EnemyClass)).Length];
+    public EnemyData defaultEnemyType;
     public float spawningHeight = 10f;
     [EnumNamedArray(typeof(EnemyClass))]
     public float[] enemySpacing = new float[Enum.GetNames(typeof(EnemyClass)).Length];
@@ -33,30 +34,36 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private List<Enemy> enemies = new List<Enemy>();
 
-    public bool DoEasyTestWave = true;
-    public List<EnemyClass> easyTestWave = new List<EnemyClass>();
+    public WaveType waveType = WaveType.Normal;
+    public List<FleetType> testFleets = new List<FleetType>();
 
     private float _lastSpacing = 0;
 
     public void StartWave()
     {
-        if (DoEasyTestWave)
+        fleetAngles.Clear();
+        if (waveType == WaveType.EasyTest)
         { 
             EasyTestWave();
+        }
+        else if (waveType == WaveType.EndlessTest)
+        {
+            StartCoroutine(EndlessWaveTest());
             return;
         }
-
-        //Randomly assign difficulty points to fleets of main/rare enemies
-        fleetAngles.Clear();
-        if (_waveNumber >= MData.waves.Count)
-            ChooseAllFleets(MData.waves[MData.waves.Count - 1]);
         else
-            ChooseAllFleets(MData.waves[_waveNumber]);
+        {
+            //Randomly assign difficulty points to fleets of main/rare enemies
+            if (_waveNumber >= MData.waves.Count)
+                ChooseAllFleets(MData.waves[MData.waves.Count - 1]);
+            else
+                ChooseAllFleets(MData.waves[_waveNumber]);
+        }
 
         string waveDescription = "Wave " + _waveNumber + " (" + MData.waves[_waveNumber].name + ") = ";
         foreach (EnemyFleet fleet in fleetsToSpawn)
         {
-            StartCoroutine(SpawnFleet(fleet, fleet.startDelay));
+            StartCoroutine(SpawnFleet(fleet));
             waveDescription += "\n" + fleet.plan.name + " of " + fleet.enemyType.name + ", starting at " + fleet.startDelay;
         }
         Debug.Log(waveDescription);
@@ -173,6 +180,11 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    /// <summary> Find the biggest empty section within a section of armySpacing degrees centered around armyAngle,
+    /// and return a random angle within that section (biased towards the center). </summary>
+    /// <param name="armyAngle"> Center of the allowed section. </param>
+    /// <param name="armySpacing"> Size of the allowed section (e.g. max angle is armyAngle +/- armySpacing/2). </param>
+    /// <returns> Returns a float between 0-360 representing the chosen angle, and adds the fleet to the fleetAngles list for future checks. </returns>
     private float ChooseFleetAngle(float armyAngle, float armySpacing)
     {
         float spacing = armySpacing / 2f;
@@ -222,16 +234,39 @@ public class EnemySpawner : MonoBehaviour
     {
         EnemyData randomMainType = MData.mainEnemyTypes.Random();
 
-        foreach (EnemyClass enemyClass in easyTestWave)
+        float startTime = 0;
+        foreach (FleetType fleet in testFleets)
         {
-            SpawnEnemy(0, randomMainType, enemyClass);
-            SpawnEnemy(180, randomMainType, enemyClass);
+            fleetsToSpawn.Add(FleetAsDefault(ChooseFleetAngle(0f, 20f), fleet, startTime));
+            fleetsToSpawn.Add(FleetAsDefault(ChooseFleetAngle(180f, 20f), fleet, startTime));
+            startTime += 10;
         }
     }
 
-    private IEnumerator SpawnFleet(EnemyFleet fleet, float startDelay)
+    private IEnumerator EndlessWaveTest()
     {
-        yield return new WaitForSeconds(startDelay);
+        float startTime = 0;
+        float delay = 30f;
+        for (int i = 0; i < 100; ++i)
+        {
+            foreach (FleetType fleet in testFleets)
+            {
+                StartCoroutine(SpawnFleet(FleetAsDefault(ChooseFleetAngle(0f, 360f), fleet, startTime)));
+                startTime += 1;
+            }
+            yield return new WaitForSeconds(delay);
+            delay = Mathf.Max(0, delay - 1f);
+        }
+    }
+
+    private EnemyFleet FleetAsDefault(float fleetAngle, FleetType fleetPlan, float startDelay)
+    {
+        return new EnemyFleet { baseAngle = fleetAngle, enemyType = defaultEnemyType, plan = fleetPlan, startDelay = startDelay };
+    }
+
+    private IEnumerator SpawnFleet(EnemyFleet fleet)
+    {
+        yield return new WaitForSeconds(fleet.startDelay);
 
         List<Spawn> spawns = new List<Spawn>();
         foreach (FleetType.EnemyGroup group in fleet.plan.Groups)
@@ -259,6 +294,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy(float angle, EnemyData data, EnemyClass enemyClass)
     {
+        Debug.Log("Spawning " + enemyClass);
         Enemy newEnemy = Instantiate(classBasePrefabs[(int)enemyClass], transform);
         newEnemy.SetData(data);
         float height = spawningHeight;
@@ -451,4 +487,11 @@ public class EnemySpawner : MonoBehaviour
         }
     }
     #endregion
+
+    public enum WaveType
+    {
+        EasyTest,
+        EndlessTest,
+        Normal,
+    }
 }

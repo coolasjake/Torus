@@ -120,10 +120,10 @@ MonoBehaviour:
     - {fileID: 11400000, guid: f929964220032f545904b2a43b0a4303, type: 2}
     - {fileID: 11400000, guid: 5e71248ef71c64f49841722e34b6035b, type: 2}
   mainEnemyTypes:
-  - {fileID: 11400000, guid: a718cfaa43d44cb45b6f718e957291c1, type: 2}
-  - {fileID: 11400000, guid: a718cfaa43d44cb45b6f718e957291c1, type: 2}
-  rareEnemyTypes:
   - {fileID: 11400000, guid: 28edd38b77d0ac048940971327495eaa, type: 2}
+  - {fileID: 11400000, guid: 28edd38b77d0ac048940971327495eaa, type: 2}
+  rareEnemyTypes:
+  - {fileID: 11400000, guid: a718cfaa43d44cb45b6f718e957291c1, type: 2}
   chosenWeapons: 0100000002000000
   torusPrefab: {fileID: 0}
   systemBackground: {fileID: 0}

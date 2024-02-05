@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BattleController : MonoBehaviour
 {
     public static BattleController singleton;
     public static MissionData missionData;
+
+    public MissionData testMissionData;
 
     public static int WaveNumber => singleton.enemySpawner.WaveNumber;
     public int stationHealth = 9;
@@ -18,14 +21,22 @@ public class BattleController : MonoBehaviour
     public static int numReadyPlayers = 0;
 
     public List<UpgradeController> upgradeControllers = new List<UpgradeController>();
+
+    public EnemySpawner enemySpawner;
+
+    public bool getAbilityOnStart = false;
+
+    [Header("Upgrade/Pause Countdown")]
     public RectTransform countdownPanel;
     public TMP_Text countdownText;
     public TMP_Text countdownTimer;
     public float countdownTime = 5f;
 
-    public EnemySpawner enemySpawner;
-
-    public bool getAbilityOnStart = false;
+    [Header("Gameover")]
+    public RectTransform gameoverPanel;
+    public float preGameoverTime = 5f;
+    public float gameoverTime = 10f;
+    public string hubScene = "Hub";
 
     void Start()
     {
@@ -33,11 +44,16 @@ public class BattleController : MonoBehaviour
             Debug.LogError("Multiple battle controllers!");
         singleton = this;
 
+        if (missionData == null)
+            missionData = testMissionData;
+
         _readyPlayers = new bool[upgradeControllers.Count];
 
         ShowStationDamage();
         foreach (UpgradeController upgrader in singleton.upgradeControllers)
             upgrader.Initialize();
+
+        gameoverPanel.gameObject.SetActive(false);
 
         if (getAbilityOnStart)
             EndWave();
@@ -106,6 +122,14 @@ public class BattleController : MonoBehaviour
         _countdownCoroutine = null;
     }
 
+    private IEnumerator ShowGameoverThenGoToMenu()
+    {
+        yield return new WaitForSecondsRealtime(preGameoverTime);
+        gameoverPanel.gameObject.SetActive(true);
+        yield return new WaitForSecondsRealtime(gameoverTime);
+        SceneManager.LoadScene(hubScene);
+    }
+
     public static void EndWave()
     {
         for (int i = 0; i < _readyPlayers.Length; ++i)
@@ -140,7 +164,7 @@ public class BattleController : MonoBehaviour
     public static void DamageStation(int damage)
     {
         if (singleton.stationHealth <= 0)
-            GameOver();
+            singleton.GameOver();
         else
         {
             singleton.stationHealth -= damage;
@@ -152,9 +176,9 @@ public class BattleController : MonoBehaviour
         }
     }
 
-    public static void GameOver()
+    public void GameOver()
     {
-
+        StartCoroutine(ShowGameoverThenGoToMenu());
     }
 
     private void ShowStationDamage()

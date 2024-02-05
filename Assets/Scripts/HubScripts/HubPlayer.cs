@@ -27,7 +27,7 @@ public class HubPlayer : MonoBehaviour
     {
         if (input.MovementDown)
         {
-            Vector2 move = input.Movement.SimplifyToDir() * tileSize;
+            Vector2 move = input.Movement.SimplifyToDir() * StaticRefs.TileSize;
             if (CheckMove(move))
             {
                 transform.position += (Vector3)move;
