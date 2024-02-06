@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2359475529569184121}
   - component: {fileID: 2359475529569184119}
+  - component: {fileID: 5754779028035725699}
   - component: {fileID: 2359475529569184118}
   m_Layer: 0
   m_Name: Input
@@ -43,6 +44,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 58bc06224b1c83b4ea7d3fcfe21bbe21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInput: {fileID: 2359475529569184118}
+  MPEvents: {fileID: 4735977265302022361}
+--- !u!114 &5754779028035725699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2359475529569184120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cf84fed8320d184482a80ecbed92d9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 2359475529569184118}
@@ -109,11 +124,35 @@ MonoBehaviour:
     m_ActionId: f3c5dcc8-2d61-4fb7-bdb2-19e633959a3d
     m_ActionName: Player/Fire[/Mouse/leftButton,/Keyboard/w,/Keyboard/upArrow]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5754779028035725699}
+        m_TargetAssemblyTypeName: HubInput, Assembly-CSharp
+        m_MethodName: OnMove
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: dacf3cd2-085a-4b1c-9f25-41aafa5b0781
     m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5754779028035725699}
+        m_TargetAssemblyTypeName: HubInput, Assembly-CSharp
+        m_MethodName: OnFire
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 0c235b88-10c3-441b-bc1a-a62d4d31c60e
     m_ActionName: UI/Submit[/Keyboard/enter,/Keyboard/w,/Keyboard/upArrow]
   - m_PersistentCalls:

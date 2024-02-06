@@ -6,12 +6,12 @@ public class HubPlayer : MonoBehaviour
 {
     public int playerIndex = 0;
     public float tileSize = 1f;
-    public WeaponInput input;
+    public HubInput input;
 
     // Start is called before the first frame update
     void Start()
     {
-        input = StaticRefs.SpawnInputPrefab(transform, playerIndex, "Keyboard_" + playerIndex);
+        input = StaticRefs.SpawnHubInputPrefab(transform, playerIndex, "Keyboard_" + playerIndex);
     }
 
     // Update is called once per frame
@@ -43,7 +43,7 @@ public class HubPlayer : MonoBehaviour
             HubCharacter character = hit.GetComponent<HubCharacter>();
             if (character)
             {
-                character.Interact();
+                HubController.singleton.StartDialogue(character, playerIndex);
             }
         }
         return (hits.Length == 0);

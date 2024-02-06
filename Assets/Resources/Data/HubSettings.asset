@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: HubSettings
   m_EditorClassIdentifier: 
   tileSize: 1
+  inputPrefab: {fileID: 2359475529569184120, guid: 6a8e896cde3aba748b505e515e80ade3, type: 3}

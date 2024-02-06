@@ -40,21 +40,35 @@ public class BattleController : MonoBehaviour
 
     void Start()
     {
+        //Setup Singleton
         if (singleton != null)
             Debug.LogError("Multiple battle controllers!");
         singleton = this;
 
+        //Set mission to default if null for testing
         if (missionData == null)
             missionData = testMissionData;
 
+        //Setup array of player ready-states
         _readyPlayers = new bool[upgradeControllers.Count];
 
+        //Setup station health visuals
         ShowStationDamage();
+
+        //Spawn weapons and initialize UpgradeControllers
+        int count = Mathf.Min(singleton.upgradeControllers.Count, missionData.chosenWeapons.Count);
+        for (int i = 0; i < count; ++i)
+        {
+            Weapon weapon = StaticRefs.SpawnWeapon(missionData.chosenWeapons[i], i);
+            singleton.upgradeControllers[i].targetWeapon = weapon;
+        }
         foreach (UpgradeController upgrader in singleton.upgradeControllers)
             upgrader.Initialize();
 
+        //Hide gameover panel
         gameoverPanel.gameObject.SetActive(false);
 
+        //Start the first wave or upgrade
         if (getAbilityOnStart)
             EndWave();
         else
@@ -169,7 +183,7 @@ public class BattleController : MonoBehaviour
         {
             singleton.stationHealth -= damage;
             singleton.ShowStationDamage();
-            float explosionHeight = ((damage / 5f) * (singleton.enemySpawner.spawningHeight - 1f)) + 1f;
+            float explosionHeight = ((damage / 5f) * (StaticRefs.SpawningHeight - 1f)) + 1f;
             singleton.enemySpawner.ExplodeEnemies(explosionHeight);
             StaticRefs.SpawnStationExplosion(explosionHeight * 10f);
             singleton.tester.gizmoHeight = explosionHeight;

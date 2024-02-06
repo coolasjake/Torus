@@ -7,6 +7,9 @@ public class MissionData : ScriptableObject
 {
     public Faction faction = Faction.None;
 
+    [TextArea(3, 10)]
+    public string missionBrief;
+
     [Min(1)]
     public int difficulty = 1;
 
@@ -27,6 +30,7 @@ public class WaveData
 {
     public string name = "";
     public float waveTime = 180f;
+    //public List<int> pointsForEachType = new List<int>();
     [Min(1)]
     public int pointsForMainTypes = 1;
     [Min(0)]

@@ -51,18 +51,22 @@ public class CombatSettings : ScriptableObject
     }
 
     [Header("Enemy Settings")]
-    
+    public float spawningHeight = 10f;
     [Min(0)]
     [Tooltip("How far an enemy will move per update with a speed of 1.")]
     public float baseEnemySpeed = 0.1f;
+    [Min(0.001f)]
+    public float spacingRate = 0.001f;
+    [Min(0.001f)]
+    public float spacingForce = 0.5f;
+    [Min(0.0001f)]
+    public float maxSpacingMove = 0.01f;
 
-    
+
     [Min(0)]
     [Tooltip("How far a dodge enemy will move when it dodges.")]
     public float dodgeDist = 0.5f;
-
     /// <summary> The height that fast enemies start boosting (using their ability to move faster) at. </summary>
-    
     public float boostStartingHeight = 6f;
 
     [Header("Controls Settings")]
@@ -107,4 +111,8 @@ public class CombatSettings : ScriptableObject
         [Tooltip("Minimum time between lightning hits from the same weapon.")]
         public float lightningGroundedDur = 0.5f;
     }
+
+    [Header("Weapons")]
+    [EnumNamedArray(typeof(WeaponType))]
+    public Weapon[] weaponPrefabs = new Weapon[System.Enum.GetNames(typeof(WeaponType)).Length];
 }

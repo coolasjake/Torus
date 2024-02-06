@@ -16,7 +16,11 @@ public class StaticRefs : MonoBehaviour
     #region Combat Settings
     [SerializeField]
     private CombatSettings combatSettingsObject;
+#if UNITY_EDITOR
+    private static CombatSettings combatData { get => singleton.combatSettingsObject; set => singleton.combatSettingsObject = value; }
+#else
     private static CombatSettings combatData;
+#endif
     public static LayerMask AttackMask => combatData.attackMask;
 
     public static WeaponInput SpawnInputPrefab(Transform parent, int index, string scheme)
@@ -170,6 +174,11 @@ public class StaticRefs : MonoBehaviour
         return combatData.effectSettings.hotColour.WithAlpha(Mathf.Clamp01(hotValue) * 0.5f);
     }
 
+    public static float SpawningHeight => combatData.spawningHeight;
+
+    public static float SpacingRate => combatData.spacingRate;
+    public static float SpacingForce => combatData.spacingForce;
+    public static float MaxSpacingMove => combatData.maxSpacingMove;
     public static float BaseSpeed => combatData.baseEnemySpeed;
     public static float DodgeDist => combatData.dodgeDist;
     public static float BoostStartingHeight => combatData.boostStartingHeight;
@@ -216,6 +225,14 @@ public class StaticRefs : MonoBehaviour
     }
     public static float CriticalMass => combatData.damageSettings.criticalMassThreshold;
     public static float GroundedDur => combatData.damageSettings.lightningGroundedDur;
+
+    public static Weapon SpawnWeapon(WeaponType type, int playerIndex)
+    {
+        Vector2 pos = playerIndex == 0 ? Vector2.left : Vector2.right;
+        Weapon weapon = Instantiate<Weapon>(combatData.weaponPrefabs[(int)type], pos, Quaternion.identity);
+        weapon.playerIndex = playerIndex;
+        return weapon;
+    }
     #endregion
 
     #region Hub Settings
@@ -244,11 +261,6 @@ public class StaticRefs : MonoBehaviour
         hubData = hubSettingsObject;
         if (hubData == null)
             hubData = Resources.Load<HubSettings>(path);
-        TorusMotion.torusScale = combatData.torusScale;
-    }
-
-    void OnDrawGizmos()
-    {
         TorusMotion.torusScale = combatData.torusScale;
     }
 }

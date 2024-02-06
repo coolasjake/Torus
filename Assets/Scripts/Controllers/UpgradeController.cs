@@ -163,8 +163,6 @@ public class UpgradeController : MonoBehaviour
         if (_initialized)
             return;
 
-        _initialized = true;
-
         if (targetWeapon == null)
         {
             Weapon[] weapons = FindObjectsOfType<Weapon>();
@@ -176,6 +174,11 @@ public class UpgradeController : MonoBehaviour
                     break;
                 }
             }
+
+            if (targetWeapon == null)
+            {
+                Debug.LogError("Upgrade Controller is not linked to a weapon and cannot find one.");
+            }
         }
 
         targetWeapon.Initialize();
@@ -183,6 +186,8 @@ public class UpgradeController : MonoBehaviour
         UIManager.firstSelectedGameObject = buttons[1].gameObject;
         title.text = targetWeapon.Type().ToString() + " Upgrades";
         SetupDamageTypes();
+
+        _initialized = true;
     }
 
     private void SetupDamageTypes()

@@ -11,15 +11,18 @@ public class EnemySpawner : MonoBehaviour
     [EnumNamedArray(typeof(EnemyClass))]
     public Enemy[] classBasePrefabs = new Enemy[Enum.GetNames(typeof(EnemyClass)).Length];
     public EnemyData defaultEnemyType;
-    public float spawningHeight = 10f;
+    public CombatSettings combatSettingsForGizmos;
     [EnumNamedArray(typeof(EnemyClass))]
     public float[] enemySpacing = new float[Enum.GetNames(typeof(EnemyClass)).Length];
+    /*
+    public float spawningHeight = 10f;
     [Min(0.001f)]
     public float spacingRate = 0.001f;
     [Min(0.001f)]
     public float spacingForce = 0.5f;
     [Min(0.0001f)]
     public float maxSpacingMove = 0.01f;
+    */
     [EnumNamedArray(typeof(EnemyClass))]
     public FleetType[] defaultFleets = new FleetType[Enum.GetNames(typeof(EnemyClass)).Length];
 
@@ -246,16 +249,30 @@ public class EnemySpawner : MonoBehaviour
     private IEnumerator EndlessWaveTest()
     {
         float startTime = 0;
+
+        foreach (FleetType fleet in testFleets)
+        {
+            EnemyFleet enemyFleet = FleetAsDefault(ChooseFleetAngle(0f, 360f), fleet, startTime);
+            fleetsToSpawn.Add(enemyFleet);
+            StartCoroutine(SpawnFleet(enemyFleet));
+            startTime += 1;
+        }
+
         float delay = 30f;
         for (int i = 0; i < 100; ++i)
         {
+            Debug.Log("Endless Wave: " + i);
+            fleetAngles.Clear();
+            float randomAngle = Random.Range(0f, 360f);
             foreach (FleetType fleet in testFleets)
             {
-                StartCoroutine(SpawnFleet(FleetAsDefault(ChooseFleetAngle(0f, 360f), fleet, startTime)));
+                EnemyFleet enemyFleet = FleetAsDefault(ChooseFleetAngle(randomAngle, 180f), fleet, startTime + delay);
+                fleetsToSpawn.Add(enemyFleet);
+                StartCoroutine(SpawnFleet(enemyFleet));
                 startTime += 1;
             }
+            delay = Mathf.Max(3, delay - 1f);
             yield return new WaitForSeconds(delay);
-            delay = Mathf.Max(0, delay - 1f);
         }
     }
 
@@ -297,7 +314,7 @@ public class EnemySpawner : MonoBehaviour
         Debug.Log("Spawning " + enemyClass);
         Enemy newEnemy = Instantiate(classBasePrefabs[(int)enemyClass], transform);
         newEnemy.SetData(data);
-        float height = spawningHeight;
+        float height = StaticRefs.SpawningHeight;
         angle = angle + Random.Range(-2f, 2f);
         if (enemyClass == EnemyClass.swarm)
         {
@@ -314,8 +331,8 @@ public class EnemySpawner : MonoBehaviour
     {
         Enemy newEnemy = Instantiate(classBasePrefabs[(int)EnemyClass.swarm], transform);
         newEnemy.SetData(data);
-        float height = spawningHeight;
-        newEnemy.AngleAndHeight = new Vector2(originAngle + 1f, spawningHeight + Random.Range(0, 0.5f));
+        float height = StaticRefs.SpawningHeight;
+        newEnemy.AngleAndHeight = new Vector2(originAngle + 1f, StaticRefs.SpawningHeight + Random.Range(0, 0.5f));
         enemies.Add(newEnemy);
         newEnemy.destroyEvents += EnemyDestroyed;
     }
@@ -377,7 +394,7 @@ public class EnemySpawner : MonoBehaviour
     #region Enemy Spacing
     private void FixedUpdate()
     {
-        if (Time.time > _lastSpacing + spacingRate)
+        if (Time.time > _lastSpacing + StaticRefs.SpacingRate)
             SpaceEnemies();
     }
 
@@ -447,9 +464,9 @@ public class EnemySpawner : MonoBehaviour
             }
 
             //Apply rates and limits
-            _spacingDir = _spacingDir * (spacingForce * spacingRate);
-            if (_spacingDir.SqrMagnitude() > maxSpacingMove * maxSpacingMove)
-                _spacingDir = _spacingDir.normalized * maxSpacingMove;
+            _spacingDir = _spacingDir * (StaticRefs.SpacingForce * StaticRefs.SpacingRate);
+            if (_spacingDir.SqrMagnitude() > StaticRefs.MaxSpacingMove * StaticRefs.MaxSpacingMove)
+                _spacingDir = _spacingDir.normalized * StaticRefs.MaxSpacingMove;
 
             //Convert to angle/height, then reduce height element (so enemies space out around instead of away/towards station)
             _spacingDir = enemy.VectorAsAngleHeight(_spacingDir);
@@ -478,7 +495,9 @@ public class EnemySpawner : MonoBehaviour
     public bool breakAfterSpacing = false;
     private void OnDrawGizmosSelected()
     {
-        TorusTester.DrawTorusGizmo(spawningHeight, 180, Color.red);
+        TorusMotion.torusScale = combatSettingsForGizmos.torusScale;
+        TorusTester.DrawTorusGizmo(combatSettingsForGizmos.spawningHeight, 180, Color.red);
+        TorusTester.DrawTorusGizmo(combatSettingsForGizmos.boostStartingHeight, 180, Color.yellow);
 
         for (int i = 0; i < Mathf.Min(enemies.Count); ++i)
         {

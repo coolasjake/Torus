@@ -9,6 +9,8 @@ public class Missile : MonoBehaviour
     public MissileLauncher missileLauncher;
     public float acceleration = 0f;
 
+    private bool _exploded = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,9 +33,13 @@ public class Missile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (_exploded)
+            return;
+
         Enemy enemy = collision.GetComponent<Enemy>();
         if (enemy)
         {
+            _exploded = true;
             missileLauncher.MissileHit(this, enemy);
         }
     }

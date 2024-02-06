@@ -64,9 +64,13 @@ MonoBehaviour:
     lightningExplosionPrefab: {fileID: 1446598337663847966, guid: cec0f3961eb436d44aa93e8d033ca393, type: 3}
     antimatterExplosionPrefab: {fileID: 5466367041440219502, guid: b157bc7c26c36c9449a85ff153b80717, type: 3}
     nuclearExplosionPrefab: {fileID: 0}
-  baseEnemySpeed: 0.1
+  spawningHeight: 6.5
+  baseEnemySpeed: 0.01
+  spacingRate: 0.001
+  spacingForce: 0.5
+  maxSpacingMove: 0.01
   dodgeDist: 50
-  boostStartingHeight: 4.5
+  boostStartingHeight: 4
   weaponDirectionSwapBuffer: 0
   damageSettings:
     typeCompatibilities: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
@@ -89,3 +93,13 @@ MonoBehaviour:
     timeBetweenRadiationTicks: 2
     criticalMassThreshold: 100
     lightningGroundedDur: 0.5
+  weaponPrefabs:
+  - {fileID: 0}
+  - {fileID: 1499472357665506888, guid: f3c2f0c6016a7c54189def8ad214f1a7, type: 3}
+  - {fileID: 7596284297932037342, guid: ad7acda35a5b356448a5cc41b115f89e, type: 3}
+  - {fileID: 4492755611722352095, guid: e0ee4089b243cf74f9a38dd067c56eb6, type: 3}
+  - {fileID: 1521168904870613232, guid: 20345d61c6c03f8438ae41371530b4a7, type: 3}
+  - {fileID: 3458797535649616549, guid: cdcb39e97e8d83b43aa80cd3a530a97c, type: 3}
+  - {fileID: 5462324060944859428, guid: 0fe541608744f5a4fb90f240e778bb1c, type: 3}
+  - {fileID: 5905984026408160248, guid: ea84b01d017cf654282404d5cdfe66c5, type: 3}
+  - {fileID: 3393616458474039759, guid: e1b74b3220d9cb64c94021b03b4cb291, type: 3}

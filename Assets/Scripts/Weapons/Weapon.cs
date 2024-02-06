@@ -127,6 +127,7 @@ public abstract class Weapon : TorusMotion
             _velocity = Mathf.Lerp(_velocity, _actualMoveSpeed, dampeningForce);
         else
             _velocity = Mathf.Lerp(_velocity, 0f, dampeningForce);
+        Height = 1f;
         MoveAround(_velocity * Time.fixedDeltaTime);
 
         WeaponFixedUpdate();
